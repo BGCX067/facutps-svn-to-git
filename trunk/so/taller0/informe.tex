@@ -1,0 +1,51 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage[spanish] {babel}
+\title{Trabajo Practico 1}
+\usepackage{caratula}
+\usepackage{amssymb}
+
+\setlength{\leftmargin}{2cm}
+\setlength{\rightmargin}{2cm}
+\setlength{\oddsidemargin}{-1cm}
+\setlength{\evensidemargin}{-1cm}
+\setlength{\topmargin}{-1cm}
+\setlength{\textwidth}{18cm}
+\setlength{\textheight}{25cm}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead [L]{\scriptsize Trabajo Pr\'actico N$^{\circ}$1}
+\fancyhead [R]{\scriptsize Mancuso, Mataloni}%1{20pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\materia{Sistemas Operativos}
+\submateria{Primer Cuatrimestre de 2010}
+\titulo{Trabajo Practico N$^{\circ}$1}
+\subtitulo{Mini Telnet}
+\grupo{Grupo}
+\integrante{Mataloni Alejandro}{706/07}{amataloni@gmail.com}
+\integrante{Mancuso Emiliano}{597/07}{emiliano.mancuso@gmail.com}
+\maketitle
+
+\newpage
+
+\section{Mini-Telnet-1}
+ En este ejercicio lo que teniamos que hacer era, para un servidor ya dado por la catedra, programar un cliente que se conectara a este mismo para pasarle comandos a ejecutar. Este cliente recibe la IP del servidor a conectarse como primer parametro del programa. Luego para convertir este String en su estructura apropiada utilizamos la funci\'on $inet\_aton$. Luego trabajando bien las estructuras logramos conectar al servidor con el cliente. Aca es donde nos surgi\'o el mayor problema del ejercicio que fue darnos cuenta que en la funci\'on $sendTo$ del cliente cuando le manda el comando (ingresado por la consola) a ejecutar le teniamos que sumar uno a la longitud del mensaje. Esto se debe a que los string deben temrinar con el caracter nulo. Luego de solucionar este inconveniente logramos mandar los comandos correctamente al servidor para ser ejecutados.
+
+
+\section{Mini-Telnet-2}
+ Este ejercicio era parecido al anterior salvo que ahora debiamos mandar la respuesta al cliente. Lo primero que tuvimos que decidir fue el tipo de socket a utilizar en esta ocaci\'on. Para \'esto leimos el manual de socket y finalmente nos dimos cuenta que el socket con tipo $SOCK\_STREAM$ era el mas apropiado para la ocaci\'on. Luego el siguiente inconveniente fue el de devolver el output del comando al cliente. Para esto, por recomendaciones de la c\'atedra, investigamos el comando $dup2$ el cual duplica file descriptors. Aprovechando que el socket es tratado como un file lo que hicimos en un primer momento fue duplicar el socket en el standar output. Pero con esto nos surgi\'o el problema de que del lado del server no podiamos escribir en pantalla el comando ejecutado. Para solucionar esto utilizamos otro file descriptor al cual le aplicamos tambi\'en la operaci\'on $dup2$ con el stdout. Luego asi pudimos tambi\'en imprimir el comando ejecutado en pantalla. El otro inconveniente que tuvimos fue que en un primer momento la salida del comando no llegaba bien al cliente. Luego de varias pruebas nos dimos cuenta que el string que llegaba no era el correcto. Lo que pensamos era que no ten\'ia el caracter null al final, asique hicimos la prueba y efectivamente ese hab\'ia sido el problema. Por lo tanto en el cliente cuando recibe el output del comando, le agregamos el caracter null al final. Con esto solucionado el ejercicio quedo como esperabamos.\\\\
+ Queda para una futura implementaci\'on solucionar los problemas que nos dijeron que no tengamos en cuanta como ser: cuando el mensaje no entra en el tama\~{n}o del mensaje definido, cuando el comando no tiene ningun tipo de salida, etc. 
+Y m\'as personalemnte nos gustar\'ia investigar como se podria tener $autocompletion$ del lado del cliente, ya que es una utilidad interesante para tener en cuenta.
+
+
+
+
+ 
+ 
+
+\end{document}
+

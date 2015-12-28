@@ -1,0 +1,47 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage[spanish] {babel}
+\title{Taller 1}
+\usepackage{caratula}
+\usepackage{amssymb}
+
+\setlength{\leftmargin}{2cm}
+\setlength{\rightmargin}{2cm}
+\setlength{\oddsidemargin}{-1cm}
+\setlength{\evensidemargin}{-1cm}
+\setlength{\topmargin}{-1cm}
+\setlength{\textwidth}{18cm}
+\setlength{\textheight}{25cm}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead [L]{\scriptsize Trabajo Pr\'actico N$^{\circ}$1}
+\fancyhead [R]{\scriptsize Mancuso, Mataloni}%1{20pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\materia{Sistemas Operativos}
+\submateria{Primer Cuatrimestre de 2010}
+\titulo{Taller N$^{\circ}$1}
+\subtitulo{Mini Telnet}
+\grupo{Grupo}
+\integrante{Mataloni Alejandro}{706/07}{amataloni@gmail.com}
+\integrante{Mancuso Emiliano}{597/07}{emiliano.mancuso@gmail.com}
+\maketitle
+
+\newpage
+
+\section{Ejercicio 1}
+ Para este ejercicio lo que tuvimos que hacer fue utilizar el comando strace para determinar, mediante las llamadas al sistema operativo, como se comportaba el ejecutable $mister$ entregado por la c\'atedra.Luego de mirar un poco estas llamadas logramos entender el funcionamiento del mismo. Lo que hace el programa es generar 2 pipes. Luego se crea un proceso hijo con el cual se comunicara con su padre de la siguiente manera: el hijo lee lo que el padre escribe en un pipe, y escribe en el otro pipe la cantidad de caracteres que tenia el mensaje que ley\'o del padre. 
+ Lo primero que encontramos fue que corriendo este mismo ejecutable en 2 maquinas distintas su comportamiento no era exactamente el mismo. Esto sucedia porque todo depende de los sistemas, de la politica de scheduling del mismo, y los procesos corriendo en ese momento. 
+ 
+
+
+\section{Ejercicio 2}
+ Este ejercicio consistia en hacer un programa que ejecute un programa pasado como par\'ametro, pero que no le permita el mismo ejecutar ninguna de las siguientes syscalls: $fork(), clone()$. Esto lo implementamos con la instrucci\'on $ptrace$. Con esta instrucci\'on logramos que el el padre se entere cuando el proceso hijo hace una syscall por lo tanto cuando el padre captura est\'a llamada pregunta si la misma es alguna de las prohibidas, si esto ocurre frena la ejecuci\'on y mata al proceso hijo (con la funci\'on ptrace pasandole como par\'ametro PTRACE\_KILL y el pid del proceso).
+
+
+
+\end{document}
+

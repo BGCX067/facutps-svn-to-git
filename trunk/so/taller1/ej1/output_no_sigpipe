@@ -1,0 +1,48 @@
+execve("./mister", ["./mister"], ["ORBIT_SOCKETDIR=/tmp/orbit-emanc"..., "SSH_AGENT_PID=1050", "TERM=xterm", "SHELL=/bin/bash", "XDG_SESSION_COOKIE=27024ec9ad910"..., "WINDOWID=73400323", "OLDPWD=/home/emancu/svn/so", "GNOME_KEYRING_CONTROL=/tmp/keyri"..., "GTK_MODULES=canberra-gtk-module", "USER=emancu", "LS_COLORS=rs=0:di=01;34:ln=01;36"..., "SSH_AUTH_SOCK=/tmp/keyring-RslEt"..., "DEFAULTS_PATH=/usr/share/gconf/g"..., "SESSION_MANAGER=local/vbx:@/tmp/"..., "USERNAME=emancu", "XDG_CONFIG_DIRS=/etc/xdg/xdg-gno"..., "DESKTOP_SESSION=gnome", "PATH=/usr/local/sbin:/usr/local/"..., "PWD=/home/emancu/svn/so/tp1", "GDM_KEYBOARD_LAYOUT=us", "LANG=en_US.utf8", "MANDATORY_PATH=/usr/share/gconf/"..., "GDM_LANG=en_US.utf8", "PS1=\\[\33[36m\\]\\u@\\h:\\W$ \\[\33[m\33(B\\"..., "GDMSESSION=gnome", "SPEECHD_PORT=7560", "SHLVL=1", "HOME=/home/emancu", "GNOME_DESKTOP_SESSION_ID=this-is"..., "LOGNAME=emancu", "XDG_DATA_DIRS=/usr/share/gnome:/"..., "DBUS_SESSION_BUS_ADDRESS=unix:ab"..., "LESSOPEN=| /usr/bin/lesspipe %s", "DISPLAY=:0.0", "LESSCLOSE=/usr/bin/lesspipe %s %"..., "XAUTHORITY=/var/run/gdm/auth-for"..., "COLORTERM=gnome-terminal", "_=/usr/bin/strace"]) = 0
+uname({sysname="Linux", nodename="vbx", release="2.6.32-21-generic", version="#32-Ubuntu SMP Fri Apr 16 08:10:02 UTC 2010", machine="i686"}) = 0
+brk(0)                                  = 0x854d000
+brk(0x854dcd0)                          = 0x854dcd0
+set_thread_area({entry_number:-1 -> 6, base_addr:0x854d830, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
+brk(0x856ecd0)                          = 0x856ecd0
+brk(0x856f000)                          = 0x856f000
+pipe([3, 4])                            = 0
+pipe([5, 6])                            = 0
+clone(child_stack=0, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x854d898) = 19024
+[pid 19023] close(3)                    = 0
+[pid 19023] close(6)                    = 0
+[pid 19023] write(4, "vaca", 4)         = 4
+[pid 19023] read(5,  <unfinished ...>
+[pid 19024] close(4)                    = 0
+[pid 19024] close(5)                    = 0
+[pid 19024] read(3, "vaca", 1024)       = 4
+[pid 19024] write(6, "4\n", 2)          = 2
+[pid 19023] <... read resumed> "4\n", 1024) = 2
+[pid 19023] write(4, "Hay solo 10 tipos de personas, l"..., 68) = 68
+[pid 19023] read(5,  <unfinished ...>
+[pid 19024] read(3, "Hay solo 10 tipos de personas, l"..., 1024) = 68
+[pid 19024] write(6, "68\n", 3)         = 3
+[pid 19023] <... read resumed> "68\n", 1024) = 3
+[pid 19023] write(4, "Colegas, dej'e los parciales en "..., 73) = 73
+[pid 19023] read(5,  <unfinished ...>
+[pid 19024] read(3, "Colegas, dej'e los parciales en "..., 1024) = 73
+[pid 19024] write(6, "73\n", 3)         = 3
+[pid 19023] <... read resumed> "73\n", 1024) = 3
+[pid 19024] read(3,  <unfinished ...>
+[pid 19023] write(4, "chau", 4 <unfinished ...>
+[pid 19024] <... read resumed> "chau", 1024) = 4
+[pid 19023] <... write resumed> )       = 4
+[pid 19024] write(6, "4\n", 2 <unfinished ...>
+[pid 19023] read(5,  <unfinished ...>
+[pid 19024] <... write resumed> )       = 2
+[pid 19023] <... read resumed> "4\n", 1024) = 2
+[pid 19024] read(3,  <unfinished ...>
+[pid 19023] close(4 <unfinished ...>
+[pid 19024] <... read resumed> "", 1024) = 0
+[pid 19024] write(6, "0\n", 2)          = 2
+[pid 19024] close(3)                    = 0
+[pid 19024] close(6)                    = 0
+[pid 19024] exit_group(0)               = ?
+<... close resumed> )                   = 0
+--- SIGCHLD (Child exited) @ 0 (0) ---
+close(5)                                = 0
+exit_group(0)                           = ?

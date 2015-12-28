@@ -1,0 +1,1066 @@
+%% BEGIN: pst-node.doc
+\def\fileversion{0.93a}
+\def\filedate{93/03/12}
+%%
+%% pst-node.tex: Node macros for PSTricks.
+%% See the PSTricks read-me file and the User's Guide for documentation.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%%
+%% Copying of part or all of any file in the pstricks.tex package
+%% is allowed under the following conditions only:
+%% (1) You may freely distribute unchanged copies of the files. Please
+%%     include the documentation when you do so.
+%% (2) You may modify a renamed copy of any file, but only for personal
+%%     use or use within an organization.
+%% (3) You may copy fragments from the files, for personal use or for use
+%%     in a macro package for distribution, as long as credit is given
+%%     where credit is due.
+%%
+%% You are NOT ALLOWED to take money for the distribution or use of
+%% these files or modified versions or fragments thereof, except for
+%% a nominal charge for copying etc.
+%%
+% **************************************************************************
+% This file contains the documented code for pst-node.tex and pst-node.pro.
+% See the PSTricks read-me file for information on how to use this file.
+% **************************************************************************
+%
+% \EndDocPreamble
+%
+% \CheckSum{5874}
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+%
+% \part{pst-node.doc}
+%
+% Check whether file has been loaded already.
+%    \begin{macrocode}
+\csname PSTnodesLoaded\endcsname
+\let\PSTnodesLoaded\endinput
+%    \end{macrocode}
+%
+% Load "pstricks.tex" if necessary:
+%    \begin{macrocode}
+\ifx\PSTricksLoaded\endinput\else
+  \def\next{\input pstricks.tex}\expandafter\next
+\fi
+%    \end{macrocode}
+%
+% Take care of the catcode of "@":
+%    \begin{macrocode}
+\edef\TheAtCode{\the\catcode`\@}
+\catcode`\@=11
+%    \end{macrocode}
+%
+%
+% \section{Node header}
+%
+% Nodes use the dictionary "tx@NodeDict", which is always put on the stack
+% after "tx@Dict". "tx@NodeDict" should avoid using the same procedure names
+% as are found in "tx@Dict", especially those that do not use scratch
+% variables and hence can be used without problem when "tx@NodeDict" is on top
+% of the stack. When invoking a "tx@Dict" procedure that does use scratch
+% variables, "tx@Dict" should be put on top.
+%
+% \begin{macro}{\pst@nodedict}
+%    \begin{macrocode}
+\pst@ATH<\% Version \fileversion, \filedate.>
+\pst@ATH<\% For use with \pstdriver.>
+\pst@ATH</tx@NodeDict 200 dict def tx@NodeDict begin>
+\ifx\pst@useheader\iftrue
+  \pstheader{pst-node.pro}
+  \def\pst@nodedict{tx@NodeDict begin }
+\else
+  \def\pst@nodedict{%
+    /tx@NodeDict where
+    { pop }
+    { userdict begin /tx@NodeDict 200 dict def end }
+    ifelse
+    tx@NodeDict begin }
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Nodes}
+%
+%
+% \begin{macro}{\pst@getnode}
+%    \begin{macrocode}
+% A node is a dictionary. To reduce the chance of errors, we check that the
+% name begins with a letter and does not contain any spaces.
+%    \begin{macrocode}
+\def\pst@getnode#1#2{%
+  \pst@expandafter\pst@@getnode{#1} * \@nil{#1}#2}
+\def\pst@@getnode#1#2 #3\@nil#4#5{%
+  \ifcat#1a\relax
+    \def#5{/TheNode#1#2 }%
+  \else
+    \def#5{/BadNode }%
+    \@pstrickserr{Bad node name: `#4'}\@ehpa
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% Before a node is defined, the coordinate system is scaled to PSTricks'
+% standard coordinate system, with the origin at \TeX's current point. The
+% following objects should then be added to the node dictionary:
+% \begin{description}
+% \item[NodeMtrx] The current matrix.
+% \item[X] The x-coordinate of the center.
+% \item[Y] The y-coordinate of the center.
+% \item[NodePos] A procedure that, given the values of "Sin", "Cos", and
+% "Nodesep", gives the relative position of the point that is distance
+% "Nodesep"from the edge of the node, in the direction "(Cos,Sin)" from the
+% center. ``Relative'' means relative to "(X,Y)" and for the coordinate system
+% in effect when the node was defined.
+% \end{description}
+%
+% \begin{macro}{\tx@NewNode,\pst@newnode}
+% The node's dictionary size should be large enough for the 7 key's mentioned
+% above, plus any keys the node needs for "NodePos", plus a few more to avoid
+% mistakes.
+%
+% Syntax for "NewNode"
+% \begin{LVerbatim}
+%   {<beforenode_proc>} /<node_name> <dict_size> {<node_proc>} NewNode"
+% \end{LVerbatim}
+% "<beforenode_proc>" is stuff to be done with "tx@Dict". It might leave
+% things on the stack for use by "<node_proc>".
+%
+% Syntax for "\pst@newnode":
+% \begin{LVerbatim}
+%   \pst@newnode{<node_name>}{<dict_size>}{<beforenode_proc>}{<node_proc>}
+% \end{LVerbatim}
+%    \begin{macrocode}
+\pst@def{NewNode}<%
+  gsave
+    /next ED
+    dict
+    dup 3 -1 roll ED
+    begin
+      tx@Dict begin
+        \tx@STV
+        CP T
+        exec
+      end
+      /NodeMtrx CM def
+      next
+    end
+  grestore>
+\def\pst@newnode#1#2#3#4{%
+  \leavevmode
+  \pst@getnode{#1}\pst@thenode
+  \pst@Verb{%
+    \pst@nodedict
+       { #3 } \pst@thenode #2 { #4 } \tx@NewNode
+    end}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@InitPnode,\pnode}
+%    \begin{macrocode}
+\pst@def{InitPnode}<%
+  /Y ED /X ED
+  /NodePos { Nodesep Cos mul Nodesep Sin mul } def>
+\def\pnode{\@ifnextchar({\pnode@}{\pnode@(0,0)}}
+\def\pnode@(#1)#2{%
+  \pst@@getcoor{#1}%
+  \pst@newnode{#2}{10}{\pst@coor}{\tx@InitPnode}%
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@InitCnode,\cnode}
+%    \begin{macrocode}
+\pst@def{InitCnode}<%
+  /r ED /Y ED /X ED
+  /NodePos { Nodesep r add dup Cos mul exch Sin mul } def>
+\def\cnode{\def\pst@par{}\pst@object{cnode}}
+\def\cnode@i{\@ifnextchar({\cnode@ii}{\cnode@ii(0,0)}}
+\def\cnode@ii(#1)#2#3{%
+  \begingroup
+    \use@par
+    \pscircle@do(#1){#2}%
+    \pst@@getcoor{#1}%
+    \pssetlength\pst@dimc{#2}%
+    \pst@newnode{#3}{11}{%
+      \pst@coor
+      \pst@number\pst@dimc
+      \pst@number\pslinewidth
+      \psk@dimen .5 sub mul sub}%
+      {\tx@InitCnode}%
+  \endgroup
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\def\cnodeput{\def\pst@par{}\pst@object{cnodeput}}
+\def\cnodeput@i{%
+  \begingroup
+    \pst@killglue
+    \leavevmode
+    \pst@getrputrot
+    \cnodeput@ii}
+\def\cnodeput@ii(#1)#2{%
+  \pst@makebox{\cput@iii{\cnodeput@iii{#2}}(#1)}}
+\def\cnodeput@iii#1{%
+  \pst@newnode{#1}{11}{\pscirclebox@iv \pst@number\pslinewidth add}%
+    {\tx@InitCnode}}
+%    \end{macrocode}
+%
+% \begin{macro}{\circlenode}
+%    \begin{macrocode}
+\def\circlenode{\def\pst@par{}\pst@object{circlenode}}
+\def\circlenode@i#1{\pst@makebox{\pscirclebox@ii{\cnodeput@iii{#1}}}}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\pst@def{GetRnodePos}<%
+  Cos 0 gt
+  { /dx r Nodesep add def }
+  { /dx l Nodesep sub def }
+  ifelse
+  Sin 0 gt
+  { /dy u Nodesep add def }
+  { /dy d Nodesep sub def }
+  ifelse
+  dx Sin mul abs dy Cos mul abs gt
+  { dy Cos mul Sin div dy }
+  { dx dup Sin mul Cos \tx@Div }
+  ifelse>
+%    \end{macrocode}
+%
+% \begin{macro}{InitRnode}
+% Syntax:
+% \begin{Ex}
+%   <yref ht dp bool xref wd> InitRnode
+% \end{Ex}
+% Additional keys: "r", "l", "d", "u", "dx" and "dy".
+%    \begin{macrocode}
+\pst@def{InitRnode}<%
+  /r ED r mul neg /l ED /r r l add def
+  /X l neg def
+  { neg /d ED /u ED /Y 0 def }
+  { neg /Y ED
+    Y sub /u ED
+    u mul neg /d ED
+    /u u d add def
+    /Y Y d sub def }
+  ifelse
+  /NodePos { \tx@GetRnodePos } def>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\rnode}
+% The ability to set the refpoint is an undocumented feature that may be
+% omitted.
+%    \begin{macrocode}
+\def\rnode{\begingroup\pst@getref\rnode@}
+\def\rnode@#1{\pst@makebox{\rnode@@{#1}}}
+\def\rnode@@#1{%
+  \ifx\refpoint@x\relax
+    \def\refpoint@y{.5}%
+    \def\refpoint@x{.5}%
+  \fi
+  \pst@newnode{#1}{16}{}{%
+    \ifx\refpoint@x\relax .5 \else \refpoint@y\space \fi
+    \pst@number{\ht\pst@hbox}%
+    \pst@number{\dp\pst@hbox}%
+    \ifx\refpoint@y\@empty true \else false \fi
+    \refpoint@x\space
+    \pst@number{\wd\pst@hbox}%
+    \tx@InitRnode}%
+  \box\pst@hbox
+  \endgroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{InitRNode}
+% Syntax:
+% \begin{Ex}
+%   <ht dp wd xref yref> "InitRNode"
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{InitRNode}<%
+  /Y ED /X ED /r ED /X r 2 div X add def /r r X sub def /l X neg def
+  Y add neg /d ED Y sub /u ED
+  /NodePos { \tx@GetRnodePos } def>
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\Rnode}
+%    \begin{macrocode}
+\def\Rnode{\@ifnextchar({\Rnode@}{\Rnode@(\RnodeRef)}}
+\def\Rnode@(#1)#2{\pst@makebox{\Rnode@@(#1){#2}}}
+\def\Rnode@@(#1)#2{%
+  \begingroup
+    \pst@@getcoor{#1}%
+    \pst@newnode{#2}{16}{%
+      \pst@number{\ht\pst@hbox}\pst@number{\dp\pst@hbox}%
+      \pst@number{\wd\pst@hbox}\pst@coor}{\tx@InitRNode}%
+    \box\pst@hbox
+  \endgroup}
+\def\RnodeRef{0,.7ex}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{GetOnodePos}
+%    \begin{macrocode}
+\pst@def{GetOnodePos}<%
+  /ww w Nodesep add def /hh h Nodesep add def
+  Sin ww mul Cos hh mul \tx@Atan dup
+  cos ww mul exch sin hh mul>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ovalnode}
+% Additional keys: "w", "h", "ww", "hh".
+%    \begin{macrocode}
+\def\ovalnode{\def\pst@par{}\pst@object{ovalnode}}
+\def\ovalnode@i#1{\pst@makebox{\psovalbox@ii{\ovalnode@ii{#1}}}}
+\def\ovalnode@ii#1{%
+  \pst@newnode{#1}{14}{}{%
+    /X \pst@number{\wd\pst@hbox}2 div def
+    /Y \pst@number\pst@dimg 2 div \pst@number{\dp\pst@hbox}sub def
+    /w \pst@number\pst@dima def
+    /h \pst@number\pst@dimb def
+    /NodePos { \tx@GetOnodePos } def}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Node connections: Preliminaries}
+%
+% \begin{macro}{\tx@GetCenter,\tx@GetAngle}
+% Syntax:
+% \begin{Ex}
+%   - "GetCenter" <x y>  \hskip 1em (Center coordinates)\\
+%   - "GetAngle" <angle>       \hskip 1em (Angle from A to B)
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{GetCenter}<begin X Y NodeMtrx transform CM itransform end>
+\pst@def{GetAngle}<%
+  nodeA \tx@GetCenter
+  nodeB \tx@GetCenter
+  3 -1 roll sub 3 1 roll sub neg \tx@Atan>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@GetEdge,\tx@GetPos}
+% Syntax:
+% \begin{Ex}
+% <offset angle nodesep node> "GetEdge" <x y>
+% \end{Ex}
+% "GetPos" defines "(x1,y1)" and "(x2,y2)" to be coordinates of position for
+% node A and B, taking into account "AngleA", "AngleB", "OffsetA", "OffsetB",
+% "NodesepA" and "NodesepB".
+%    \begin{macrocode}
+\pst@def{GetEdge}<%
+  begin
+    /Nodesep ED
+    dup
+    1 0 NodeMtrx dtransform CM idtransform exch atan sub
+    dup sin /Sin ED cos /Cos ED
+    NodePos Y add exch X add exch
+    NodeMtrx transform CM itransform
+  end % offset angle x y
+  4 2 roll
+% Now add the offsets:
+  1 index 0 eq
+  { pop pop }
+  { 2 copy 5 2 roll % x offset angle y offset angle
+    cos mul add
+    4 1 roll
+    sin mul sub
+    exch }
+  ifelse>
+\pst@def{GetPos}<%
+  OffsetA AngleA NodesepA nodeA \tx@GetEdge /y1 ED /x1 ED
+  OffsetB AngleB NodesepB nodeB \tx@GetEdge /y2 ED /x2 ED>
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\def\check@arrow#1#2{%
+  \check@@arrow#2-\@nil
+  \if@pst
+    \addto@par{arrows=#2}%
+    \def\next{#1}%
+  \else
+    \def\next{#1{#2}}%
+  \fi
+  \next}
+\def\check@@arrow#1-#2\@nil{%
+  \ifx\@nil#2\@nil\@pstfalse\else\@psttrue\fi}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{InitNC}<%
+  /nodeB ED /nodeA ED
+  /NodesepB ED /NodesepA ED
+  /OffsetB ED /OffsetA ED
+  tx@NodeDict nodeA known tx@NodeDict nodeB known and dup
+  { /nodeA nodeA load def /nodeB nodeB load def } if>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\nc@object#1#2#3#4{%
+  \begin@OpenObj
+    \showpointsfalse
+    \pst@getnode{#1}\pst@tempa
+    \pst@getnode{#2}\pst@tempb
+    \gdef\lputpos@default{#3}%
+    \addto@pscode{%
+      \pst@nodedict
+        \psk@offsetA
+        \psk@offsetB neg
+        \psk@nodesepA
+        \psk@nodesepB
+        \pst@tempa
+        \pst@tempb
+        \tx@InitNC { #4 } if
+      end}%
+    \def\use@pscode{%
+      \pst@Verb{gsave \tx@STV newpath \pst@code\space grestore}%
+      \gdef\pst@code{}}%
+  \end@OpenObj}
+\def\lputpos@default{.5}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pc@object#1{%
+  \@ifnextchar({\pc@@object#1}{\pst@getarrows{\pc@@object#1}}}
+\def\pc@@object#1(#2)(#3){%
+  \pnode(#2){@@A}\pnode(#3){@@B}%
+  #1{@@A}{@@B}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\psset@nodesepA#1{\pst@getlength{#1}\psk@nodesepA}
+\def\psset@nodesepB#1{\pst@getlength{#1}\psk@nodesepB}
+\def\psset@nodesep#1{%
+  \psset@nodesepA{#1}\let\psk@nodesepB\psk@nodesepA}
+\psset@nodesep{0}
+%    \end{macrocode}
+%
+% \begin{macro}{\psset@offset,\psk@offsetA,\psk@offsetB}
+%    \begin{macrocode}
+\def\psset@offsetA#1{\pst@getlength{#1}\psk@offsetA}
+\def\psset@offsetB#1{\pst@getlength{#1}\psk@offsetA}
+\def\psset@offset#1{%
+  \psset@offsetA{#1}\let\psk@offsetB\psk@offsetA}
+\psset@offset{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@arm,\psk@armA,\psk@armB}
+%    \begin{macrocode}
+\def\psset@armA#1{\pst@getlength{#1}\psk@armA}
+\def\psset@armB#1{\pst@getlength{#1}\psk@armB}
+\def\psset@arm#1{\psset@armA{#1}\let\psk@armB\psk@armA}
+\psset@arm{10pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@angle,\psk@angleA,\psk@angleB}
+%    \begin{macrocode}
+\def\psset@angleA#1{\pst@getangle{#1}\psk@angleA}
+\def\psset@angleB#1{\pst@getangle{#1}\psk@angleB}%
+\def\psset@angle#1{\pst@getangle{#1}\psk@angleA
+  \let\psk@angleB\psk@angleA}
+\psset@angle{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@arcangle,\psk@arcangleA,\psk@arcangleB}
+%    \begin{macrocode}
+\def\psset@arcangleA#1{\pst@getangle{#1}\psk@arcangleA}
+\def\psset@arcangleB#1{\pst@getangle{#1}\psk@arcangleB}%
+\def\psset@arcangle#1{\pst@getangle{#1}\psk@arcangleA
+  \let\psk@arcangleB\psk@arcangleA}
+\psset@arcangle{8}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@ncurv,\psk@ncurvA,\psk@ncurvB}
+%    \begin{macrocode}
+\def\psset@ncurvA#1{\pst@checknum{#1}\psk@ncurvA}
+\def\psset@ncurvB#1{\pst@checknum{#1}\psk@ncurvB}%
+\def\psset@ncurv#1{\psset@ncurvA{#1}\let\psk@ncurvB\psk@ncurvA}
+\psset@ncurv{.67}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Node connections: The real thing}
+%
+%    \begin{macrocode}
+\pst@def{LineMP}<%
+  4 copy
+  1 t sub mul exch t mul add 3 1 roll
+  1 t sub mul exch t mul add exch 6 2 roll
+  sub 3 1 roll sub \tx@Atan>
+%    \end{macrocode}
+%
+% \begin{macro}{\tx@NCCoor,\tx@NCLine}
+% Syntax:
+% \begin{Ex}
+%   <OffsetB NodesepB OffsetA NodesepA> NCLine
+% \end{Ex}
+% Leaves coordinates on stack rather than actually drawing line.
+%    \begin{macrocode}
+\pst@def{NCCoor}<%
+  \tx@GetAngle
+  /AngleA ED /AngleB AngleA 180 add def
+  \tx@GetPos
+  /LPutVar [ x2 x1 y2 y1 ] cvx def
+  /LPutPos { LPutVar \tx@LineMP } def
+  x1 y1 x2 y2>
+\pst@def{NCLine}<%
+  \tx@NCCoor
+  tx@Dict begin
+    ArrowB
+    4 2 roll
+    ArrowA
+    lineto
+  end>
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\def\ncline{\def\pst@par{}\pst@object{ncline}}
+\def\ncline@i{\check@arrow{\ncline@ii}}
+\def\ncline@ii#1#2{\nc@object{#1}{#2}{.5}{\tx@NCLine}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pcline{\def\pst@par{}\pst@object{pcline}}
+\def\pcline@i{\pc@object\ncline@ii}
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}
+\def\ncLine{\def\pst@par{}\pst@object{ncLine}}
+\def\ncLine@i{\check@arrow{\ncLine@ii}}
+\def\ncLine@ii#1#2{\nc@object{#1}{#2}{.5}%
+  {\tx@NCLine
+  /LPutVar [
+    nodeA \tx@GetCenter
+    nodeB \tx@GetCenter
+    3 1 roll 4 1 roll
+  ] cvx def }}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{BezierMidpoint}<%
+  /y3 ED /x3 ED
+  /y2 ED /x2 ED
+  /y1 ED /x1 ED
+  /y0 ED /x0 ED
+  /t ED
+  /cx x1 x0 sub 3 mul def
+  /cy y1 y0 sub 3 mul def
+  /bx x2 x1 sub 3 mul cx sub def
+  /by y2 y1 sub 3 mul cy sub def
+  /ax x3 x0 sub cx sub bx sub def
+  /ay y3 y0 sub cy sub by sub def
+  ax t 3 exp mul bx t t mul mul add cx t mul add x0 add
+  ay t 3 exp mul by t t mul mul add cy t mul add y0 add
+  3 ay t t mul mul mul 2 by t mul mul add cy add
+  3 ax t t mul mul mul 2 bx t mul mul add cx add
+  atan>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{GetArms}<%
+  /x1a armA AngleA cos mul x1 add def
+  /y1a armA AngleA sin mul y1 add def
+  /x2a armB AngleB cos mul x2 add def
+  /y2a armB AngleB sin mul y2 add def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{NCCurve}<%
+  \tx@GetPos
+  x1 x2 sub y1 y2 sub \tx@Pyth
+  2 div dup
+  3 -1 roll mul /armA ED mul /armB ED
+  \tx@GetArms
+  x1a y1a x1 y1 tx@Dict begin ArrowA end
+  x2a y2a x2 y2 tx@Dict begin ArrowB end
+  curveto
+  /LPutVar [ x1 y1 x1a y1a x2a y2a x2 y2 ] cvx def
+  /LPutPos { t LPutVar \tx@BezierMidpoint } def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\nccurve{\def\pst@par{}\pst@object{nccurve}}
+\def\nccurve@i{\check@arrow{\nccurve@ii}}
+\def\nccurve@ii#1#2{\nc@object{#1}{#2}{.5}{%
+  /AngleA \psk@angleA\space def /AngleB \psk@angleB\space def
+  \psk@ncurvB\space \psk@ncurvA\space
+  \tx@NCCurve}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pccurve{\def\pst@par{}\pst@object{pccurve}}
+\def\pccurve@i{\pc@object\nccurve@ii}
+%    \end{macrocode}
+%
+%
+%    \begin{macrocode}
+\def\ncarc{\def\pst@par{}\pst@object{ncarc}}
+\def\ncarc@i{\check@arrow{\ncarc@ii}}
+\def\ncarc@ii#1#2{\nc@object{#1}{#2}{.5}{%
+  \tx@GetAngle dup
+  \psk@arcangleA\space add /AngleA ED
+  \psk@arcangleB\space sub 180 add /AngleB ED
+  \psk@ncurvB\space \psk@ncurvA\space
+  \tx@NCCurve}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pcarc{\def\pst@par{}\pst@object{pcarc}}
+\def\pcarc@i{\pc@object\ncarc@ii}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{AnglesMP}<%
+  LPutVar
+  t 3 gt
+  { /t t 3 sub def }
+  { t 2 gt
+    { /t t 2 sub def 10 -2 roll }
+    { t 1 gt
+      { /t t 1 sub def 10 -4 roll }
+      { 10 4 roll }
+      ifelse }
+    ifelse }
+  ifelse
+  6 { pop } repeat
+  3 -1 roll exch \tx@LineMP>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{NCAngles}<%
+  \tx@GetPos
+  \tx@GetArms
+  /mtrx AngleA matrix rotate def
+  x1a y1a mtrx transform pop
+  x2a y2a mtrx transform exch pop
+  mtrx itransform
+  /y0 ED /x0 ED
+  mark
+  armB 0 ne { x2 y2 } if x2a y2a x0 y0 x1a y1a armA 0 ne { x1 y1 } if
+  tx@Dict begin false \tx@Line end
+  /LPutVar [ x2 y2 x2a y2a x0 y0 x1a y1a x1 y1 ] cvx def
+  /LPutPos { \tx@AnglesMP } def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\ncangles{\def\pst@par{}\pst@object{ncangles}}
+\def\ncangles@i{\check@arrow{\ncangles@ii}}
+\def\ncangles@ii#1#2{%
+  \nc@object{#1}{#2}{1.5}{\ncangles@iii \tx@NCAngles}}
+\def\ncangles@iii{%
+  tx@Dict begin
+  \ifdim\pslinearc>\z@
+    /r \pst@number\pslinearc def
+    /Lineto { \tx@Arcto } def
+  \else
+    /Lineto { L } def
+  \fi
+  end
+  /AngleA \psk@angleA\space def /AngleB \psk@angleB\space def
+  /armA \psk@armA\space def /armB \psk@armB\space def }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pcangles{\def\pst@par{}\pst@object{pcangles}}
+\def\pcangles@i{\pc@object\ncangles@ii}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{NCAngle}<%
+  \tx@GetPos
+  /x2a armB AngleB cos mul x2 add def
+  /y2a armB AngleB sin mul y2 add def
+  /mtrx AngleA matrix rotate def
+  x2a y2a mtrx transform pop
+  x1 y1 mtrx transform exch pop
+  mtrx itransform
+  /y0 ED /x0 ED
+  mark
+  armB 0 ne { x2 y2 } if x2a y2a x0 y0 x1 y1
+  tx@Dict begin false \tx@Line end
+  /LPutVar [ x2 y2 x2 y2 x2a y2a x0 y0 x1 y1 ] cvx def
+  /LPutPos { \tx@AnglesMP } def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\ncangle{\def\pst@par{}\pst@object{ncangle}}
+\def\ncangle@i{\check@arrow{\ncangle@ii}}
+\def\ncangle@ii#1#2{%
+  \nc@object{#1}{#2}{1.5}{\ncangles@iii \tx@NCAngle}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pcangle{\def\pst@par{}\pst@object{pcangle}}
+\def\pcangle@i{\pc@object\ncangle@ii}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{NCBar}<%
+  \tx@GetPos
+  \tx@GetArms
+  /mtrx AngleA matrix rotate def
+  x1a y1a mtrx transform pop
+  x2a y2a mtrx transform pop sub
+  dup 0 mtrx itransform
+  3 -1 roll 0 gt
+  { /y2a exch y2a add def /x2a exch x2a add def }
+  { /y1a exch neg y1a add def /x2a exch neg x2a add def }
+  ifelse
+  mark
+  x2 y2 x2a y2a x1a y1a x1 y1
+  tx@Dict begin false \tx@Line end
+  /LPutVar [ x2 y2 x2 y2 x2a y2a x1a y1a x1 y1 ] cvx def
+  /LPutPos { LPutVar \tx@AnglesMP } def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\ncbar{\def\pst@par{}\pst@object{ncbar}}
+\def\ncbar@i{\check@arrow{\ncbar@ii}}
+\def\ncbar@ii#1#2{\nc@object{#1}{#2}{1.5}{%
+  \ncangles@iii /AngleB \psk@angleA def \tx@NCBar}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pcbar{\def\pst@par{}\pst@object{pcbar}}
+\def\pcbar@i{\pc@object\ncbar@ii}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@def{NCDiag}<%
+  \tx@GetPos
+  \tx@GetArms
+  mark
+  x2 y2 x2a y2a x1a y1a x1 y1
+  tx@Dict begin false \tx@Line end
+  /LPutVar [ x2 y2 x2 y2 x2a y2a x1a y1a x1 y1 ] cvx def
+  /LPutPos { \tx@AnglesMP } def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\ncdiag{\def\pst@par{}\pst@object{ncdiag}}
+\def\ncdiag@i{\check@arrow{\ncdiag@ii}}
+\def\ncdiag@ii#1#2{%
+  \nc@object{#1}{#2}{1.5}{\ncangles@iii \tx@NCDiag}}
+%    \end{macrocode}
+%
+% \begin{macro}{\pcdiag}
+%    \begin{macrocode}
+\def\pcdiag{\def\pst@par{}\pst@object{pcdiag}}
+\def\pcdiag@i{\pc@object\ncdiag@ii}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\pst@def{NCDiagg}<%
+  OffsetA AngleA NodesepA nodeA \tx@GetEdge
+  /y1 ED /x1 ED
+  /x1a armA AngleA cos mul x1 add def
+  /y1a armA AngleA sin mul y1 add def
+  nodeB \tx@GetCenter
+  y1a sub exch x1a sub \tx@Atan 180 add /AngleB ED
+  OffsetB AngleB NodesepB nodeB \tx@GetEdge
+  /y2 ED /x2 ED
+  mark
+  x2 y2 x1a y1a x1 y1
+  tx@Dict begin false \tx@Line end
+  /LPutVar [ x2 y2 x2 y2 x2 y2 x1a y1a x1 y1] cvx def
+  /LPutPos { \tx@AnglesMP } def>
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\ncdiagg{\def\pst@par{}\pst@object{ncdiagg}}
+\def\ncdiagg@i{\check@arrow{\ncdiagg@ii}}
+\def\ncdiagg@ii#1#2{%
+  \nc@object{#1}{#2}{.5}{\ncangles@iii \tx@NCDiagg}}
+%    \end{macrocode}
+%
+% \begin{macro}{\pcdiagg}
+%    \begin{macrocode}
+\def\pcdiagg{\def\pst@par{}\pst@object{pcdiagg}}
+\def\pcdiagg@i{\pc@object\ncdiagg@ii}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@LoopMP}
+%    \begin{macrocode}
+\pst@def{LoopMP}<%
+  /t t abs def
+  [ LPutVar ] length 2 div 1 sub dup t lt { /t ED } { pop } ifelse
+  mark LPutVar
+  t cvi { /t t 1 sub def pop pop } repeat
+  counttomark 1 add 4 roll cleartomark
+  3 -1 roll exch \tx@LineMP>
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\pst@def{NCLoop}<%
+  \tx@GetPos
+  \tx@GetArms
+  /mtrx AngleA matrix rotate def
+  x1a y1a mtrx transform loopsize add /y1b ED /x1b ED
+  /x2b x2a y2a mtrx transform pop def
+  x2b y1b mtrx itransform /y2b ED /x2b ED
+  x1b y1b mtrx itransform /y1b ED /x1b ED
+  mark
+  armB 0 ne { x2 y2 } if x2a y2a x2b y2b x1b y1b x1a y1a armA
+    0 ne { x1 y1 } if
+  tx@Dict begin false \tx@Line end
+  /LPutVar [ x2 y2 x2a y2a x2b y2b x1b y1b x1a y1a x1 y1 ] cvx def
+  /LPutPos { \tx@LoopMP } def>
+%    \end{macrocode}
+%
+% \begin{macro}{\psset@loopsize}
+%    \begin{macrocode}
+\def\psset@loopsize#1{\pst@getlength{#1}\psk@loopsize}
+\psset@loopsize{1cm}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\def\ncloop{\def\pst@par{}\pst@object{ncloop}}
+\def\ncloop@i{\check@arrow{\ncloop@ii}}
+\def\ncloop@ii#1#2{%
+  \nc@object{#1}{#2}{2.5}%
+    {\ncangles@iii /loopsize \psk@loopsize\space def \tx@NCLoop}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\pcloop{\def\pst@par{}\pst@object{pcloop}}
+\def\pcloop@i{\pc@object\ncloop@ii}
+%    \end{macrocode}
+%
+% \begin{macro}{\tx@NCCircle}
+%    \begin{macrocode}
+\pst@def{NCCircle}<%
+  nodeA \tx@GetCenter
+  0 0 NodesepA nodeA \tx@GetEdge
+  % Stack:  x-center y-center x-edge y-origin
+  pop 3 1 roll
+  /Y ED /X ED    % center
+  X sub 2 div    % half distance to edge
+  dup 2 exp r r mul sub abs sqrt atan 2 mul /a ED % angle to edge
+  r AngleA 90 add \tx@PtoC      % displacement to origin
+  Y add exch X add exch         % origin
+  2 copy /LPutVar [ 4 2 roll r a ] def
+  /LPutPos { LPutVar aload pop t 360 mul add dup 5 1 roll
+    90 sub \tx@PtoC 3 -1 roll add 3 1 roll add exch 3 -1 roll } def
+  r
+  AngleA 90 sub a add           % begin arc angle
+  AngleA 270 add a sub          % end arc angle
+  % Stack:  x0 y0 r a1 a2
+  tx@Dict begin
+    /angleB ED
+    /angleA ED
+    /r ED
+    /c 57.2957 r \tx@Div def
+    /y ED
+    /x ED>
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\def\nccircle{\def\pst@par{}\pst@object{nccircle}}
+\def\nccircle@i{\check@arrow{\nccircle@ii}}
+\def\nccircle@ii#1#2{%
+  \pssetlength\pst@dima{#2}%
+  \nc@object{#1}{#1}{.5}{%
+    /AngleA \psk@angleA def
+    /r \pst@number\pst@dima def
+     \tx@NCCircle \psarc@v end}}
+%    \end{macrocode}
+%
+%
+% \section{Node Labels}
+%
+%
+% \begin{macro}{\pst@getlputrot}
+%    \begin{macrocode}
+\def\pst@getlputrot#1{%
+  \@ifnextchar(%
+    {\def\pst@rot{}#1}%
+    {\pst@@getlputrot{\@ifnextchar({#1}{#1(\lputpos@default)}}}}
+\def\pst@@getlputrot#1#2{%
+  \pst@expandafter{\@ifnextchar:{\pst@@@getlputrot}%
+    {\@ifstar{\pst@@@getrot}{\pst@@getrot}}}{#2}\@nil
+  \ifx\pst@rotlist\@empty\else
+    \edef\pst@rotlist{\pst@rotlist \pst@rot add }%
+  \fi
+  #1}
+\def\pst@@@getlputrot#1#2\@nil{%
+  \pst@@getrot#2\@nil
+  \edef\pst@rot{langle \ifx\pst@rot\@empty\else\pst@rot add \fi}}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{LPutCoor}
+%    \begin{macrocode}
+\pst@def{LPutCoor}<%
+  tx@NodeDict /LPutPos known
+  { gsave
+      LPutPos
+      tx@Dict begin
+        /langle ED
+        CM 3 1 roll
+        \tx@STV
+        CP 3 -1 roll sub neg 3 1 roll sub exch
+        moveto
+        setmatrix
+        CP
+      end
+    grestore }
+  { 0 0 tx@Dict /langle 0 def end }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psput@lput}
+%    \begin{macrocode}
+\def\psput@lput#1#2{%
+  \pst@checknum{#1}\pst@tempa
+  \hbox{%
+    \pst@Verb{%
+      \pst@nodedict
+        /t \pst@tempa\space def
+        \tx@LPutCoor
+      end
+      \tx@PutBegin}%
+    \box#2%
+    \pst@Verb{\tx@PutEnd}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\lput}
+%    \begin{macrocode}
+\def\lput{\begin@psput{\pst@getref{\pst@getlputrot{\end@psput\lput@i}}}}
+\def\lput@i(#1){%
+    \pst@makesmall\pst@hbox
+    \ifx\pst@rot\@empty\else\pst@rotate\pst@hbox\fi
+    \psput@lput{#1}\pst@hbox}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\mput}
+%    \begin{macrocode}
+\def\mput{%
+  \begin@psput{\def\pst@rot{}\pst@getref{\end@psput\lput@i(\lputpos@default)}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\aput,\Aput,\bput,\Bput}
+%    \begin{macrocode}
+\def\aput@#1{\begin@psput{%
+  \def\pst@refangle{#1 }%
+  \@ifnextchar[{\aput@i}{\pst@getlputrot{\end@psput\aput@ii}}}}
+\def\aput@i[#1]{%
+  \pssetlength\pslabelsep{#1}\pst@getlputrot{\end@psput\aput@ii}}
+\def\aput@ii(#1){%
+    \uput@iv\aput@iii
+    \psput@lput{#1}\pst@hbox}
+\def\aput@iii{exch pop add a \tx@PtoC h1 add exch w1 add exch }
+\def\aput{\aput@{langle 90 add}}
+\def\bput{\aput@{langle 90 sub}}
+\def\Aput@#1{\begin@psput{%
+  \def\pst@refangle{#1 }%
+  \def\pst@rot{}%
+  \@ifnextchar[{\Aput@i}{\end@psput\aput@ii(\lputpos@default)}}}
+\def\Aput@i[#1]{%
+  \pssetlength\pslabelsep{#1}%
+  \end@psput\aput@ii(\lputpos@default)}
+\def\Aput{\Aput@{langle 90 add}}
+\def\Bput{\Aput@{langle 90 sub}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\Lput,\Mput}
+% These are obsolete.
+%    \begin{macrocode}
+\def\Lput{%
+  \begin@psput{\pst@getlabelsep{\pst@getlputrot{\end@psput{\Rput@i\lput@i}}}}}
+\def\Mput{%
+  \begin@psput{%
+    \def\pst@rot{}%
+    \pst@getlabelsep{\end@psput{\Rput@i\lput@i}(\lputpos@default)}}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Node coordinates}
+%
+% \begin{macro}{\node@coor}
+%    \begin{macrocode}
+\def\node@coor#1;#2\@nil{%
+  \pst@getnode{#1}\pst@tempg
+  \edef\pst@coor{%
+    \pst@nodedict
+    tx@NodeDict \pst@tempg known
+    { \pst@tempg load \tx@GetCenter }
+    { 0 0 }
+    ifelse
+    end }}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Node@coor}
+%    \begin{macrocode}
+\def\Node@coor[#1]#2;#3\@nil{%
+  \begingroup
+    \psset{#1}%
+    \pst@getnode{#2}\pst@tempg
+    \xdef\pst@tempg{%
+      \pst@nodedict
+      tx@NodeDict \pst@tempg known
+      { \psk@offsetA \psk@angleA \psk@nodesepA \pst@tempg load \tx@GetEdge }
+      { 0 0 }
+      ifelse
+      end }%
+  \endgroup
+  \let\pst@coor\pst@tempg}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+\pst@ATH<end>
+\catcode`\@=\TheAtCode\relax
+\endinput
+%    \end{macrocode}
+%
+% \Finale
+% \endinput
+%
+%% END: pst-node.doc

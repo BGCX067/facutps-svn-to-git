@@ -1,0 +1,3947 @@
+%%% BEGIN pst-user.tex
+\def\Date{93/03/12}
+\def\Version{0.93a}
+%% LaTeX file pst-user.tex. Source for the PSTricks User's Guide.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%%
+%% Copying of part or all of any file in the pstricks.tex package
+%% is allowed under the following conditions only:
+%% (1) You may freely distribute unchanged copies of the files. Please
+%%     include the documentation when you do so.
+%% (2) You may modify a renamed copy of any file, but only for personal
+%%     use or use within an organization.
+%% (3) You may copy fragments from the files, for personal use or for use
+%%     in a macro package for distribution, as long as credit is given
+%%     where credit is due.
+%%
+%% You are NOT ALLOWED to take money for the distribution or use of
+%% these files or modified versions or fragments thereof, except for
+%% a nominal charge for copying etc.
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Under normal circumstances, you do not need to LaTeX this file because
+%% the User's Guide is distributed with the PSTricks package, already
+%% typeset and converted to PostScript, as the files pst-usr1.ps and
+%% pst-usr2.ps. If you do need/want to run it again, here is what to do:
+%%
+%% * You must have installed the PSTricks package.
+%%
+%% * You must run this with the New Font Selection Scheme, available from
+%%     ftp.uni-stuttgart.de.
+%%   Please don't direct questions about the NFSS to me. You can also
+%%   get rid of the PostScript font stuff below and run with regular
+%%   LaTeX, but don't expect the spacing to be right.
+%%
+%% * You must have the files
+%%     pst-user.sty, defaults.pst, fancybox.sty, tvz-user.sty,
+%%     tvz-hax.sty and npsfont.sty,
+%%   which are distributed with PSTricks.
+%%
+%% * An index, pst-user.ind, is also distributed with PSTricks. You
+%%   can use makeindex, without any special styles, to remake the index.
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Include `a4' option for A4 paper,
+%% and/or `twoside' option for two-sided printing.
+%% It is not necessary to remake the index, if you make no other changes.
+
+\documentstyle{pst-user}
+
+\makeindex  % Comment this out to suppress generation of .idx file.
+
+\begin{document}
+
+\begingroup
+\evensidemargin \paperwidth\relax
+\advance\evensidemargin -2in
+\advance\evensidemargin -\textwidth
+\divide\evensidemargin 2
+\oddsidemargin\evensidemargin
+
+\begin{titlepage}
+
+\let\footnotesize\small
+\let\footnoterule\relax
+\setcounter{page}{0}
+
+\null
+\vfil
+\vskip 25pt
+\begin{center}
+  {\LARGE\bf PSTricks}:\\[5pt]
+  {\large\bf PostScript macros for Generic TeX.}\\
+\end{center}
+
+\bigskip\bigskip
+\hbox to \hsize{%
+  \hss
+  \psset{unit=.4cm}
+  \begin{pspicture}(0,-2)(31,12)
+    \catcode`\<=12
+    \rput(1.5,0){%
+      \psellipse[linewidth=1pt](8,7)(1,3)
+      \psframe[linecolor=white,fillstyle=solid,fillcolor=white]
+        (6.4,6.5)(8,7.5)
+      \psline[linearc=.3,linewidth=1pt](8,8)(8,7.5)(4,7.5)
+      \psbezier[linewidth=1pt](4,7.5)(3,7.5)(3,6.5)(3,5.5)
+      \psline[linearc=.3,linewidth=1pt](8,6)(8,6.5)(5,6.5)
+      \psbezier[linewidth=1pt](5,6.5)(4,6.5)(4,6.5)(4,5.5)
+      \psline[linewidth=1pt](3,5.5)(4,5.5)
+      \psline[linearc=.3,linewidth=1pt](5,7.5)(5,8)(6,8)(6,7.5)
+      \psframe[linewidth=1pt](5.3,8)(5.7,8.7)
+      \psframe[linewidth=1pt,framearc=1,fillstyle=solid,
+        fillcolor=white](4,8.7)(7,9)
+      \multirput(3.5,4.8)(0,-1){4}{%
+        \psbezier[linewidth=.5pt](0,0)(.25,-.4)(-.25,-.4)(0,0)}
+      \rput[t](5.5,0){Dripping Faucet}}
+    \rput(20,5){%
+      \pspolygon[linecolor=white,fillstyle=vlines,
+        fillcolor=darkgray,hatchsep=.2](1,4.5)(1,4)(4,4)(4,4.5)
+      \psline[linewidth=2pt](1,4)(4,4)
+      \psline[linewidth=1.5pt](2.5,4)(2.5,3.5)(2.9,3.3)(2.1,2.9)
+        (2.9,2.5)(2.1,2.1)(2.9,1.7)(2.1,1.3)(2.5,1.1)(2.5,0.6)
+      \psframe[linecolor=black,linewidth=1.5pt,fillstyle=solid,
+        fillcolor=lightgray](1.8,-1)(3.2,.6)
+      \rput(2.5,-.2){$M$}
+      \psline{<->}(3.7,-.9)(3.7,.5)
+      \psframe[linecolor=black,linewidth=1.5pt,fillstyle=solid,
+        fillcolor=lightgray](1.8,-3.5)(3.2,-1.9)
+      \rput(2.5,-2.7){$m$}
+      \psline{->}(5,1)(5,-1)
+      \rput[l](5.5,0){$g$}
+      \psline{->}(3.7,-2)(3.7,-3.4)
+      \rput[t](2.5,-4){Mathematical Model for}
+      \rput[t](2.5,-5){a Dripping Faucet}
+      \rput(-6,-2){%
+        \psset{linewidth=2pt}
+        \psline(0,.5)(2,.5)
+        \psline(0,-.5)(2,-.5)
+        \psline(1.5,1)(2.5,0)(1.5,-1)}}
+    \psframe[linewidth=2pt,framearc=.05,linecolor=gray](0,-2.5)(31,12)
+    \uput[l]{90}(0,4.75){\tt{leecheng}}
+  \end{pspicture}%
+  \hss}
+\bigskip
+\bigskip
+
+\begin{center}
+{\LARGE\bf User's Guide}\par
+\vskip 3em
+{\large \lineskip .75em Timothy Van Zandt}\par
+\vskip 1.5em {\large \thefiledate\\[2pt]Version \fileversion}\par
+\end{center}
+\vfil
+\small
+Author's address:\\
+  Department of Economics, Princeton University,\\
+  Princeton, NJ 08544-1021, USA. Internet: {\tt tvz@Princeton.EDU}
+
+\end{titlepage}
+
+\endgroup
+
+\setcounter{footnote}{0}
+\tableofcontents
+\pagenumbering{arabic}
+
+\part*{Welcome to PSTricks}
+
+PSTricks is a collection of PostScript-based \TeX{} macros that is compatible
+with most \TeX\ macro packages, including Plain \TeX, \LaTeX, \AmS\TeX, and
+\AmS-\LaTeX. PSTricks gives you color, graphics, rotation, trees and overlays.
+  PSTricks puts the icing (PostScript) on your cake (\TeX)!
+
+To install PSTricks, follow the instructions in the file "read-me.pst" that
+comes with the PSTricks package. Even if PSTricks has already been installed
+for you, give "read-me.pst" a look over.
+
+This {\em User's Guide} verges on being a reference manual, meaning that it is
+not designed to be read linearly. Here is a recommended strategy: Finish
+reading this brief overview of the features in PSTricks. Then thumb through
+the entire {\em User's Guide} to get your own overview. Return to Part
+\ref{P-essentials} (Essentials) and read it carefully. Refer to the remaining
+sections as the need arises.
+
+When you cannot figure out how to do something or when trouble arises, check
+out the appendices (Help). You just might be lucky enough to find a solution.
+There is also a \LaTeX\ file "samples.pst" of samples that is distributed with
+PSTricks. Look to this file for further inspiration.
+
+This documentation is written with \LaTeX. Some examples use \LaTeX\ specific
+constructs and some don't. However, there is nothing \LaTeX\ specific about
+any of the macros, nor is there anything that does not work with \LaTeX. This
+package has been tested with Plain \TeX, \LaTeX, \AmS-\LaTeX and \AmS\TeX, and
+should work with other \TeX\ macro packages as well.
+
+\File{pstricks}
+The main macro file is "pstricks.tex"/"pstricks.sty". Each of the PSTricks
+macro files comes with a ".tex" extension and a ".sty" extension; these are
+equivalent, but the ".sty" extension means that you can include the file name
+as a \LaTeX\ document style option.
+
+There are numerous supplementary macro files. A file, like the one above and
+the left, is used in this {\em User's Guide} to remind you that you must input
+a file before using the macros it contains.
+
+For most PSTricks macros, even if you misuse them, you will not get PostScript
+errors in the output. However, it is recommended that you resolve any \TeX\
+errors before attempting to print your document. A few PSTricks macros pass on
+PostScript errors without warning. Use these with care, especially if you are
+using a networked printer, because PostScript errors can cause a printer to
+bomb. Such macros are pointed out in strong terms, using a warning like this
+one:
+
+\begin{Warning}
+Use macros that do not check for PostScript errors with care. PostScript
+errors can cause a printer to bomb!
+\end{Warning}
+
+Keep in mind the following typographical conventions in this User's Guide.
+\begin{itemize}
+\item All literal input characters, i.e., those that should appear verbatim in
+your input file, appear in upright "Helvetica" and "Helvetica-Bold" fonts.
+\item Meta arguments, for which you are supposed to substitute a value (e.g.,
+<angle>) appear in slanted <Helvetica-Oblique> and {\UsageFont\MetaFont
+Helvetica-BoldOblique} fonts.
+\item The main entry for a macro or parameter that states its syntax appears
+in a large bold font, {\em except for the optional arguments, which are in
+medium weight}. This is how you can recognize the optional arguments.
+\item References to PSTricks commands and parameters within paragraphs are set
+in {\UsageFont Helvetica-Bold}.
+\end{itemize}
+
+
+\part{The Essentials\label{P-essentials}}
+
+
+\section{Arguments and delimiters}
+
+Here is some nitty-gritty about arguments and delimiters that is really
+important to know.
+
+The PSTricks macros use the following delimiters:
+\begin{center}
+\begin{tabular}{rl}
+Curly braces & "{<arg>}" \\
+Brackets (only for optional arguments) & "[<arg>]" \\
+Parentheses and commas for coordinates & \c{} \\
+"=" and "," for parameters & "<par1>=<val1>," \ldots\\
+\end{tabular}
+\end{center}
+Spaces and commas are also used as delimiters within arguments, but in this
+case the argument is expanded before looking for the delimiters.
+
+Always use a period rather than a comma to denote the decimal point, so that
+PSTricks doesn't mistake the comma for a delimiter.
+
+The easiest mistake to make with the PSTricks macros is to mess up the
+delimiters. This may generate complaints from \TeX{} or PSTricks about bad
+arguments, or other unilluminating errors such as the following:
+\begin{description}\itemsep=0pt\parsep=0pt
+\item[] "! Use of \get@coor doesn't match its definition."
+\item[] "! Paragraph ended before \pst@addcoor was complete."
+\item[]
+"! Forbidden control sequence found while scanning use of \check@arrow."
+\item[] "! File ended while scanning use of \lput."
+\end{description}
+Delimiters are generally the first thing to check when you get errors with a
+PSTricks macro.
+
+Since PSTricks macros can have many arguments, it is useful to know that you
+can leave a space or new line between any arguments, except between arguments
+enclosed in curly braces. If you need to insert a new line between arguments
+enclosed in curly braces, put a comment character "%" at the end of the line.
+
+As a general rule, the first non-space character after a PSTricks macro should
+not be a "[" or "(". Otherwise, PSTricks might think that the "[" or "(" is
+actually part of the macro. You can always get around this by inserting a pair
+"{}" of braces somewhere between the macro and the "[" or "(".
+
+
+\Section{Color\label{S-color}}
+
+The grayscales
+\begin{quote}
+  "black", "darkgray", "gray", "lightgray", and "white",
+\end{quote}
+and the colors
+\begin{quote}
+  "red", "green", "blue", "cyan", "magenta", and "yellow"
+\end{quote}
+are predefined in PSTricks.
+
+This means that these names can be used with the graphics objects that are
+described in later sections. This also means that the command \n\gray\ (or
+\n\red, etc.) can be used much like "\rm" or "\tt", as in
+\begin{Ex}
+  \gray\Large"{\gray This stuff should be gray.}"
+\end{Ex}
+The commands \n\gray, \n\red, etc. can be nested like the font commands as
+well. There are a few important ways in which the color commands differ from
+the font commands:
+\begin{enumerate}
+\item The color commands can be used in and out of math mode (there are no
+restrictions, other than proper \TeX\ grouping).
+
+\item The color commands affect whatever is in their scope (e.g., lines), not
+simply characters.
+
+\item The scope of the color commands does not extend across pages.
+
+\item The color commands are not as robust as font commands when used inside
+box macros. See page \pageref{colorboxproblems} for details. You can avoid
+most problems by explicitly grouping color commands (e.g., enclosing the scope
+in braces "{}") whenever these are in the argument of another
+command.\footnote{However, this is not necessary with the PSTricks LR-box
+commands, expect when \n\psverbboxtrue\ is in effect. See Section
+\ref{S-boxes}.}
+
+\end{enumerate}
+
+You can define or redefine additional colors and grayscales with the following
+commands. In each case, <numi> is a number between 0 and 1. Spaces are used as
+delimiters---don't add any extraneous spaces in the arguments.
+
+\begin{description}
+
+\mitem \newgray{color}{num}
+
+  <num> is the gray scale specification, to be set by PostScript's "setgray"
+operator. 0 is black and 1 is white. For example:
+\begin{LVerb}
+  \newgray{darkgray}{.25}
+\end{LVerb}
+
+\mitem \newrgbcolor{color}{num1 num2 num3}
+
+  <num1 num2 num3> is a {\em red-green-blue} specification, to be set by
+PostScript's "setrgbcolor" operator. For example,
+\begin{LVerb}
+  \newrgbcolor{green}{0 1 0}
+\end{LVerb}
+
+\mitem \newhsbcolor{color}{num1 num2 num3}
+
+  <num1 num2 num3> is an {\em hue-saturation-brightness} specification, to be
+set by PostScript's "sethsbcolor" operator. For example,
+\begin{LVerb}
+  \newhsbcolor{mycolor}{.3 .7 .9}
+\end{LVerb}
+
+\mitem \newcmykcolor{color}{num1 num2 num3 num4}
+
+  <num1 num2 num3 num4> is a {\em cyan-magenta-yellow-black} specification, to
+be set by PostScript's "newcmykcolor" operator. For example,
+\begin{LVerb}
+  \newcmykcolor{hercolor}{.5 1 0 .5}
+\end{LVerb}
+
+\end{description}
+
+For defining new colors, the {\em rbg} model is a sure thing. {\em hsb} is not
+recommended. {\em cmyk} is not supported by all Level 1 implementations of
+PostScript, although it is best for color printing. For more information on
+color models and color specifications, consult the {\em PostScript Language
+Reference Manual}, 2nd Edition (Red Book), and a color guide.
+
+\begin{drivers} The command \n\pstVerb\ must be defined.\end{drivers}
+
+
+\Section{Setting graphics parameters\label{S-par}}
+
+PSTricks uses a key-value system of graphics parameters to customize the
+macros that generate graphics (e.g., lines and circles), or graphics combined
+with text (e.g., framed boxes). You can change the default values of
+parameters with the command \n\psset, as in
+\begin{LVerb}
+  \psset{fillcolor=yellow}
+  \psset{linecolor=blue,framearc=.3,dash=3pt 6pt}
+\end{LVerb}
+The general syntax is:
+  \Mac  \psset{par1=value1`,par2=value2,\ldots'}
+As illustrated in the examples above, spaces are used as delimiters for some
+of the values. Additional spaces are allowed only following the comma that
+separates <par>"="<value> pairs (which is thus a good place to start a new
+line if there are many parameter changes). E.g., the first example is
+acceptable, but the second is not:
+\begin{LVerb}
+  \psset{fillcolor=yellow, linecolor=blue}
+  \psset{fillcolor= yellow,linecolor =blue }
+\end{LVerb}
+The parameters are described throughout this {\em User's Guide}, as they are
+needed.
+
+Nearly every macro that makes use of graphics parameters allows you to include
+changes as an optional first argument, enclosed in square brackets.
+For example,
+\begin{LVerb}
+  \psline[linecolor=green,linestyle=dotted](8,7)
+\end{LVerb}
+draws a dotted, green line. It is roughly equivalent to
+\begin{LVerb}
+  {\psset{linecolor=green,linestyle=dotted}\psline(8,7)}
+\end{LVerb}
+
+For many parameters, PSTricks processes the value and stores it in a peculiar
+form, ready for PostScript consumption. For others, PSTricks stores the value
+in a form that you would expect. In the latter case, this {\em User's Guide\/}
+will mention the name of the command where the value is stored. This is so
+that you can use the value to set other parameters. E.g.,
+\begin{LVerb}
+  \psset{linecolor=\psfillcolor,doublesep=.5\pslinewidth}
+\end{LVerb}
+However, even for these parameters, PSTricks may do some processing and
+error-checking, and you should always set them using \n\psset\ or as optional
+parameter changes, rather than redefining the command where the value is
+stored.
+
+\Section{Dimensions, coordinates and angles\label{S-coor}}
+
+Whenever an argument of a PSTricks macro is a dimension, the unit is optional.
+The default unit is set by the
+\begin{Ex}
+  \Par{unit=dim}   (1cm)
+\end{Ex}
+parameter. For example, with the default value of "1cm", the following are
+equivalent:
+\begin{LVerb}
+  \psset{linewidth=.5cm}
+  \psset{linewidth=.5}
+\end{LVerb}
+By never explicitly giving units, you can scale graphics by changing the value
+of \p{unit}.
+
+You can use the default coordinate when setting non-PSTricks dimensions as
+well, using the commands
+\begin{Ex}
+  \object  \pssetlength{cmd}{dim}
+  \object  \psaddtolength{cmd}{dim}
+\end{Ex}
+where <cmd> is a dimension register (in \LaTeX\ parlance, a ``length''), and
+<dim> is a length with optional unit. These are analogous to \LaTeX's
+"\setlength" and "\addtolength".
+
+Coordinate pairs have the form \c{}. The origin of the coordinate system is at
+\TeX's currentpoint. The command \n\SpecialCoor\ lets you use polar
+coordinates, in the form "(<r>;<a>)", where <r> is the radius (a dimension)
+and <a> is the angle (see below). You can still use Cartesian coordinates. For
+a complete description of \n\SpecialCoor, see Section \ref{S-SpecialCoor}.
+
+The \p{unit} parameter actually sets the following three parameters:
+\begin{Ex}
+  \Par{xunit=dim}  (1cm)
+  \Par{yunit=dim}  (1cm)
+  \Par{runit=dim}  (1cm)
+\end{Ex}
+These are the default units for x-coordinates, y-coordinates, and all other
+coordinates, respectively. By setting these independently, you can scale the x
+and y dimensions in Cartesian coordinate unevenly. After changing \p{yunit} to
+"1pt", the two \n\psline's below are equivalent:
+\begin{LVerb}
+  \psset{yunit=1pt}
+  \psline(0cm,20pt)(5cm,80pt)
+  \psline(0,20)(5,80)
+\end{LVerb}
+
+The values of the \p{runit}, \p{xunit} and \p{yunit} parameters are stored in
+the dimension registers \n\psunit (also \n\psrunit), \n\psxunit\ and
+\n\psyunit.
+
+Angles, in polar coordinates and other arguments, should be a number giving
+the angle in degrees, by default. You can also change the units used for
+angles with the command
+  \Mac  \degrees`[num]'
+<num> should be the number of units in a circle. For example, you might use
+\begin{LVerb}
+  \degrees[100]
+\end{LVerb}
+to make a pie chart when you know the shares in percentages. \n\degrees\
+without the argument is the same as
+\begin{LVerb}
+  \degrees[360]
+\end{LVerb}
+The command
+  \Mac  \radians
+is short for
+\begin{Ex}
+  "\degrees[6.28319]"
+\end{Ex}
+\n\SpecialCoor\ lets you specify angles in other ways as well.
+
+\Section{Basic graphics parameters}
+
+The width and color of lines is set by the parameters:
+\begin{Ex}
+  \Par{linewidth=dim}
+  \Par{linecolor=color}
+\end{Ex}
+The \p{linewidth} is stored in the dimension register \n\pslinewidth, and the
+\p{linecolor} is stored in the command \n\pslinecolor.
+
+The regions delimited by open and closed curves can be filled, as determined
+by the parameters:
+\begin{Ex}
+  \p{fillstyle=<style>}\\
+  \p{fillcolor=<color>}
+\end{Ex}
+When \p{fillstyle=none}, the regions are not filled. When \p{fillstyle=solid},
+the regions are filled with \p{fillcolor}. Other \p{fillstyle}'s are described
+in Section \ref{S-fillstyles}.
+
+The graphics objects all have a starred version (e.g., \n\psframe*) which
+draws a solid object whose color is \p{linecolor}. For example,
+\begin{MEx}(2,1)
+  \psellipse*(1,.5)(1,.5)
+\end{MEx}
+
+Open curves can have arrows, according to the
+\begin{Ex}
+  \p{arrows=<arrows>}
+\end{Ex}
+parameter. If \p{arrows=-}, you get no arrows.
+\begingroup
+\catcode`\<=12
+If \p{arrows=<->}, you get arrows on both ends of the curve. You can also set
+\p{arrows=->} and \p{arrows=<-},
+\endgroup
+if you just want an arrow on the end or beginning of the curve, respectively.
+With the open curves, you can also specify the arrows as an optional argument
+enclosed in "{}" brackets. This should come after the optional parameters
+argument. E.g.,
+\begin{MEx}(2,1)
+  \psline[linewidth=2pt]{<-}(2,1)
+\end{MEx}
+Other arrow styles are described in Section \ref{S-arrows}
+
+If you set the
+\begin{Ex}
+  \Par{showpoints=true/false}
+\end{Ex}
+parameter to "true", then most of the graphics objects will put dots at the
+appropriate coordinates or control points of the object.\footnote{The
+parameter value is stored in the conditional "\ifshowpoints".} Section
+\ref{S-dots} describes how to change the dot style.
+
+\part{Basic graphics objects\label{P-graphics}}
+
+\Section{Lines and polygons\label{S-lines}}
+
+The objects in this section also use the following parameters:
+\begin{description}
+\pitem[linearc=dim] The radius of arcs drawn at the corners of lines by the
+\n\psline\ and \n\pspolygon\ graphics objects. <dim> should be positive.
+\pitem[framearc=num] In the \n\psframe\ and the related box framing macros,
+the radius of rounded corners is set, by default, to one-half <num> times the
+width or height of the frame, whichever is less. <num> should be between 0 and
+1.
+\pitem[cornersize=relative/absolute] If \p{cornersize} is "relative", then the
+\p{framearc} parameter determines the radius of the rounded corners for
+\n\psframe, as described above (and hence the radius depends on the size of
+the frame). If \p{cornersize} is "absolute", then the \p{linearc} parameter
+determines the radius of the rounded corners for \n\psframe\ (and hence the
+radius is of constant size).
+\end{description}
+
+
+Now here are the lines and polygons:
+\begin{description}
+
+\oitem  \psline`{arrows}(\x0,\y0)'(\x1,\y1)`\ldots(\x n,\y n)'
+
+  This draws a line through the list of coordinates. For example:
+\begin{MEx*}(4,2)
+  \psline[linewidth=2pt,linearc=.25]{->}(4,2)(0,1)(2,0)
+\end{MEx*}
+
+\mitem  \qline(coor0)(coor1)
+
+  This is a streamlined version of \n\psline\ that does not pay attention to
+the \p{arrows} parameter, and that can only draw a single line segment. Note
+that both coordinates are obligatory, and there is no optional argument for
+setting parameters (use \n\psset\ if you need to change the \p{linewidth}, or
+whatever). For example:
+\begin{MEx*}(2,1)
+  \qline(0,0)(2,1)
+\end{MEx*}
+
+\oitem  \pspolygon`(\x0,\y0)'(\x1,\y1)(\x2,\y2)`\ldots(\x n,\y n)'
+
+  This is similar to \n\psline, but it draws a closed path. For example:
+\begin{MEx*}(4,2)
+  \pspolygon[linewidth=1.5pt](0,2)(1,2)
+  \pspolygon*[linearc=.2,linecolor=darkgray](1,0)(1,2)(4,0)(4,2)
+\end{MEx*}
+
+\oitem  \psframe`(\x0,\y0)'(\x1,\y1)
+
+  \n\psframe\ draws a rectangle with opposing corners \c0 and \c1. For
+example:
+\begin{MEx*}(4,2)
+  \psframe[linewidth=2pt,framearc=.3,fillstyle=solid,
+    fillcolor=lightgray](4,2)
+  \psframe*[linecolor=white](1,.5)(2,1.5)
+\end{MEx*}
+
+\end{description}
+
+\Section{Arcs, circles and ellipses}
+
+\begin{description}
+
+\oitem  \pscircle`(\x0,\y0)'{radius}
+
+This draws a circle whose center is at \c0 and that has radius <radius>. For
+example:
+\begin{MEx*}[-1,-1](2,2)
+  \pscircle[linewidth=2pt](.5,.5){1.5}
+\end{MEx*}
+
+\mitem  \qdisk(coor){radius}
+
+  This is a streamlined version of \n{\pscircle*}. Note that the two arguments
+are obligatory and there is no parameters arguments. To change the color of
+the disks, you have to use \n\psset:
+\begin{MEx}[1.9,2.9](2.1,3.1)
+  \psset{linecolor=gray}
+  \qdisk(2,3){4pt}
+\end{MEx}
+
+\oitem  \pswedge`(\x0,\y0)'{radius}{angle1}{angle2}
+
+  This draws a wedge whose center is at \c0, that has radius <radius>, and
+that extends counterclockwise from <angle1> to <angle2>. The angles must be
+specified in degrees. For example:
+\begin{MEx*}(2,2)
+  \pswedge[linecolor=gray,linewidth=2pt,fillstyle=solid]{2}{0}{70}
+\end{MEx*}
+
+\oitem  \psellipse`(\x0,\y0)'(\x1,\y1)
+
+\c0 is the center of the ellipse, and \x1 and \y1 are the horizontal and
+vertical radii, respectively. For example:
+\begin{MEx*}[-1,-1.5](2,1)
+  \psellipse[fillcolor=lightgray](.5,0)(1.5,1)
+\end{MEx*}
+
+\oitem  \psarc`{arrows}\c~'{radius}{angleA}{angleB}
+
+  This draws an arc from <angleA> to <angleB>, going counter clockwise, for a
+circle of radius <radius> and centered at \c{}. You must include either the
+{arrows} argument or the \c{} argument. For example:
+\begin{MEx*}(3,2)
+  \psarc*[showpoints=true](1.5,1.5){1.5}{215}{0}
+\end{MEx*}
+See how \p{showpoints=true} draws a dashed line from the center to the arc;
+this is useful when composing pictures.
+
+\n\psarc\ also uses the parameters:
+\begin{description}
+
+\pitem[arcsepA=dim](0pt)
+
+  <angleA> is adjusted so that the arc would just touch  a line of width <dim>
+that extended from the center of the arc in the direction of <angleA>.
+
+\pitem[arcsepB=dim](0pt) This is like \p{arcsepA}, but <angleB> is adjusted.
+
+\pitem[arcsep=dim] This just sets both \p{arcsepA} and \p{arcsepB}.
+\end{description}
+These parameters make it easy to draw two intersecting lines and then use
+\n\psarc\ with arrows to indicate the angle between them. For example:
+\begin{MEx*}(4,3)
+  \SpecialCoor
+  \psline[linewidth=2pt](4;50)(0,0)(4;10)
+  \psarc[arcsepB=2pt]{->}{3}{10}{50}
+\end{MEx*}
+
+\oitem  \psarcn`{arrows}\c~'{radius}{angleA}{angleB}
+
+  This is like \n\psarc, but the arc is drawn {\em clockwise}. You can achieve
+the same effect using \n\psarc\ by switching <angleA> and <angleB> and the
+arrows.\footnote{However, with \n\pscustom\ graphics object, described in Part
+\ref{P-custom}, \n\psarcn\ is not redundant.}
+
+\end{description}
+
+
+\Section{Curves}
+
+\begin{description}
+
+\oitem  \psbezier`{arrows}(\x0,\y0)'(\x1,\y1)(\x2,\y2)(\x3,\y3)
+
+  \n\psbezier\ draws a bezier curve with the four control points. The curve
+starts at the first coordinate, tangent to the line connecting to the second
+coordinate. It ends at the last coordinate, tangent to the line connecting to
+the third coordinate. The second and third coordinates, in addition to
+determining the tangency of the curve at the endpoints, also ``pull'' the
+curve towards themselves. For example:
+\begin{MEx}(4,4)
+  \psbezier[linewidth=2pt,showpoints=true]{->}(0,0)(1,4)(2,1)(4,3.5)
+\end{MEx}
+\p{showpoints=true} puts dots in all the control points, and connects them by
+dashed lines, which is useful when adjusting your bezier curve.
+
+\oitem  \parabola`{arrows}'\c0\c1
+
+  Starting at \c0, \n\parabola\ draws the parabola that passes through \c0 and
+whose maximum or minimum is \c1. For example:
+\begin{MEx*}(4,3)
+  \parabola*(1,1)(2,3)
+  \psset{xunit=.01}
+  \parabola{<->}(400,3)(200,0)
+\end{MEx*}
+\end{description}
+
+The next three graphics objects interpolate an open or closed curve through
+the given points. The curve at each interior point is perpendicular to the
+line bisecting the angle ABC, where B is the interior point, and A and C are
+the neighboring points. Scaling the coordinates {\em does not} cause the curve
+to scale proportionately.
+
+The curvature is controlled by the following parameter:
+\begin{description}
+\pitem[curvature=num1 num2 num3]
+
+  You have to just play around with this parameter to get what you want.
+Individual values outside the range -1 to 1 are either ignored or are for
+entertainment only. Below is an explanation of what each number does. A, B and
+C refer to three consecutive points.
+
+ Lower values of <num1> make the curve tighter.
+
+ Lower values of <num2> tighten the curve where the angle ABC is greater than
+45 degrees, and loosen the curve elsewhere.
+
+ <num3> determines the slope at each point. If <num3>=0, then the curve is
+perpendicular at B to the bisection of ABC. If <num3>=-1, then the curve at B
+is parallel to the line AC. With this value (and only this value), scaling the
+coordinates causes the curve to scale proportionately. However, positive
+values can look better with irregularly spaced coordinates. Values less than
+-1 or greater than 2 are converted to -1 and 2, respectively.
+\end{description}
+
+Here are the three curve interpolation macros:
+\begin{description}
+
+\oitem  \pscurve`{arrows}'\c1`\ldots\cn'
+
+  This interpolates an open curve through the points. For example:
+\begin{MEx*}(4,2)
+  \pscurve[showpoints=true]{<->}(0,1.3)(0.7,1.8)
+    (3.3,0.5)(4,1.6)(0.4,0.4)
+\end{MEx*}
+Note the use of \p{showpoints=true} to see the points. This is helpful when
+constructing a curve.
+
+\oitem  \psecurve`{arrows}'\c1`\ldots\cn']
+
+  This is like \n\pscurve, but the curve is not extended to the first and last
+points. This gets around the problem of trying to determine how the curve
+should join the first and last points. The "e" has something to do with
+``endpoints''. For example:
+\begin{MEx*}[0,-.9](4,4)
+  \psecurve[showpoints=true](.125,8)(.25,4)(.5,2)
+    (1,1)(2,.5)(4,.25)(8,.125)
+\end{MEx*}
+
+\oitem  \psccurve`{arrows}'\c1`\ldots\cn'
+
+This interpolates a closed curve through the points. "c" stands for
+``closed''. For example:
+\begin{MEx*}(4,1)
+  \psccurve[showpoints=true]
+    (.5,0)(3.5,1)(3.5,0)(.5,1)
+\end{MEx*}
+\end{description}
+
+\Section{Dots\label{S-dots}}
+
+The graphics object
+\begin{Ex}
+  \object  \psdots`*[par]'(\x1,\y1)`(\x2,\y2)\ldots(\x n,\y n)'
+\end{Ex}
+puts a dot at each coordinate. What a ``dot'' is depends on the value of the
+\begin{Ex}
+  \Par{dotstyle=style}
+\end{Ex}
+parameter. This also determines the dots you get when \p{showpoints=true}. The
+dot styles are also pretty intuitive:%
+\newbox\dottable
+\setbox\dottable=\hbox{%
+  \def\mydots#1{%
+    \psdots[dotstyle=#1](.1,1ex)(.55,1ex)(1,1ex)(1.45,1ex)(1.9,1ex)}%
+  \hfill
+  \begin{tabular}{cl}%
+    {\em Style} & \hbox to 2cm{\em Example\hss} \\[2pt]
+    "*" & \mydots{*}\\
+    "o" & \mydots{o}\\
+    "+" & \mydots{+}\\
+    "triangle" & \mydots{triangle}\\
+    "triangle*" & \mydots{triangle*}
+  \end{tabular}%
+  \hfill
+  \begin{tabular}{cl}
+    {\em Style} & \hbox to 2cm{\em Example\hss}\\[2pt]
+    "square" & \mydots{square}\\
+    "square*" & \mydots{square*}\\
+    "pentagon" & \mydots{pentagon}\\
+    "pentagon*" & \mydots{pentagon*}\\
+    "|" & \mydots{|}
+  \end{tabular}%
+  \hfill}%
+\addtoquickref{center}{%
+  {\large\bf Dot styles}\par
+  \leavevmode\hbox to \hsize{\unhbox\dottable}}
+\begin{center}
+  \leavevmode
+  \hbox to \hsize{\unhcopy\dottable}%
+\end{center}
+
+As with arrows, there is a parameter for scaling the dots:
+\begin{Ex}
+  \Par{dotscale=num1 <num2>}
+\end{Ex}
+The dots are scaled horizontally by <num1> and vertically by <num2>. If you
+only include one number, the arrows are scaled the same in both directions.
+
+There is also a parameter for rotating the dots:
+\begin{Ex}
+  \Par{dotangle=angle}
+\end{Ex}
+Thus, e.g., by setting \p{dotangle=45}, the "+" \p{dotstyle} gives you an "x",
+and the "square" \p{dotstyle} gives you a diamond. Note that the dots are
+first scaled and then rotated.
+
+The unscaled size of the \t| dot style is controlled by the \p{tbarsize}
+parameter, and the unscaled size of the remaining dot styles is controlled by
+the \p{dotsize}. These are described in Section \ref{S-arrows}. The radius as
+determined by the value of \p{dotsize} is the radius of solid or open circles.
+The other types of dots are of similar size.\footnote{The polygons are sized
+to have the same area as the circles. A diamond is just a rotated square.}
+
+The dot sizes are allowed to depend on the \p{linewidth} because of the
+\p{showpoints} parameter . However, you can set the dot sizes to an absolute
+dimension by setting the second number in the \p{dotsize} parameter to 0.
+E.g.,
+\begin{LVerb}
+  \psset{dotsize=3pt 0}
+\end{LVerb}
+sets the size of the dots to "3pt", independent of the value of \p{linewidth}.
+
+
+\Section{Grids\label{S-grids}}
+
+PSTricks has a powerful macro for making grids and graph paper:
+  \Mac  \psgrid`(\x0,\y0)(\x1,\y1)(\x2,\y2)'
+\n\psgrid\ draws a grid with opposing corners \c1 and \c2. The intervals are
+numbered, with the numbers positioned at \x0 and \y0. The coordinates are
+always interpreted as Cartesian coordinates. For example:
+\begin{MEx}[-1,-1](3,2)
+  \psgrid(0,0)(-1,-1)(3,2)
+\end{MEx}
+(Note that the coordinates and label positioning work the same as with
+\n\psaxes.)
+
+The main grid divisions occur on multiples of \p{xunit} and \p{yunit}.
+Subdivisions are allowed as well. Generally, the coordinates would be given as
+integers, without units.
+
+If the \c0 coordinate is omitted, \c1 is used. The default for \c1 is "(0,0)".
+If you don't give any coordinates at all, then the coordinates of the current
+\n\pspicture\ environment are used or a 10x10 grid is drawn. Thus, you can
+include a \n\psgrid\ command without coordinates in a \n\pspicture\
+environment to get a grid that will help you position objects in the picture.
+
+The main grid divisions are numbered, with the numbers drawn next to the
+vertical line at \x0 (away from \x2) and next to the horizontal line at \x1
+(away from \y2). \c1 can be any corner of the grid, as long as \c2 is the
+opposing corner, you can position the labels on any side you want. For
+example, compare
+\begin{MEx}(4,1)
+  \psgrid(0,0)(4,1)
+\end{MEx}
+and
+\begin{MEx}(4,1)
+  \psgrid(4,1)(0,0)
+\end{MEx}
+
+The following parameters apply only to \n\psgrid:
+\begin{description}
+
+\pitem[gridwidth=dim]
+  The width of grid lines.
+
+\pitem[gridcolor=color]
+  The color of grid lines.
+
+\pitem[griddots=num]
+  If <num> is positive, the grid lines are dotted, with <num> dots per
+division.
+
+\pitem[gridlabels=dim]
+  The size of the numbers used to mark the grid.
+
+\pitem[gridlabelcolor=color]
+  The color of the grid numbers.
+
+\pitem[subgriddiv=int]
+  The number of grid subdivisions.
+
+\pitem[subgridwidth=dim]
+  The width of subgrid lines.
+
+\pitem[subgridcolor=color]
+  The color of subgrid lines.
+
+\pitem[subgriddots=num]
+  Like \p{griddots}, but for subdivisions.
+
+\end{description}
+
+Here is a familiar looking grid which illustrates some of the parameters:
+\begin{MEx}[-1,-1](3,1)
+  \psgrid[subgriddiv=1,griddots=10,gridlabels=7pt](-1,-1)(3,1)
+\end{MEx}
+
+Note that the values of \p{xunit} and \p{yunit} are important parameters for
+\n\psgrid, because they determine the spacing of the divisions. E.g., if the
+value of these is "1pt", and then you type
+\begin{LVerb}
+  \psgrid(0,0)(10in,10in)
+\end{LVerb}
+you will get a grid with 723 main divisions and 3615 subdivisions! (Actually,
+\n\psgrid\ allows at most 500 divisions or subdivisions, to limit the damage
+done by this kind of mistake.) Probably you want to set \p{unit} to ".5in" or
+"1in", as in
+\begin{LVerb}
+  \psgrid[unit=.5in](0,0)(20,20)
+\end{LVerb}
+
+
+\Section{Plots}
+
+\File{pst-plot}
+The plotting commands described in this part are defined in
+"pst-plot.tex"/"pst-plot.sty", which you must load first.
+
+The \n\psdots, \n\psline, \n\pspolygon, \n\pscurve, \n\psecurve\ and
+\n\psccurve\ graphics objects let you plot data in a variety of ways. However,
+first you have to generate the data and enter it as coordinate pairs \c{}.
+The plotting macros in this section give you other ways to get and use the
+data. (Section \ref{S-axes} tells you how to generate axes.)
+
+To parameter
+\begin{Ex}
+ \Par{plotstyle=style}
+\end{Ex}
+determines what kind of plot you get. Valid styles are "dots", "line",
+"polygon", "curve", "ecurve", "ccurve". E.g., if the \p{plotstyle} is
+"polygon", then the macro becomes a variant of the \n\pspolygon\ object.
+
+You can use arrows with the plot styles that are open curves, but there is no
+optional argument for specifying the arrows. You have to use the \p{arrows}
+parameter instead.
+
+\begin{Warning}
+No PostScript error checking is provided for the data arguments. Read Appendix
+\ref{S-raw} before including PostScript code in the arguments.
+
+There are system-dependent limits on the amount of data \TeX{} and PostScript
+can handle. You are much less likely to exceed the PostScript limits when you
+use the "line", "polygon" or "dots" plot style, with \p{showpoints=false},
+\p{linearc=0pt}, and no arrows.
+\end{Warning}
+
+Note that the lists of data generated or used by the plot commands cannot
+contain units. The values of \n\psxunit\ and \n\psyunit\ are used as the unit.
+
+
+\begin{description}
+
+\oitem  \fileplot{file}
+
+\n\plotfile\ is the simplest of the plotting functions to use. You just need a
+file that contains a list of coordinates (without units), such as generated by
+Mathematica or other mathematical packages. The data can be delimited by curly
+braces "{"~"}", parentheses "("~")", commas, and/or white space. Bracketing
+all the data with square brackets "[ ]" will significantly speed up the rate
+at which the data is read, but there are system-dependent limits on how much
+data \TeX\ can read like this in one chunk. (The "[" {\em must} go at the
+beginning of a line.) The file should not contain anything else (not even
+"\endinput"), except for comments marked with "%".
+
+\n\plotfile\ only recognizes the "line", "polygon" and "dots" plot styles, and
+it ignores the \p{arrows}, \p{linearc} and \p{showpoints} parameters. The
+\n\listplot\ command, described below, can also plot data from file, without
+these restrictions and with faster \TeX\ processing. However, you are less
+likely to exceed PostScript's memory or operand stack limits with \n\plotfile.
+
+If you find that it takes \TeX\ a long time to process your \n\plotfile\
+command, you may want to use the \n\PSTtoEPS\ command described on page
+\pageref{+PSTtoEPS}. This will also reduce \TeX's memory requirements.
+
+\oitem  \dataplot{commands}
+
+\n\dataplot\ is also for plotting lists of data generated by other programs,
+but you first have to retrieve the data with one of the following commands:
+\begin{Ex}
+  \object  \savedata{command}[data]
+  \object  \readdata{command}{file}
+\end{Ex}
+<data> or the data in <file> should conform to the rules described above for
+the data in \n\fileplot\ (with \n\savedata, the data must be delimited by
+"["~"]", and with \n\readdata, bracketing the data with "["~"]" speeds things
+up). You can concatenate and reuse lists, as in
+\begin{LVerb}
+  \readdata{\foo}{foo.data}
+  \readdata{\bar}{bar.data}
+  \dataplot{\foo\bar}
+  \dataplot[origin=(0,1)]{\bar}
+\end{LVerb}
+
+The \n\readdata\ and \n\dataplot\ combination is faster than \n\fileplot\ if
+you reuse the data. \n\fileplot\ uses less of \TeX's memory than \n\readdata\
+and \n\dataplot\ if you are also use \n\PSTtoEPS.
+
+Here is a plot of "Integral(sin(x))". The data was generated by Mathematica,
+with
+\begin{LVerb}
+  Table[{x,N[SinIntegral[x]]},{x,0,20}]
+\end{LVerb}
+and then copied to this document.
+\begin{MEx}(4,3)
+  \psset{xunit=.2cm,yunit=1.5cm}
+  \savedata{\mydata}[
+    {{0, 0}, {1., 0.946083}, {2., 1.60541}, {3., 1.84865}, {4., 1.7582},
+    {5., 1.54993}, {6., 1.42469}, {7., 1.4546}, {8., 1.57419},
+    {9., 1.66504}, {10., 1.65835}, {11., 1.57831}, {12., 1.50497},
+    {13., 1.49936}, {14., 1.55621}, {15., 1.61819}, {16., 1.6313},
+    {17., 1.59014}, {18., 1.53661}, {19., 1.51863}, {20., 1.54824}}]
+  \dataplot[plotstyle=curve,showpoints=true,
+    dotstyle=triangle]{\mydata}
+  \psline{<->}(0,2)(0,0)(20,0)
+\end{MEx}
+
+\oitem  \listplot{list}
+
+\n\listplot\ is yet another way of plotting lists of data. This time, <list>
+should be a list of data (coordinate pairs), delimited only by white space.
+<list> is first expanded by \TeX\ and then by PostScript. This means that
+<list> might be a PostScript program that leaves on the stack a list of data,
+but you can also include data that has been retrieved with \n\readdata\ and
+\n\dataplot. However, when using the "line", "polygon" or "dots" plotstyles
+with \p{showpoints=false}, \p{linearc=0pt} and no arrows, \n\dataplot\ is much
+less likely than \n\listplot\ to exceed PostScript's memory or stack limits.
+In the preceding example, these restrictions were not satisfied, and so the
+example is equivalent to when \n\listplot\ is used:
+\begin{LVerb}
+  ...
+  \listplot[plotstyle=curve,showpoints=true,
+    dotstyle=triangle]{\mydata}
+  ...
+\end{LVerb}
+
+\oitem  \psplot{$x_!\min@$}{$x_!\max@$}{function}
+
+  \n\psplot\ can be used to plot a function $f(x)$, if you know a little
+PostScript.  <function> should be the PostScript code for calculating $f(x)$.
+Note that you must use $x$ as the dependent variable. PostScript is not
+designed for scientific computation, but \n\psplot\ is good for graphing
+simple functions right from within \TeX. E.g.,
+\begin{LVerb}
+  \psplot[plotpoints=200]{0}{720}{x sin}
+\end{LVerb}
+plots $\sin(x)$ from 0 to 720 degrees, by calculating $\sin(x)$ roughly every
+3.6 degrees and then connecting the points with \n\psline. Here are plots of
+$\sin(x)\cos((x/2)^2)$ and $\sin^2(x)$:
+\begin{MEx}[0,-1](4,1)
+  \psset{xunit=1.2pt}
+  \psplot[linecolor=gray,linewidth=1.5pt,plotstyle=curve]%
+    {0}{90}{x sin dup mul}
+  \psplot[plotpoints=100]{0}{90}{x sin x 2 div 2 exp cos mul}
+  \psline{<->}(0,-1)(0,1)
+  \psline{->}(100,0)
+\end{MEx}
+
+\oitem  \parametricplot{$t_!\min@$}{$t_!\max@$}{function}
+
+This is for a parametric plot of $(x(t),y(t))$. <function> is the PostScript
+code for calculating the pair $x(t)$ $y(t)$.
+
+For example,
+\begin{MEx*}(3,3)
+  \parametricplot[plotstyle=dots,plotpoints=13]%
+    {-6}{6}{1.2 t exp 1.2 t neg exp}
+\end{MEx*}
+plots 13 points from the hyperbola $xy=1$, starting with $(1.2^{-6},1.2^6)$
+and ending with $(1.2^6,1.2^{-6})$.
+
+Here is a parametric plot of $(\sin(t),\sin(2t))$:
+\begin{MEx}[-2,-1](2,1)
+  \psset{xunit=1.7cm}
+  \parametricplot[linewidth=1.2pt,plotstyle=ccurve]%
+    {0}{360}{t sin t 2 mul sin}
+  \psline{<->}(0,-1.2)(0,1.2)
+  \psline{<->}(-1.2,0)(1.2,0)
+\end{MEx}
+
+\end{description}
+
+The number of points that the \n\psplot\ and \n\parametricplot\ commands
+calculate is set by the
+\begin{Ex}
+  \Par{plotpoints=int}
+\end{Ex}
+parameter. Using "curve" or its variants instead of "line" and increasing the
+value of \p{plotpoints} are two ways to get a smoother curve. Both ways
+increase the imaging time. Which is better depends on the complexity of the
+computation. (Note that all PostScript lines are ultimately rendered as a
+series (perhaps short) line segments.)  Mathematica generally uses "lineto" to
+connect the points in its plots. The default minimum number of plot points for
+Mathematica is 25, but unlike \n\psplot\ and \n\parametricplot, Mathematica
+increases the sampling frequency on sections of the curve with greater
+fluctuation.
+
+\part{More graphics parameters}
+
+The graphics parameters described in this part are common to all or most of
+the graphics objects.
+
+\Section{Coordinate systems}
+
+The following manipulations of the coordinate system apply only to pure
+graphics objects.
+
+A simple way to move the origin of the coordinate system to \c{} is with the
+\begin{Ex}
+  \Par{origin=\{coor\}}({0pt,0pt})
+\end{Ex}
+This is the one time that coordinates {\em must} be enclosed in curly brackets
+"{}" rather than parentheses "()".
+
+A simple way to switch swap the axes is with the
+\begin{Ex}
+  \Par{swapaxes=true}
+\end{Ex}
+parameter. E.g., you might change your mind on the orientation of a plot after
+generating the data.
+
+\Section{Line styles\label{S-linestyles}}
+
+The following graphics parameters (in addition to \p{linewidth} and
+\p{linecolor}) determine how the lines are drawn, whether they be open or
+closed curves.
+\begin{description}\raggedright
+
+\pitem[linestyle=style]
+  Valid styles are "none", "solid", "dashed" and "dotted".
+
+\pitem[dash=dim1 dim2]
+  The <black-white> dash pattern for the "dashed" line style. For example:
+\begin{MEx}(4,2)
+  \psellipse[linestyle=dashed,dash=3pt 2pt](2,1)(2,1)
+\end{MEx}
+
+\pitem[dotsep=dim]
+  The distance between dots in the "dotted" line style. For example
+\begin{MEx}(4,1)
+  \psline[linestyle=dotted,dotsep=2pt]{|->>}(4,1)
+\end{MEx}
+
+\pitem[border=dim]
+  A positive value draws a border of width <dim> and color \p{bordercolor} on
+each side of the curve. This is useful for giving the impression that one line
+passes on top of another. The value is saved in the dimension register
+\n\psborder.
+
+\pitem[bordercolor=color]
+  See \p{border} above.
+
+  For example:
+\begin{MEx}(4,3)
+  \psline(0,0)(1.8,3)
+  \psline[border=2pt]{*->}(0,3)(1.8,0)
+  \psframe*[linecolor=gray](2,0)(4,3)
+  \psline[linecolor=white,linewidth=1.5pt]{<->}(2.2,0)(3.8,3)
+  \psellipse[linecolor=white,linewidth=1.5pt,
+    bordercolor=gray,border=2pt](3,1.5)(.7,1.4)
+\end{MEx}
+
+\pitem[doubleline=true/false]
+  When "true", a double line is drawn, separated by a space that is
+\p{doublesep} wide and of color \p{doublecolor}. This doesn't work as expected
+with the "dashed" \p{linestyle}, and some arrows look funny as well.
+
+\pitem[doublesep=dim]
+  See \p{doubleline}, above.
+
+\pitem[doublecolor=color]
+  See \p{doubleline}, above.
+
+Here is an example of double lines:
+\begin{MEx}(4,1)
+  \psline[doubleline=true,linearc=.5,
+    doublesep=1.5pt]{->}(0,0)(3,1)(4,0)
+\end{MEx}
+
+\pitem[shadow=true/false]
+  When "true", a shadow is drawn, at a distance \p{shadowsize} from the
+original curve, in the direction \p{shadowangle}, and of color
+\p{shadowcolor}.
+
+\pitem[shadowsize=dim]
+  See \p{shadow}, above.
+
+\pitem[shadowangle=angle]
+  See \p{shadow}, above.
+
+\pitem[shadowcolor=color]
+  See \p{shadow}, above.
+
+Here is an example of the \p{shadow} feature, which should look familiar:
+\begin{MEx}[-1,-.5](1,.7)
+  \pspolygon[linearc=2pt,shadow=true,shadowangle=45,
+    xunit=1.1](-1,-.55)(-1,.5)(-.8,.5)(-.8,.65)
+    (-.2,.65)(-.2,.5)(1,.5)(1,-.55)
+\end{MEx}
+\end{description}
+
+Here is another graphics parameter that is related to lines but that applies
+only to the closed graphics objects \n\psframe, \n\pscircle, \n\psellipse\ and
+\n\pswedge:
+\begin{Ex}
+  \Par{dimen=outer/inner/middle}
+\end{Ex}
+It determines whether the dimensions refer to the inside, outside or middle of
+the boundary. The difference is noticeable when the linewidth is large:
+\begin{MEx*}(4,3)
+  \psset{linewidth=.25cm}
+  \psframe[dimen=inner](0,0)(2,1)
+  \psframe[dimen=middle](0,2)(2,3)
+  \psframe[dimen=outer](3,0)(4,3)
+\end{MEx*}
+With "\pswedge", this only affects the radius; the origin always lies in the
+middle the boundary. The right setting of this parameter depends on how you
+want to align other objects.
+
+
+\Section{Fill styles\label{S-fillstyles}}
+
+The next group of graphics parameters determine how closed regions are filled.
+Even open curves can be filled; this does not affect how the curve is painted.
+\begin{description}\raggedright
+
+\pitem[fillstyle=style]
+  Valid styles are
+  \begin{quote}\raggedright
+  "none", "solid", "vlines", "vlines*", "hlines", "hlines*",  "crosshatch" and
+"crosshatch*".
+  \end{quote}
+  "vlines", "hlines" and "crosshatch" draw a pattern of lines, according to
+the four parameters list below that are prefixed with "hatch". The "*"
+versions also fill the background, as in the "solid" style.
+
+\pitem[fillcolor=color]
+  The background color in the "solid", "vlines*", "hlines*" and "crosshatch*"
+styles.
+
+\pitem[hatchwidth=dim]
+  Width of lines.
+
+\pitem[hatchsep=dim]
+  Width of space between the lines.
+
+\pitem[hatchcolor=color]
+  Color of lines. Saved in \n\pshatchcolor.
+
+\pitem[hatchangle=rot]
+  Rotation of the lines, in degrees. For example, if \p{hatchangle} is set to
+"45", the "vlines" style draws lines that run NW-SE, and the "hlines" style
+draws lines that run "SW-NE", and the "crosshatch" style draws both.
+\end{description}
+
+Here is an example of the "vlines" and related fill styles:
+\begin{MEx}(4,3)
+  \pspolygon[fillstyle=vlines](0,0)(0,3)(4,0)
+  \pspolygon[fillstyle=hlines](0,0)(4,3)(4,0)
+  \pspolygon[fillstyle=crosshatch*,fillcolor=black,
+    hatchcolor=white,hatchwidth=1.2pt,hatchsep=1.8pt,
+    hatchangle=0](0,3)(2,1.5)(4,3)
+\end{MEx}
+Don't be surprised if the checkered part of this example (the last
+\n\pspolygon) looks funny on low-resolution devices. PSTricks adjusts the
+lines so that they all have the same width, but the space between them, which
+in this case is black, can have varying width.
+
+Each of the pure graphics objects (except those beginning with "q") has a
+starred version that produces a solid object of color \p{linecolor}. (It
+automatically sets \p{linewidth} to zero, \p{fillcolor} to \p{linecolor},
+\p{fillstyle} to "solid", and \p{linestyle} to "none".)
+
+
+\Section{Arrowheads and such\label{S-arrows}}
+
+  Lines and other open curves can be terminated with various arrowheads,
+t-bars or circles. The
+\begin{Ex}
+  \Par{arrows=style}
+\end{Ex}
+parameter determines what you get. It can have the following values, which are
+pretty intuitive:\footnote{This is \TeX's version of WYSIWYG.}%
+\newbox\arrowtable
+\setbox\arrowtable=\hbox{%
+  \def\myline#1{\psline{#1}(0,1ex)(1.3,1ex)}%
+  \catcode`\<=12
+  \begin{tabular}{cll}%
+    {\em Value} & \hbox to 1.3cm{\em Example\hss} & {\em Name} \\[2pt]
+    "-"      & \myline{-}      & None\\
+    "<->"    & \myline{<->}    & Arrowheads.\\
+    ">-<"    & \myline{>-<}    & Reverse arrowheads.\\
+    "<<->>"  & \myline{<<->>}  & Double arrowheads.\\
+    ">>-<<"  & \myline{>>-<<}  & Double reverse arrowheads.\\
+    "|-|"    & \myline{|-|}    & T-bars, flush to endpoints.\\
+    "|*-|*"  & \myline{|*-|*}  & T-bars, centered on endpoints.\\
+    "[-]"    & \myline{[-]}    & Square brackets.\\
+    "(-)"    & \myline{(-)}    & Rounded brackets.\\
+    "o-o"    & \myline{o-o}    & Circles, centered on endpoints.\\
+    "*-*"    & \myline{*-*}    & Disks, centered on endpoints.\\
+    "oo-oo"  & \myline{oo-oo}  & Circles, flush to endpoints.\\
+    "**-**"  & \myline{**-**}  & Disks, flush to endpoints.\\
+    "c-c"    & \myline{c-c}    & Extended, rounded ends.\\
+    "cc-cc"  & \myline{cc-cc}  & Flush round ends.\\
+    "C-C"    & \myline{C-C}    & Extended, square ends.
+  \end{tabular}}%
+\addtoquickref{center}{%
+  {\large\bf Arrows}\par
+  \leavevmode\box\arrowtable}
+\begin{center}
+  \leavevmode\copy\arrowtable
+\end{center}
+You can also mix and match. E.g., "->", "*-)" and "[->" are all valid values
+of the \p{arrows} parameter.
+
+Well, perhaps the "c", "cc" and "C" arrows are not so obvious. "c" and "C"
+correspond to setting PostScript's "linecap" to 1 and 2, respectively. "cc" is
+like "c", but adjusted so that the line flush to the endpoint. These arrows
+styles are noticeable when the \p{linewidth} is thick:
+\begin{MEx}[-.25,-.25](3.25,2.25)
+  \psline[linewidth=.5cm](0,0)(0,2)
+  \psline[linewidth=.5cm]{c-c}(1,0)(1,2)
+  \psline[linewidth=.5cm]{cc-cc}(2,0)(2,2)
+  \psline[linewidth=.5cm]{C-C}(3,0)(3,2)
+  "\rput[t](0,-.3){{\tt -}}
+  "\rput[t](1,-.3){{\tt c-c}}
+  "\rput[t](2,-.3){{\tt cc-cc}}
+  "\rput[t](3,-.3){{\tt C-C}}
+\end{MEx}
+
+Almost all the open curves let you include the \p{arrows} parameters as an
+optional argument, enclosed in curly braces and before any other arguments
+(except the optional parameters argument). E.g., instead of
+\begin{LVerb}
+  \psline[arrows=<-,linestyle=dotted](3,4)
+\end{LVerb}
+you can write
+\begin{LVerb}
+  \psline[linestyle=dotted]{<-}(3,4)
+\end{LVerb}
+The exceptions are a few streamlined macros that do not support the use of
+arrows (these all begin with "q").
+
+The size of these line terminators is controlled by the following parameters.
+In the description of the parameters, the width always refers to the dimension
+perpendicular to the line, and length refers to a dimension in the direction
+of the line.
+\begin{description}
+
+\pitem[arrowsize=dim num]
+  Width of arrowheads, as shown below.
+
+\pitem[arrowlength=num]
+  Length of arrowheads, as shown below.
+
+\pitem[arrowinset=num]
+  Size of inset for arrowheads, as shown below.
+
+\begin{center}\leavevmode
+\hbox to \linewidth{%
+  \psset{unit=.5cm}
+  \pspicture[.5](-3.6,-1.3)(3.4,4.8)
+    \pspolygon*(-2,0)(0,4)(2,0)(0,1)
+    \psset{arrows=|-|}
+    \psline(-2.5,0)(-2.5,4)\rput(-2.7,2){\psframebox*{\em length}}
+    \psline(-2,-.5)(2,-.5)\rput(0,-.5){\psframebox*{\em width}}
+    \psline(2.5,0)(2.5,1)\rput[l](2.8,.5){\em inset}
+  \endpspicture
+  \hfill
+  \begin{tabular}{rcl}
+    {\tt arrowsize} & = & <dim num>\\
+    {\em width} & = & <num> x \p{linewidth} + <dim1>\\
+    {\em length} & = & \p{arrowlength} x {\em width}\\
+    {\em inset} & = & \p{arrowinset} x {\em height}
+  \end{tabular}}
+\end{center}
+
+\pitem[tbarsize=dim num]
+  The width of a t-bar, square bracket or rounded bracket is <num> times
+\p{linewidth}, plus <dim>.
+
+\pitem[bracketlength=num]
+  The height of a square bracket is <num> times its width.
+
+\pitem[rbracketlength=num]
+  The height of a round bracket is <num> times its width.
+
+\pitem[dotsize=dim num]
+  The diameter of a circle or disc is <num> times \p{linewidth}, plus <dim>.
+
+\pitem[arrowscale=arrowscale=num1 <num2>]
+  Imagine that arrows and such point down. This scales the width of the arrows
+by <num1> and the length (height) by <num2>. If you only include one number,
+the arrows are scaled the same in both directions. Changing \p{arrowscale} can
+give you special effects not possible by changing the parameters described
+above. E.g., you can change the width of lines used to draw brackets.
+\end{description}
+
+
+\Section{Custom styles}
+
+You can define customized versions of any macro that has parameter changes as
+an optional first argument using the \n\newpsobject\ command:
+  \Mac  \newpsobject{name}{object}{par1=value1`,\ldots'}
+as in
+\begin{LVerb}
+  \newpsobject{myline}{psline}{linecolor=green,linestyle=dotted}
+  \newpsobject{\mygrid}{psgrid}{subgriddiv=1,griddots=10,
+    gridlabels=7pt}
+\end{LVerb}
+The first argument is the name of the new command you want to define. The
+second argument is the name of the graphics object. Note that both of these
+arguments are given without the backslash. The third argument is the special
+parameter values that you want to set.
+
+With the above examples, the commands "\myline" and "\mygrid" work just like
+the graphics object \n\psline\ it is based on, and you can even reset the
+parameters that you set when defining "\myline", as in:
+\begin{LVerb}
+  \myline[linecolor=gray,dotsep=2pt](5,6)
+\end{LVerb}
+
+Another way to define custom graphics parameter configurations is with the
+  \Mac  \newpsstyle{name}{par1=value1`,\ldots'}
+command. You can then set the \p{style} graphics parameter to <name>, rather
+than setting the parameters given in the second argument of \n\newpsstyle. For
+example,
+\begin{LVerb}
+  \newpsstyle{mystyle}{linecolor=green,linestyle=dotted}
+  \psline[style=mystyle](5,6)
+\end{LVerb}
+
+\part{Custom graphics\label{P-custom}}
+
+\Section{The basics}
+
+PSTricks contains a large palette of graphics objects, but sometimes you need
+something special. For example, you might want to shade the region between two
+curves. The
+  \Mac  \pscustom`*[par]'{commands}
+command lets you ``roll you own'' graphics object.
+
+Let's review how PostScript handles graphics. A {\em path} is a line, in the
+mathematical sense rather than the visual sense. A path can have several
+disconnected segments, and it can be open or closed. PostScript has various
+operators for making paths. The end of the path is called the {\em current
+point}, but if there is no path then there is no current point. To turn the
+path into something visual, PostScript can {\em fill} the region enclosed by
+the path (that is what \p{fillstyle} and such are about), and {\em stroke} the
+path (that is what \p{linestyle} and such are about).
+
+At the beginning of \n\pscustom, there is no path. There are various commands
+that you can use in \n\pscustom\ for drawing paths. Some of these (the open
+curves) can also draw arrows.  \n\pscustom\ fills and strokes the path at the
+end, and for special effects, you can fill and stroke the path along the way
+using \n\psfill\ and \n\pstroke\ (see below).
+
+\begin{drivers}
+\n\pscustom\ uses \n\pstverb\ and \n\pstunit. There are system-dependent
+limits on how long the argument of "\special" can be. You may run into this
+limit using \n\pscustom\ because all the PostScript code accumulated by
+\n\pscustom\ is the argument of a single "\special" command.
+\end{drivers}
+
+\Section{Parameters}
+
+You need to keep the separation between drawing, stroking and filling paths in
+mind when setting graphics parameters. The \p{linewidth} and \p{linecolor}
+parameters affect the drawing of arrows, but since the path commands do not
+stroke or fill the paths, these parameters, and the \p{linestyle},
+\p{fillstyle} and related parameters, do not have any other effect (except
+that in some cases \p{linewidth} is used in some calculations when drawing the
+path). \n\pscustom\ and \n\fill\ make use of \p{fillstyle} and related
+parameters, and \n\pscustom\ and \n\stroke\ make use of p{linestyle} and
+related parameters.
+
+For example, if you include
+\begin{LVerbatim}
+  \psline[linewidth=2pt,linecolor=blue,fillstyle=vlines]{<-}(3,3)(4,0)
+\end{LVerbatim}
+in \n\pscustom, then the changes to \p{linewidth} and \p{linecolor} will
+affect the size and color of the arrow but not of the line when it is stroked,
+and the change to \p{fillstyle} will have no effect at all.
+
+The \p{shadow}, \p{border}, \p{doubleline} and \p{showpoints} parameters are
+disabled in \n\pscustom, and the \p{origin} and \p{swapaxes} parameters only
+affect \n\pscustom\ itself, but there are commands (described below) that let
+you achieve these special effects.
+
+The \p{dashed} and \p{dotted} line styles need to know something about the
+path in order to adjust the dash or dot pattern appropriately. You can give
+this information by setting the
+\begin{Ex}
+  \Par{linetype=int}
+\end{Ex}
+parameter. If the path contains more than one disconnected segment, there is
+no appropriate way to adjust the dash or dot pattern, and you might as well
+leave the default value of \p{linetype}. Here are the values for simple paths:
+\begin{center}
+\begin{tabular}{cl}
+  {\em Value} & {\em Type of path}\\
+  0           & Open curve without arrows.\\
+  -1          & Open curve with an arrow at the beginning.\\
+  -2          & Open curve with an arrow at the end.\\
+  -3          & Open curve with an arrow at both ends.\\
+  1           & Closed curve with no particular symmetry.\\
+  $n$">"1     & Closed curve with $n$ symmetric segments.
+\end{tabular}
+\end{center}
+
+\Section{Graphics objects}
+
+You can use most of the graphics objects in \n\pscustom. These draw paths and
+making arrows, but do not fill and stroke the paths.
+
+There are three types of graphics objects:
+\begin{description}
+\item[Special]
+  Special graphics objects include \n\psgrid, \n\psdots, \n\qline\ and
+\n\qdisk. You cannot use special graphics objects in \n\pscustom.
+
+\item[Closed]
+  You are allowed to use closed graphics objects in \n\pscustom, but their
+effect is unpredictable.\footnote{The closed objects never use the current
+point as an coordinate, but typically they will close any existing paths, and
+they might draw a line between the currentpoint and the closed curved.} 
+Usually you would use the open curves plus \n\closepath\ (see below) to draw
+closed curves.
+
+\item[Open]The open graphics objects are the most useful commands for drawing
+paths with \n\pscustom. By piecing together several open curves, you can draw
+arbitrary paths. The rest of this section pertains to the open graphics
+objects.
+\end{description}
+
+  By default, the open curves draw a straight line between the current point,
+if it exists, and the beginning of the curve, except when the curve begins
+with an arrow. For example
+\begin{MEx*}(3,3)
+  \pscustom{
+    \psarc(0,0){1.5}{5}{85}
+    \psarcn{->}(0,0){3}{85}{5}}
+\end{MEx*}
+
+Also, the following curves make use of the current point, if it exists, as a
+first coordinate:
+\begin{quote}
+  \n\psline\ and \n\pscurve.\\
+  The plot commands, with the "line" or "curve" \p{plotstyle}.\\
+  \n\psbezier\, if you only include three coordinates.\\
+\end{quote}
+For example:
+\begin{MEx*}(4,3)
+  \pscustom[linewidth=1.5pt]{
+    \psplot[plotstyle=curve]{.67}{4}{2 x div}
+    \psline(4,3)}
+\end{MEx*}
+We'll see later how to make that one more interesting. Here is another example
+\begin{MEx*}(4,3)
+  \pscustom{
+    \psline[linearc=.2]{|-}(0,2)(0,0)(2,2)
+    \psbezier{->}(3,3)(1,0)(4,3)}
+\end{MEx*}
+
+However, you can control how the open curves treat the current point with the
+\begin{Ex}
+  \Par{liftpen=0/1/2}
+\end{Ex}
+parameter.
+
+If \p{liftpen=0}, you get the default behavior described above. For example
+\begin{MEx*}(4,3)
+  \pscustom[linewidth=2pt,fillstyle=solid,fillcolor=gray]{
+    \pscurve(0,2)(1,2.5)(2,1.5)(4,3)
+    \pscurve(4,1)(3,0.5)(2,1)(1,0)(0,.5)}
+\end{MEx*}
+
+If \p{liftpen=1}, the curves do not use the current point as the first
+coordinate (except \n\psbezier, but you can avoid this by explicitly including
+the first coordinate as an argument). For example:
+\begin{MEx*}(4,3)
+  \pscustom[linewidth=2pt,fillstyle=solid,fillcolor=gray]{
+    \pscurve(0,2)(1,2.5)(2,1.5)(4,3)
+    \pscurve[liftpen=1](4,1)(3,0.5)(2,1)(1,0)(0,.5)}
+\end{MEx*}
+
+If \p{liftpen=2}, the curves do not use the current point as the first
+coordinate, and they do not draw a line between the current point and the
+beginning of the curve. For example
+\begin{MEx*}(4,3)
+  \pscustom[linewidth=2pt,fillstyle=solid,fillcolor=gray]{
+    \pscurve(0,2)(1,2.5)(2,1.5)(4,3)
+    \pscurve[liftpen=2](4,1)(3,0.5)(2,1)(1,0)(0,.5)}
+\end{MEx*}
+
+Later we will use the second example to fill the region between the two
+curves, and then draw the curves.
+
+\Section{Safe tricks}
+
+The commands described under this heading, which can only be used in
+\n\pscustom, do not run a risk of PostScript errors (assuming your document
+compiles without \TeX\ errors).
+
+Let's start with some path, fill and stroke commands:
+\begin{description}
+
+\mitem  \newpath
+
+Clear the path and the current point.
+
+\mitem  \moveto(coor)
+
+  This moves the current point to \c{}.
+
+\mitem  \closepath
+
+  This closes the path, joining the beginning and end of each piece (there may
+be more than one piece if you use \n\moveto).\footnote{Note that the path is
+automatically closed when the region is filled. Use \n\closepath\ if you also
+want to close the boundary.}
+
+\mitem  \stroke`[par]'
+
+  This strokes the path (non-destructively). \n\pscustom\ automatically
+strokes the path, but you might want to stroke it twice, e.g., to add a
+border. Here is an example that makes a double line and adds a border (this
+example is kept so simple that it doesn't need \n\pscustom\ at all):
+\begin{MEx*}(4,3)
+  \psline(0,3)(4,0)
+  \pscustom[linecolor=white,linewidth=1.5pt]{%
+    \psline(0,0)(4,3)
+    \stroke[linewidth=5\pslinewidth]
+    \stroke[linewidth=3\pslinewidth,linecolor=black]}
+\end{MEx*}
+
+\mitem  \fill`[par]'
+
+  This fills the region (non-destructively). \n\pscustom\ automatically fills
+the region as well.
+
+\mitem  \gsave
+
+  This saves the current graphics state (i.e., the path, color, line width,
+coordinate system, etc.) \n\grestore\ restores the graphics state. \n\gsave\
+and \n\grestore\ must be used in pairs, properly nested with respect to \TeX\
+groups. You can have have nested \n\gsave-\n\grestore\ pairs.
+
+\mitem  \grestore
+
+  See above.
+
+Here is an example that fixes an earlier example, using \n\gsave\ and
+\n\grestore:
+\begin{MEx}(4,3)
+  \psline{<->}(0,3)(0,0)(4,0)
+  \pscustom[linewidth=1.5pt]{
+    \psplot[plotstyle=curve]{.67}{4}{2 x div}
+    \gsave
+      \psline(4,3)
+      \fill[fillstyle=solid,fillcolor=gray]
+    \grestore}
+\end{MEx}
+Observe how the line added by "\psline(4,3)" is never stroked, because it is
+nested in "\gsave" and "\grestore".
+
+Here is another example:
+\begin{MEx*}(4,3)
+  \pscustom[linewidth=1.5pt]{
+    \pscurve(0,2)(1,2.5)(2,1.5)(4,3)
+    \gsave
+      \pscurve[liftpen=1](4,1)(3,0.5)(2,1)(1,0)(0,.5)
+      \fill[fillstyle=solid,fillcolor=gray]
+    \grestore}
+  \pscurve[linewidth=1.5pt](4,1)(3,0.5)(2,1)(1,0)(0,.5)
+\end{MEx*}
+Note how I had to repeat the second \n\pscurve\ (I could have repeated it
+within \n\pscustom, with \p{liftpen=2}), because I wanted to draw a line
+between the two curves to enclose the region but I didn't want this line to be
+stroked.
+\end{description}
+
+The next set of commands modify the coordinate system.
+\begin{description}
+
+\mitem  \translate(coor)
+
+  Translate coordinate system by \c{}. This shifts everything that comes later
+by \c{}, but doesn't affect what has already been drawn.
+
+\mitem  \scale{num1 `num2'}
+
+  Scale the coordinate system in both directions by <num1>, or horizontally by
+<num1> and vertically by <num2>.
+
+\mitem  \rotate{angle}
+
+  Rotate the coordinate system by <angle>.
+
+\mitem  \swapaxes
+
+  Switch the x and y coordinates. This is equivalent to
+\begin{LVerb}
+  \rotate{-90}
+  \scale{-1 1 scale}
+\end{LVerb}
+
+\mitem  \msave
+
+  Save the current coordinate system. You can then restore it with
+\n\mrestore. You can have nested \n\msave-\n\mrestore\ pairs. \n\msave\ and
+\n\mrestore\ do not have to be properly nested with respect to \TeX\ groups or
+\n\gsave\ and \n\grestore. However, remember that \n\gsave\ and \n\grestore
+also affect the coordinate system. \n\msave-\n\mrestore\ lets you change the
+coordinate system while drawing part of a path, and then restore the old
+coordinate system without destroying the path. \n\gsave-\n\grestore, on the
+other hand, affect the path and all other componments of the graphics state.
+
+\mitem  \mrestore
+
+  See above.
+\end{description}
+
+And now here are a few shadow tricks:
+\begin{description}
+\mitem  \openshadow`[par]'
+
+Strokes a replica of the current path, using the various shadow parameters.
+
+\mitem  \closedshadow`[par]'
+
+Makes a shadow of the region enclosed by the current path as if it were opaque
+regions.
+
+\mitem  \movepath(coor)
+
+Moves the path by \c{}. Use \n\gsave-\n\grestore\ if you don't want to lose
+the original path.
+\end{description}
+
+\Section{Pretty safe tricks}
+
+The next group of commands are safe, {\em as long as there is a current
+point\/}!
+
+\begin{description}
+\mitem  \lineto(coor)
+
+  This is a quick version of "\psline(<coor>)".
+
+\mitem  \rlineto(coor)
+
+  This is like \n\lineto, but \c{} is interpreted relative to the current
+point.
+
+\mitem  \curveto\c1\c2\c3
+
+  This is a quick version of "\psbezier"\c1\c2\c3.
+
+\mitem  \rcurveto\c1\c2\c3
+
+  This is like \n\curveto, but \c1, \c2 and \c3 are interpreted relative to
+the current point.
+\end{description}
+
+\Section{For hackers only}
+
+For PostScript hackers, there are a few more commands. Be sure to read
+Appendix \ref{S-raw} before using these. Needless to say:
+\begin{Warning}
+Misuse of the commands in this section can cause PostScript errors.
+\end{Warning}
+
+ The PostScript environment in effect with \n\pscustom\ has one unit equal to
+one \TeX\ "pt".
+
+\begin{description}
+
+\mitem  \code{code}
+  Insert the raw PostScript code.
+
+\mitem  \dim{dim}
+
+  Convert the PSTricks dimension to the number of "pt"'s, and inserts it in
+the PostScript code.
+
+\mitem  \coor\c1`\c2...\cn'
+
+Convert one or more PSTricks coordinates to a pair of numbers (using "pt"
+units), and insert them in the PostScript code.
+
+\mitem  \rcoor\c1`\c2...\cn'
+
+Like \n\coor, but insert the coordinates in reverse order.
+
+\mitem  \file{file}
+
+  This is like \n\code, but the raw PostScript is copied verbatim (except
+comments delimited by "%") from <file>.
+
+\mitem  \arrows{arrows}
+
+  This defines the PostScript operators "ArrowA" and "ArrowB" so that
+\begin{LVerb}
+  x2 y2 x1 y1 ArrowA
+  x2 y2 x1 y1 ArrowB
+\end{LVerb}
+each draws an arrow(head) with the tip at \c1 and pointing from \c2. "ArrowA"
+leaves the current point at end of the arrowhead, where a connect line should
+start, and leaves \c2 on the stack. "ArrowB" does not change the current
+point, but leaves
+\begin{LVerb}
+  x2 y2 x1' y1'
+\end{LVerb}
+on the stack, where \c{1'} is the point where a connecting line should join.
+To give an idea of how this work, the following is roughly how PSTricks draws
+a bezier curve with arrows at the end:
+\begin{MEx*}(4,3)
+  \pscustom{
+    \arrows{|->}
+    \code{
+      80 140 5 5 ArrowA
+      30 -30 110 75 ArrowB
+      curveto}}
+\end{MEx*}
+
+\mitem  \setcolor{color}
+
+  Set the color to <color>.
+
+\end{description}
+
+
+\part{Picture Tools\label{P-pictures}}
+
+\Section{Pictures\label{S-pspic}}
+
+The graphics objects and \n\rput\ and its variants do not change \TeX's
+current point (i.e., they create a 0-dimensional box). If you string several
+of these together (and any other 0-dimensional objects), they share the same
+coordinate system, and so you can create a picture. For this reason, these
+macros are called {\em picture objects}.
+
+If you create a picture this way, you will probably want to give the whole
+picture a certain size. You can do this by putting the picture objects in a
+\p{pspicture} environment, as in:
+\begin{Ex}
+  \object  \pspicture`*[baseline](\x0,\y0)'\c1
+  <  picture objects>
+  \object  \endpspicture
+\end{Ex}
+The picture objects are put in a box whose lower left-hand corner is at \c0
+(by default, "(0,0)") and whose upper right-hand corner is at \c1.
+
+By default, the baseline is set at the bottom of the box, but the optional
+argument "[<baseline>]" sets the baseline fraction <baseline> from the bottom.
+Thus, <baseline> is a number, generally but not necessarily between 0 and 1.
+If you include this argument but leave it empty ({\tt [\kern 1pt]}), then the
+baseline passes through the origin.
+
+Normally, the picture objects can extend outside the boundaries of the box.
+However, if you include the "*", anything outside the boundaries is clipped.
+
+Besides picture objects, you can put anything in a \n\pspicture\ that does not
+take up space. E.g., you can put in font declarations and use \n\psset, and
+you can put in braces for grouping. PSTricks will alert you if you include
+something that does take up space.\footnote{%
+ When PSTricks picture objects are included in a \n\pspicture\ environment,
+they gobble up any spaces that follow, and any preceding spaces as well,
+making it less likely that extraneous space gets inserted. (PSTricks objects
+always ignore spaces that follow. If you also want them to try to neutralize
+preceding space when used outside the \n\pspicture\ environment (e.g., in a
+\LaTeX\ "picture" environment), then use the command \Main\KillGlue. The
+command \Main\DontKillGlue\ turns this behavior back off.)}
+
+\LaTeX{} users can type
+\begin{Ex}
+  "\begin{pspicture}" \ldots\ "\end{pspicture}"
+\end{Ex}
+You can use PSTricks picture objects in a \LaTeX{} "picture" environment, and
+you can use \LaTeX{} picture objects in a PSTricks {\UsageFont pspicture}
+environment. However, the {\UsageFont pspicture} environment makes \LaTeX's
+"picture" environment obsolete, and has a few small advantages over the
+latter. Note that the arguments of the {\UsageFont pspicture} environment work
+differently from the arguments of \LaTeX's "picture" environment (i.e., the
+right way versus the wrong way).
+
+
+\begin{drivers} The clipping option ("*") uses \n\pstVerb\ and
+\n\pstverbscale.
+\end{drivers}
+
+
+\Section{Placing and rotating whatever\label{S-rput}}
+
+PSTricks contains several commands for positioning and rotating an HR-mode
+argument. All of these commands end in "put", and bear some similarity to
+\LaTeX's "\put" command, but with additional capabilities. Like \LaTeX's
+"\put" and unlike the box rotation macros described in Section
+\ref{S-rotation}, these commands do not take up any space. They can be used
+inside and outside \n\pspicture\ environments.
+
+Most of the PSTricks "put" commands are of the form:
+\begin{Ex}
+  \Backslash <put>*<arg>"{<rotation>}(<coor>){<stuff>}"
+\end{Ex}
+With the optional "*" argument, <stuff> is first put in a
+\begin{LVerb*}
+  \psframebox*[boxsep=false]{<stuff>}
+\end{LVerb*}
+thereby blotting out whatever is behind <stuff>. This is useful for
+positioning text on top of something else.
+
+<arg> refers to other arguments that vary from one "put" command to another,
+The optional <rotation> is the angle by which <stuff> should be rotated; this
+arguments works pretty much the same for all "put" commands and is described
+further below. The "(<coor>)" argument is the coordinate for positioning
+<stuff>, but what this really means is different for each "put" command. The
+"(<coor>)" argument is shown to be obligatory, but you can actually omit it if
+you include the <rotation> argument.
+
+The <rotation> argument should be an angle, as described in Section
+\ref{S-coor}, but the angle can be preceded by an "*". This causes all the
+rotations (except the box rotations described in Section \ref{S-rotation})
+within which the \n\rput\ command is be nested to be undone before setting the
+angle of rotation. This is mainly useful for getting a piece of text right
+side up when it is nested inside rotations. For example,
+\begin{MEx}[-1,-.5](2,2)
+  \rput{34}{%
+    \psframe(-1,0)(2,1)
+    \rput[br]{*0}(2,1){\em stuff}}
+\end{MEx}
+
+There are also some letter abbreviations for the command angles. These
+indicate which way is up:
+\begin{trivlist}\item[]
+  \leavevmode
+  \hbox to \hsize{\hfill
+    \begin{tabular}{clr}
+      {\em Letter} & {\em Short for} & {\em Equiv.\ to}\\
+      "U" & Up & 0\\
+      "L" & Left & 90\\
+      "D" & Down & 180\\
+      "R" & Right & 270\\
+    \end{tabular}
+    \hfill
+    \begin{tabular}{clr}
+      {\em Letter} & {\em Short for} & {\em Equiv.\ to}\\
+      "N" & North & *0\\
+      "W" & West & *90\\
+      "S" & South & *180\\
+      "E" & East & *270
+    \end{tabular}\hfill}
+\end{trivlist}
+
+
+This section describes just a two of the PSTricks "put" commands. The most
+basic one command is
+  \Mac  \rput`*[refpoint]{rotation}'\c~{stuff}
+<refpoint> determines the reference point of <stuff>, and this reference point
+is translated to \c{}.
+
+By default, the reference point is the center of the box. This can be changed
+by including one or two of the following in the optional <refpoint> argument:
+\begin{center}
+\begin{tabular}{rlcrl}
+\multicolumn{2}{l}{\em Horizontal} & & \multicolumn{2}{l}{\em Vertical}\\
+"l" & Left & & "t" & Top\\
+"r" & Right & &"b" & Bottom\\
+    &       & &"B" & Baseline
+\end{tabular}
+\end{center}
+Visually, here is where the reference point is set of the various combinations
+(the dashed line is the baseline):
+\begin{center}
+\begin{pspicture}(-2.4,-.9)(2.4,1.9)
+  \tt\bf
+  \psframe(-2,-.5)(2,1.5)
+  \psline[linestyle=dashed](-2,0)(2,0)
+  \uput[u](0,1.5){t}
+  \uput[d](0,-.5){b}
+  \rput*(0,0){B}
+  \uput[l](-2,.5){l}
+  \uput[l](-2,0){Bl}
+  \uput[dl](-2,-.5){bl}
+  \uput[ul](-2,1.5){tl}
+  \uput[r](2,.5){r}
+  \uput[r](2,0){Br}
+  \uput[dr](2,-.5){br}
+  \uput[ur](2,1.5){tr}
+\end{pspicture}
+\end{center}
+
+There are numerous examples of \n\rput\ in this documentation, but for now
+here is a simple one:
+\begin{example**}
+  \rput[b]{90}(-1,0){Here is a marginal note.}
+\end{example**}
+
+One common use of a macro such as \n\rput\ is to put labels on things.
+PSTricks has a variant of \n\rput\ that is especially designed for labels:
+  \Mac  \uput`*{labelsep}'[refangle]`{rotation}\c~'{stuff}
+This places <stuff> distance <labelsep> from \c{}, in the direction
+<refangle>.
+
+The default value of <labelsep> is the dimension register
+  \Mac \pslabelsep
+You can also change this be setting the
+\begin{Ex}
+  \Par{labelsep=dim}
+\end{Ex}
+parameter (but remember that \n\uput\ does have an optional argument for
+setting parameters).
+
+Here is a simple example:
+\begin{MEx}(3,2)
+  \qdisk(1,1){1pt}
+  \uput[45](1,1){(1,1)}
+\end{MEx}
+
+Here is a more interesting example where \n\uput\ is used to make a pie
+chart:\footnote{PSTricks is distributed with a useful tool for converting data
+to piecharts: "piechart.sh". This is a UNIX "sh" script written by Denis
+Girou.}
+\begin{example}
+  \psset{unit=1.2cm}
+  \pspicture(-2.2,-2.2)(2.2,2.2)
+    \pswedge[fillstyle=solid,fillcolor=gray]{2}{0}{70}
+    \pswedge[fillstyle=solid,fillcolor=lightgray]{2}{70}{200}
+    \pswedge[fillstyle=solid,fillcolor=darkgray]{2}{200}{360}
+    \SpecialCoor
+    \psset{framesep=1.5pt}
+    \rput(1.2;35){\psframebox*{\small\$9.0M}}
+    \uput{2.2}[45](0,0){Oreos}
+    \rput(1.2;135){\psframebox*{\small\$16.7M}}
+    \uput{2.2}[135](0,0){Heath}
+    \rput(1.2;280){\psframebox*{\small\$23.1M}}
+    \uput{2.2}[280](0,0){M\&M}
+  \endpspicture
+\end{example}
+
+You can use the following abbreviations for <refangle>, which indicate the
+direction the angle points:%
+\footnote{Using the abbreviations when applicable is more efficient.}%
+\footnote{%
+There is an obsolete command \n\Rput\MainIndex{\Rput}\ that has the same
+syntax as \n\uput\ and that works almost the same way, except the <refangle>
+argument has the syntax of \n\rput's <refpoint> argument, and it gives the
+point in <stuff> that should be aligned with \c{}. E.g.,
+\begin{Ex}
+  "\qdisk(4,0){2pt}"\qdisk(4,0){2pt}\Rput[tl](4,0){$(x,y)$}\\
+  "\Rput[tl](4,0){$(x,y)$}"
+\end{Ex}
+Here is the equivalence between \n\uput's <refangle> abbreviations and
+\n\Rput's <refpoint> abbreviations:
+\begin{center}
+  \tt
+  \begin{tabular}{rcccccccc}
+    \n\uput & r & u & l & d & ur & ul & dr & dl \\
+    \n\Rput & l & b & r & t & bl & br & tr & rl \\
+  \end{tabular}
+\end{center}
+Some people prefer \n\Rput's convention for specifying the position of <stuff>
+over \n\uput's.}%
+\begin{trivlist}\item[]
+  \leavevmode
+  \hbox to \hsize{\hfill
+    \begin{tabular}{clr}
+      {\em Letter} & {\em Short for} & {\em Equiv.\ to}\\
+      "r" & right & 0\\
+      "u" & up & 90\\
+      "l" & left & 180\\
+      "d" & down & 270\\
+    \end{tabular}
+    \hfill
+    \begin{tabular}{clr}
+      {\em Letter} & {\em Short for} & {\em Equiv.\ to}\\
+      "ur" & up-right & 45\\
+      "ul" & up-left & 135\\
+      "dl" & down-left & 225\\
+      "dr" & down-right & 315
+    \end{tabular}\hfill}
+\end{trivlist}
+The first example could thus have been written:
+\begin{MEx}(3,2)
+  \qdisk(1,1){1pt}
+  \uput[ur](1,1){(1,1)}
+\end{MEx}
+
+\begin{drivers} The rotation macros use \n\pstVerb\ and \n\pstrotate.
+\end{drivers}
+
+
+\Section{Repetition\label{S-loops}}
+
+The macro
+  \Mac  \multirput`*[refpoint]{angle}\c0'\c1{int}{stuff}
+is a variant of \n\rput\ that puts down <int> copies, starting at \c0 and
+advancing by \c1 each time. \c0 and \c1 are always interpreted as Cartesian
+coordinates. For example:
+\begin{MEx}(4,1.3)
+  \multirput(.5,0)(.3,.1){12}{*}
+\end{MEx}
+
+If you want copies of pure graphics, it is more efficient to use
+  \Mac  \multips`{angle}\c0'\c1{int}{graphics}
+<graphics> can be one or more of the pure graphics objects described in Part
+\ref{P-graphics}, or \n\pscustom. Note that \n\multips\ has the same syntax as
+\n\multirput, except that there is no <refpoint> argument (since the graphics
+are zero dimensional anyway). Also, unlike \n\multirput, the coordinates can
+be of any type. An "Overfull \hbox" warning indicates that the <graphics>
+argument contains extraneous output or space. For example:
+\begin{MEx}[0,-.25](4,.25)
+  \def\zigzag{\psline(0,0)(.5,1)(1.5,-1)(2,0)}%
+  \psset{unit=.25,linewidth=1.5pt}
+  \multips(0,0)(2,0){8}{\zigzag}
+\end{MEx}
+
+PSTricks is distributed with a much more general loop macro, called
+\n\multido.
+\File{multido} You must input the file "multido.tex" or "multido.sty". See the
+documentation "multido.doc" for details. Here is a sample of what you can do:
+\begin{example}
+  \begin{pspicture}(-3.4,-3.4)(3.4,3.4)
+    \newgray{mygray}{0}  % Initialize `mygray' for benefit
+    \psset{fillstyle=solid,fillcolor=mygray}  % of this line.
+    \SpecialCoor
+    \degrees[1.1]
+    \multido{\n=0.0+.1}{11}{%
+      \newgray{mygray}{\n}
+      \rput{\n}{\pswedge{3}{-.05}{.05}}
+      \uput{3.2}[\n](0,0){\small\n}}
+  \end{pspicture}
+\end{example}
+
+All of these loop macros can be nested.
+
+
+\Section{Axes\label{S-axes}}
+
+\File{pst-plot}
+The axes command described in this section is defined in "pst-plot.tex" /
+"pst-plot.sty", which you must input first. "pst-plot.tex", in turn, will
+automatically input "multido.tex", which is used for putting the labels on the
+axes.
+
+The macro for making axes is:
+  \Mac  \psaxes`*[par]{arrows}\c0\c1'\c2
+
+The coordinates must be Cartesian coordinates. They work the same way as with
+\n\psgrid. That is, if we imagine that the axes are enclosed in a rectangle,
+\c1 and \c2 are opposing corners of the rectangle. (I.e., the x-axis extends
+from \x1 to \x2 and the y-axis extends from \y1 to \y2.) The axes intersect at
+\c0. For example:
+\begin{MEx*}(4,3)
+  \psaxes[linewidth=1.2pt,labels=none,
+    ticks=none]{<->}(2,1)(0,0)(4,3)
+  "\psset{nodesep=3pt}
+  "\pnode(4,3){B}
+  "\rput*[tr](4,2.3){\rnode{A}{\c2}}
+  "\ncline{->}{A}{B}
+  "\pnode(2,1){B}
+  "\rput*[br](1.3,1.7){\rnode{A}{\c0}}
+  "\ncline{->}{A}{B}
+  "\pnode(0,0){B}
+  "\rput*[bl](0,-.9){\rnode{A}{\c1}}
+  "\ncline{->}{A}{B}
+\end{MEx*}
+
+If \c0 is omitted, then the origin is \c1. If both \c0 and \c1 are omitted,
+"(0,0)" is used as the default. For example, when the axes enclose a single
+orthont, only \c2 is needed:
+\begingroup
+\psset{unit=.8}
+\begin{MEx}[-.5,-.5](4,2)
+  "\small
+  \psaxes{->}(4,2)
+\end{MEx}
+\endgroup
+
+Labels (numbers) are put next to the axes, on the same side as \x1 and \y1.
+Thus, if we enclose a different orthont, the numbers end up in the right
+place:
+\begingroup
+\psset{unit=.8}
+\begin{MEx}[-.5,-2](4,.5)
+  "\small
+  \psaxes{->}(4,-2)
+\end{MEx}
+\endgroup
+
+Also, if you set the \p{arrows} parameter, the first arrow is used for the
+tips at <x1> and <y1>, while the second arrow is used for the tips at <x2> and
+<y2>. Thus, in the preceding examples, the arrowheads ended up in the right
+place too.\footnote{Including a first arrow in these examples would have had
+no effect because arrows are never drawn at the origin.}
+
+When the axes don't just enclose an orthont, that is, when the origin is not
+at a corner, there is some discretion as to where the numbers should go. The
+rules for positioning the numbers and arrows described above still apply, and
+so you can position the numbers as you please by switching <y1> and <y2>, or
+<x1> and <x2>. For example, compare
+\begingroup
+\psset{unit=.8}
+\begin{MEx}[-1.5,-.5](2.5,2.5)
+  "\small
+  \psaxes{<->}(0,0)(-2.5,0)(2.5,2.5)
+\end{MEx}
+\endgroup
+with what we get when <x1> and <x2> are switched:
+\begingroup
+\psset{unit=.8}
+\begin{MEx}[-1.5,-.5](2.5,2.5)
+  "\small
+  \psaxes{<->}(0,0)(2.5,0)(-2.5,2.5)
+\end{MEx}
+\endgroup
+
+\n\psaxes\ puts the ticks and numbers on the axes at regular intervals, using
+the following parameters:
+\newbox\axesbox
+\MainParIndex{Ox}
+\MainParIndex{Dx}
+\MainParIndex{dx}
+\MainParIndex{Oy}
+\MainParIndex{Dy}
+\MainParIndex{oy}
+\setbox\axesbox=\hbox{%
+  \large
+  \begin{tabular}{|c|c|c|l|}
+    \hline
+    {\em Horitontal}  & {\em Vertical} & {\em Dflt} &
+      {\em Description}\\[2pt]
+    \p{Ox=num} & \p{Oy=num} & "0" & Label at origin.\\
+    \p{Dx=num} & \p{Dy=num} & "1" & Label increment.\\
+    \p{dx=dim} & \p{oy=dim} &"0pt" & Dist btwn labels.\\
+    \hline
+  \end{tabular}}
+\addtoquickref{center}{%
+  {\large\bf Axes label parameters}\par
+  \leavevmode\box\axesbox}
+\begin{center}
+\leavevmode\copy\axesbox
+\end{center}
+When \p{dx} is 0, "Dx\psxunit" is used instead, and similarly for \p{dy}.
+Hence, the default values of "0pt" for \p{dx} and \p{dy} are not as peculiar
+as they seem.
+
+You have to be very careful when setting \p{Ox}, \p{Dx}, \p{Oy} and \p{Dy} to
+non-integer values. "multido.tex" increments the labels using rudimentary
+fixed-point arithmetic, and it will come up with the wrong answer unless
+\p{Ox} and \p{Dx}, or \p{Oy} and \p{Dy}, have the same number of digits to the
+right of the decimal. The only exception is that \p{Ox} or \p{Oy} can always
+be an integer, even if \p{Dx} or \p{Dy} is not. (The converse does not work,
+however.)%
+\footnote{For example, \p{Ox=1.0} and \p{Dx=1.4} is okay, as is \p{Ox=1} and
+\p{Dx=1.4}, but \p{Ox=1.4} and \p{Dx=1}, or \p{Ox=1.4} and \p{Dx=1.15}, is not
+okay. If you get this wrong, PSTricks won't complain, but you won't get the
+right labels either.}
+
+Note that \n\psaxes's first coordinate argument determines the physical
+position of the origin, but it doesn't affect the label at the origin. E.g.,
+if the origin is at "(1,1)", the origin is still labeled "0" along each axis,
+unless  you explicitly change \p{Ox} and \p{Oy}. For example:
+\begin{MEx}[-2,0](2,3)
+  \psaxes[Ox=-2](-2,0)(2,3)
+\end{MEx}
+
+The ticks and labels use a few other parameters as well:
+\begin{description}
+
+\pitem[labels=all/x/y/none]
+  To specify whether labels appear on both axes, the x-axis, the y-axis, or
+neither.
+
+\pitem[showorigin=true/false]
+  If "true", then labels are placed at the origin, as long as the label
+doesn't end up on one of the axes. If "false", the labels are never placed at
+the origin.
+
+\pitem[ticks=all/x/y/none]
+  To specify whether ticks appear on both axes, the x-axis, the y-axis, or
+neither.
+
+\pitem[tickstyle=full/top/bottom]
+  For example, if \p{tickstyle=top}, then the ticks are only on the side of
+the axes away from the labels. If \p{tickstyle=bottom}, the ticks are on the
+same side as the labels. "full" gives ticks extending on both sides.
+
+\pitem[ticksize=dim]
+  Ticks extend <dim> above and/or below the axis.
+
+\end{description}
+
+The distance between ticks and labels is \n\pslabelsep, which you can change
+with the \p{labelsep} parameter.
+
+The labels are set in the current font (ome of the examples above were
+preceded by "\small" so that the labels would be smaller). You can do fancy
+things with the labels by redefining the commands:
+\begin{Ex}
+  \object  \psxlabel
+  \object  \psylabel
+\end{Ex}
+E.g., if you want change the font of the horizontal labels, but not the
+vertical labels, try something like
+\begin{LVerb}
+  \def\psxlabel#1{\small #1}
+\end{LVerb}
+
+You can choose to have a frame instead of axes, or no axes at all (but you
+still get the ticks and labels), with the parameter:
+\begin{Ex}
+  \Par{axesstyle=axes/frame/none}
+\end{Ex}
+The usual \p{linestyle}, \p{fillstyle} and related paremeters apply.
+
+For example:
+\begin{MEx}[-3,-.5](.5,3)
+  \psaxes[Dx=.5,dx=1,tickstyle=top,axesstyle=frame](-3,3)
+\end{MEx}
+
+The \n\psaxes\ macro is pretty flexible, but PSTricks contains some other
+tools for making axes from scratch. E.g., you can use \n\psline\ and
+\n\psframe\ to draw axes and frames, respectively, \n\multido\ to generate
+labels (see the documentation for "multido.tex"), and \n\multips\ to make
+ticks.
+
+
+\part{Text Tricks\label{P-text}}
+
+\Section{Framed boxes\label{S-framebox}}
+
+The macros for framing boxes take their argument, put it in an "\hbox", and
+put a PostScript frame around it. (They are analogous to \LaTeX's "\fbox").
+Thus, they are composite objects rather than pure graphics objects. In
+addition to the graphics parameters for \n\psframe, these macros use the
+following parameters:
+\begin{description}
+
+\pitem[framesep=dim]
+  Distance between each side of a frame and the enclosed box.
+
+\pitem[boxsep=true/false]
+  When "true", the box that is produced is the size of the frame or whatever
+that is drawn around the object. When "false", the box that is produced is the
+size of whatever is inside, and so the frame is ``transparent'' to \TeX. This
+parameter only applies to \n\psframebox, \n\pscirclebox, and \n\psovalbox.
+
+\end{description}
+
+Here are the three box-framing macros:
+\begin{description}
+
+\oitem  \psframebox{stuff}
+
+  A simple frame (perhaps with rounded corners) is drawn using \n\psframe. The
+"*" option is of particular interest. It generates a solid frame whose color
+is \p{fillcolor} (rather than \p{linecolor}, as with the closed graphics
+objects). Recall that the default value of \p{fillcolor} is "white", and so
+this has the effect of blotting out whatever is behind the box. For example,
+\begin{MEx}(3,2)
+  \pspolygon[fillcolor=gray,fillstyle=crosshatch*](0,0)(3,0)
+    (3,2)(2,2)
+  \rput(2,1){\psframebox*[framearc=.3]{Label}}
+\end{MEx}
+
+\oitem  \psdblframebox{stuff}
+
+  This draws a double frame. It is just a variant of \n\psframebox, defined by
+\begin{LVerb}
+  \newpsobject{psdblframebox}{psframebox}{doublesep=\pslinewidth}
+\end{LVerb}
+For example,
+\begin{example}
+  \psdblframebox[linewidth=1.5pt]{%
+    \parbox[c]{6cm}{\raggedright A double frame is drawn
+    with the gap between lines equal to {\tt doublesep}}}
+\end{example}
+
+\oitem  \psshadowbox{stuff}
+
+  This draws a single frame, with a shadow.
+\begin{example**}
+  \psshadowbox{\bf Great Idea!!}
+\end{example**}
+You can get the shadow with \n\psframebox\ just be setting the \p{shadowsize}
+parameter, but with \n\psframebox\ the dimensions of the box won't reflect the
+shadow (which may be what you want!).
+
+\oitem  \pscirclebox{stuff}
+
+  This draws a circle. With \p{boxsep=true}, the size of the box is close to
+but may be larger than the size of the circle. For example:
+\begin{example**}
+  \pscirclebox{\begin{tabular}{c} You are \\ here \end{tabular}}
+\end{example**}
+
+\oitem  \cput<{angle}\c~>{stuff}
+
+  This combines the functions of \n\pscirclebox\ and \n\rput. It is like
+\begin{LVerb*}
+  \rput{<angle>}(x0,y0){\string\pscirclebox*[<par>]{<stuff>}}
+\end{LVerb*}
+but it is more efficient. Unlike the \n\rput\ command, there is no argument
+for changing the reference point; it is always the center of the box. Instead,
+there is an optional argument for changing graphics parameters. For example
+\begin{MEx*}(2,1)
+  \cput[doubleline=true](1,.5){\large $K_1$}
+\end{MEx*}
+
+\oitem  \psovalbox{stuff}
+
+  This draws an ellipse. If you want an oval with square sides and rounded
+corners, then use \n\psframebox\ with a positive value for \p{rectarc} or
+\p{linearc} (depending on whether \p{cornersize} is "relative" or "absolute").
+Here is an example that uses \p{boxsep=false}:
+\begin{example**}
+  "\parbox{\marginparwidth}{
+  At the introductory price of
+  \psovalbox[boxsep=false,linecolor=darkgray]{\$13.99},
+  it pays to act now!
+  "}
+\end{example**}
+
+\end{description}
+
+You can define variants of these box framing macros using the \n\newpsobject\
+command.
+
+If you want to control the final size of the frame, independently of the
+material inside, nest <stuff> in something like \LaTeX's "\makebox" command.
+
+
+\Section{Clipping\label{S-clipping}}
+
+The command
+  \Mac  \clipbox`[dim]'{stuff}
+puts <stuff> in an "\hbox" and then clips around the boundary of the box, at a
+distance <dim> from the box (the default is "0pt").
+
+The \n\pspicture\ environment also lets you clip the picture to the boundary.
+
+The command
+  \Mac  \psclip{graphics} \ldots\ \Main\endpsclip
+sets the clipping path to the path drawn by the graphics object(s), until the
+\n\endpsclip\ command is reached.  \n\psclip\ and \n\endpsclip\ must be
+properly nested with respect to \TeX\ grouping. Only pure graphics (those
+described in Part \ref{P-graphics} and \n\pscustom) are permitted. An
+"Overfull \hbox" warning indicates that the <graphics> argument contains
+extraneous output or space. Note that the
+graphics objects otherwise act as usual, and the \n\psclip\ does not otherwise
+affect the surrounded text. Here is an example:
+\begin{example**}
+  \parbox{4.5cm}{%
+    \psclip{\psccurve[linestyle=none](-3,-2)
+      (0.3,-1.5)(2.3,-2)(4.3,-1.5)(6.3,-2)(8,-1.5)(8,2)(-3,2)}
+  "\def\baselinestretch{.85}\small
+    ``One of the best new plays I have seen all year: cool, poetic,
+    ironic   \ldots'' proclaimed {\em The Guardian} upon the London
+    premiere of this extraordinary play about a Czech director and
+    his actress wife, confronting exile in America.\vspace{-1cm}
+    \endpsclip}
+\end{example**}
+
+If you don't want the outline to be painted, you need to include
+\p{linestyle=none} in the parameter changes. You can actually include more
+than one graphics object in the argument, in which case the clipping path is
+set to the intersection of the paths.
+
+\n\psclip\ can be a useful tool in picture environments. For example, here it
+is used to shade the region between two curves:
+\begin{MEx}(4,4)
+  \psclip{%
+    \pscustom[linestyle=none]{%
+      \psplot{.5}{4}{2 x div}
+      \lineto(4,4)}
+    \pscustom[linestyle=none]{%
+      \psplot{0}{3}{3 x x mul 3 div sub}
+      \lineto(0,0)}}
+  \psframe*[linecolor=gray](0,0)(4,4)
+  \endpsclip
+  \psplot[linewidth=1.5pt]{.5}{4}{2 x div}
+  \psplot[linewidth=1.5pt]{0}{3}{3 x x mul 3 div sub}
+  \psaxes(4,4)
+\end{MEx}
+
+\begin{drivers}
+  The clipping macros use \n\pstverbscale\ and \n\pstVerb. Don't be surprised
+if PSTricks's clipping does not work or causes problem---it is never robust.
+"\endpsclip" uses "initclip". This can interfere with other clipping
+operations, and especially if the \TeX\ document is converted to an
+Encapsulated PostScript file. The command \n\AltClipMode\ causes \n\psclip\
+and \n\endpsclip\ to use "gsave" and "grestore" instead. This bothers some
+drivers, such as NeXTTeX's TeXView, especially if \n\psclip\ and \n\endpsclip\
+do not end up on the same page.
+\end{drivers}
+
+\Section{Rotation and scaling boxes\label{S-rotation}}
+
+There are versions of the standard box rotation macros:
+\begin{Ex}
+  \object  \rotateleft{stuff}
+  \object  \rotateright{stuff}
+  \object  \rotatedown{stuff}
+\end{Ex}
+<stuff> is put in an "\hbox" and then rotated or scaled, leaving the
+appropriate amount of spaces. Here are a few uninteresting examples:
+\begin{example**}
+  \Large\bf \rotateleft{Left} \rotatedown{Down} \rotateright{Right}
+\end{example**}
+
+
+There are also two box scaling macros:
+\begin{description}
+
+\mitem  \scalebox{num1 `num2'}{stuff}
+
+  If you give two numbers in the first argument, <num1> is used to scale
+horizontally and <num2> is used to scale vertically. If you give just one
+number, the box is scaled by the same in both directions. You can't scale by
+zero, but negative numbers are OK, and have the effect of flipping the box
+around the axis. You never know when you need to do something like
+\scalebox{-1 1}{this} ("\scalebox{-1 1}{this}").
+
+\mitem  \scaleboxto\c~{stuff}
+
+  This time, the first argument is a (Cartesian) coordinate, and the box is
+scaled to have width \x{} and height (plus depth) \y{}. If one of the
+dimensions is 0, the box is scaled by the same amount in both directions. For
+example:
+\begin{example**}
+  \scaleboxto(4,2){Big and long}
+\end{example**}
+
+\end{description}
+
+PSTricks defines LR-box environments for all these box rotation and scaling
+commands:
+\begin{LVerb}
+  \pslongbox{Rotateleft}{\rotateleft}
+  \pslongbox{Rotateright}{\rotateright}
+  \pslongbox{Rotatedown}{\rotatedown}
+  \pslongbox{Scalebox}{\scalebox}
+  \pslongbox{Scaleboxto}{\scaleboxto}
+\end{LVerb}
+
+Here is an example where we \n\Rotatedown\ for the answers to exercises:
+\begin{example**}
+  "\parbox{4cm}{\raggedright\noindent\hsize 4cm
+  Question: How do Democrats organize a firing squad?
+
+  \begin{Rotatedown}
+    \parbox{\hsize}{Answer: First they get in a circle, \ldots\hss}%
+  \end{Rotatedown}
+  "}
+\end{example**}
+
+See the documentation of "fancybox.sty" for tips on rotating a \LaTeX\ "table"
+or "figure" environment, and other boxes.
+
+
+\part{Nodes and Node Connections\label{P-nodes}}
+
+\File{pst-node}
+All the commands described in this part are contained in the file
+"pst-node.tex"/"pst-node.sty".
+
+The node and node connection macros let you connect information and place
+labels, without knowing the exact position of what you are connecting or of
+where the lines should connect. These macros are useful for making graphs and
+trees, mathematical diagrams, linguistic syntax diagrams, and connecting ideas
+of any kind. They are the trickiest tricks in PSTricks!
+
+Although you might use these macros in pictures, positioning and rotating them
+with \n\rput, you can actually use them anywhere. For example, I might do
+something like this in a guide about page styles:
+\begin{example**}
+  "\parbox{4cm}{\raggedright
+  \makeatletter
+  \gdef\ps@temp{\def\@oddhead{}\def\@evenhead{}
+    \def\@oddfoot{\small\sf
+      \ovalnode[boxsep=false]{A}{\rightmark}
+      \nccurve[ncurv=.5,angleB=240,angleA=180,nodesep=6pt]{<-}{A}{B}
+      \hfil\thepage}
+    \let\@evenfoot\@oddfoot}
+  \makeatother
+  \thispagestyle{temp}
+
+  With the {\tt myfooters} page style, the name of the current section
+  appears at the bottom of each \rnode{B}{page}.
+  "}
+\end{example**}
+
+\begingroup
+\makeatletter
+\catcode`\<=12
+\gdef\ps@temp{%
+  \def\@oddhead{}%
+  \def\@evenhead{}%
+  \def\@oddfoot{%
+    \small\sf
+    \ovalnode[boxsep=false]{A}{\rightmark}
+    \nccurve[ncurv=.5,angleB=240,angleA=180,nodesep=6pt]{<-}{A}{B}
+    \hfil\thepage}
+  \let\@evenfoot\@oddfoot}%
+\thispagestyle{temp}
+\endgroup
+
+You can use nodes in math mode and in alignment environments as well. Here is
+an example of a commutative diagram:
+\begin{example**}
+  $
+  \begin{array}{c@{\hskip 1cm}c}
+    & \rnode{a}{A}\\[2cm]
+    \rnode{b}{B} & \rnode{c}{C}
+  \end{array}
+  \psset{nodesep=3pt}
+  \everypsbox{\scriptstyle}
+  \ncline{->}{a}{b}\Bput{f}
+  \ncline{->}{a}{c}\Aput{g}
+  \ncline[linestyle=dotted]{->}{b}{c}\Aput{h}
+  $
+\end{example**}
+
+There are three components to the node macros:
+\begin{description}
+\item[Node definitions] The node definitions let you assign a name and shape
+to an object. See Section \ref{S-nodes}.
+\item[Node connections] The node connections connect two nodes, identified by
+their names. See Section \ref{S-nc}.
+\item[Node labels] The node label commands let you affix labels to the node
+connections. See Section \ref{S-nodelabels}.
+\end{description}
+
+
+\Section{Nodes\label{S-nodes}}
+
+
+The <name> of a node must contain only letters and numbers, and must begin
+with a letter.
+
+\begin{Warning}
+Bad node names can cause PostScript errors.
+\end{Warning}
+
+\begin{description}
+
+\mitem  \rnode`[refpoint]'{name}{stuff}
+
+  This assigns the <name> to the node, which will have a rectangular shape for
+the purpose of making connections, with the ``center'' at the reference point
+(i.e., node connections will point to the reference point. \n\rnode\ was used
+in the two examples above.
+
+\mitem  \Rnode`\c~'{name}{stuff}
+
+  This is like \n\rnode, but the reference point is calculated differently. It
+is set to the middle of the box's baseline, plus \c{}. If you omit the \c{}
+argument, command
+  \Mac  \RnodeRef
+is substituted. The default definition of \n\RnodeRef\ is "0,.7ex". E.g, the
+following are equivalent:
+\begin{LVerb}
+  \Rnode(0,.6ex){stuff}
+  {\def\RnodeRef{0,.6ex}\Rnode{stuff}}
+\end{LVerb}
+
+\n\Rnode\ is useful when aligning nodes by their baaelines, such as in
+commutative diagrams. With \n\rnode\, horizontal node connections might not be
+quite horizontal, because of differences in the size of letters.
+
+\mitem  \pnode`\c~'{name}
+
+  This creates a zero dimensional node at the point \c{} (default "(0,0)").
+
+\oitem  \cnode`\c~'{radius}{name}
+
+  This draws a circle and assigns the <name> to it.
+
+\oitem  \circlenode{name}{stuff}
+
+  This is a variant of \n\pscirclebox\ that gives the node the shape of the
+circle.
+
+\oitem  \cnodeput`{angle}\c~'{name}{stuff}
+
+  This is a variant of \n\cput\ that gives the node the shape of the circle.
+
+\oitem  \ovalnode{name}{stuff}
+
+  This is a variant of \n\psovalbox\ that gives the node the shape of the
+ellipse.
+
+\end{description}
+
+The reason that there is no \n\framenode\ command is that using \n\psframebox\
+(or \n\psshadowbox\ or \n\psdblframebox) in the argument of \n\rnode\ gives
+the desired result.
+
+\Section{Node connections\label{S-nc}}
+
+All the node connection commands begin with "nc", and they all have the same
+syntax:
+\begin{LVerb*}
+  \<nodeconnection>[<par>]{<arrows>}{<nodeA>}{<nodeB>}
+\end{LVerb*}
+A line of some sort is drawn from <nodeA> to <nodeB>. Some of the node
+connection commands are a little confusing, but with a little experimentation
+you will figure them out, and you will be amazed at the things you can do.
+
+The node and point connections can be used with \n\pscustom. The beginning of
+the node connection is attached to the current point by a straight line, as
+with \n\psarc.\footnote{See page \protect\pageref{S-SpecialCoor} if you want
+to use the nodes as coordinates in other PSTricks macros.}
+
+ When we refer to the "A" and "B" nodes below, we are referring only to the
+order in which the names are given as arguments to the node connection macros.
+
+When a node name cannot be found on the same page as the node connection
+command, you get either no node connection or a nonsense node connection.
+However, \TeX\ will not report any errors.
+
+ The node connections use the following parameters:
+\begin{description}
+
+\pitem[nodesep=dim]
+  The border around the  nodes added for the purpose of determining where to
+connect the lines.
+
+\pitem[offset=dim]
+  After the node connection point is calculated, it is shift up for <nodeA>
+and down for <nodeB> by <dim>, where
+``up'' and ``down'' assume that the connecting line points to the right from
+the node.
+
+\pitem[arm=dim]
+  Some node connections start with a segment of length <dim> before turning
+somewhere.
+
+\pitem[angle=angle]
+  Some node connections let you specify the angle that the node connection
+should connect to the node.
+
+\pitem[arcangle=angle]
+  This applies only to \n\ncarc, and is described below.
+
+\pitem[ncurv=num]
+  This applies only to \n\nccurve\ and \n\pccurve, and is described below.
+
+\pitem[loopsize=dim]
+  This applies only the \n\ncloop\ and \n\pcloop, and is described below.
+\end{description}
+
+You can set these parameters separately for the two nodes. Just add an "A" or
+"B" to the parameter name. E.g.
+\begin{LVerb}
+  \psset{nodesepA=3pt, offsetA=5pt, offsetB=3pt, arm=1cm}
+\end{LVerb}
+sets \p{nodesep} for the "A" node, but leaves the value for the "B" node
+unchanged, sets "offset" for the "A" and "B" nodes to different values, and
+sets "arm" for the "A" and "B" nodes to the same value.
+
+Don't forget that by using the \p{border} parameter, you can create the
+impression that one node connection passes over another.
+
+Here is a description of the individual node connection commands:
+\begin{description}
+
+\oitem  \ncline`{arrows}'{nodeA}{nodeB}
+
+  This draws a straight line between the nodes. Only the \p{offset} and
+\p{nodesep} parameters are used.
+\begin{MEx}(4,3)
+  \rput[bl](0,0){\rnode{A}{Idea 1}}
+  \rput[tr](4,3){\rnode{B}{Idea 2}}
+  \ncline[nodesep=3pt]{<->}{A}{B}
+\end{MEx}
+
+\oitem  \ncLine`{arrows}'{nodeA}{nodeB}
+
+ This is like \n\ncline, but the labels (with \n\lput, etc) are positioned as
+if the line began and ended at the center of the nodes. This is useful if you
+have multiple parallel lines and you want the labels to line up, even though
+the nodes are of varying size, e.g., in commutative diagrams.
+
+\oitem  \nccurve`{arrows}'{nodeA}{nodeB}
+
+  This draws a bezier curve between the nodes. It uses the \p{nodesep},
+\p{offset}, \p{angle} and \p{ncurv} parameters.
+\begin{MEx}(4,3)
+  \rput[bl](0,0){\rnode{A}{\psframebox{Node A}}}
+  \rput[tr](4,3){\ovalnode{B}{Node B}}
+  \nccurve[angleB=180]{A}{B}
+\end{MEx}
+
+\oitem  \ncarc`{arrows}'{nodeA}{nodeB}
+
+  This is actually a variant of \n\nccurve. I.e., it also connects the nodes
+with a bezier curve, using the \p{nodesep}, \p{offset}, and \p{ncurv}
+parameters. However, the curve connects to node "A" at an angle \p{arcangleA}
+from the line between "A" and "B", and connects to node "B" at an angle
+-\p{arcangleB} from the line between "B" and "A". For small, equal values of
+\p{angleA} and \p{angleB}
+(e.g., the default value of "8") and with the default value of \p{ncurv}, the
+curve approximates an arc of a circle. \n\ncarc\ is a nice way to connect two
+nodes with two lines.
+\begin{MEx}[-.5,-.5](3.5,2.5)
+  \cnodeput(0,0){A}{X}
+  \cnodeput(3,2){B}{Y}
+  \psset{nodesep=3pt}
+  \ncarc{->}{A}{B}
+  \ncarc{->}{B}{A}
+\end{MEx}
+
+\oitem  \ncbar`{arrows}'{nodeA}{nodeB}
+
+  First, lines are drawn attaching to both nodes at an angle \p{angleA} and of
+lengths \p{armA} and \p{armB}. Then one of the arms is extended so that when
+the two are connected, the finished line contains 3 segments meeting at right
+angles. Generally, the whole line has three straight segments. The value of
+\p{linearc} is used for rounding the corners.
+\begin{example**})
+  \rnode{A}{Connect} some \rnode{B}{words}!
+  \ncbar[nodesep=3pt,angle=-90]{<-**}{A}{B}
+\end{example**}
+
+\oitem  \ncdiag`{arrows}'{nodeA}{nodeB}
+
+  First, the arms are drawn using \p{angle} and \p{arm}. Then they are
+connected with a straight line. Generally, the whole line has three straight
+segments. The value of \p{linearc} is used for rounding the corners.
+\begin{MEx}(4,3)
+  \rput[tl](0,3){\rnode{A}{\psframebox{Node A}}}
+  \rput[br](4,0){\ovalnode{B}{Node B}}
+  \ncdiag[angleA=-90,angleB=90,arm=.5,linearc=.2]{A}{B}
+\end{MEx}
+
+\oitem  \ncdiagg`{arrows}'{nodeA}{nodeB}
+
+  This is similar to \n\ncdiag, but only the arm for node A is drawn. The end
+of this arm is then connected directly to node B. The connection typically has
+two segments. The value of \p{linearc} is used for rounding the corners.
+\begin{MEx}[-.5,-1](3.5,1)
+  \cnode(0,0){4pt}{a}
+  \rput[l](3,1){\rnode{b}{H}}
+  \rput[l](3,-1){\rnode{c}{T}}
+  \ncdiagg[angleA=180,armA=2cm,nodesepA=3pt]{b}{a}
+  \ncdiagg[angleA=180,armA=2cm,nodesepA=3pt]{c}{a}
+\end{MEx}
+
+\oitem  \ncangle`{arrows}'{nodeA}{nodeB}
+
+  The node connection points are determined by \p{angleA} and \p{angleB} (and
+\p{nodesep} and \p{offset}). Then an arm is drawn for node "B" using \p{armB}.
+This arm is connected to node "A" by a right angle, that also meets node "A"
+at angle \p{angleA}. Generally, the whole line has three straight segments,
+but it can have fewer. The value of \p{linearc} is used for rounding the
+corners. Simple, right? Here is an example:
+\begin{MEx}(4,3)
+  \rput[tl](0,3){\rnode{A}{\psframebox{Node A}}}
+  \rput[br](4,0){\ovalnode{B}{Node B}}
+  \ncangle[angleA=-90,angleB=90,arm=.4cm,
+    linestyle=dashed]{A}{B}
+\end{MEx}
+
+\oitem  \ncangles`{arrows}'{nodeA}{nodeB}
+
+  This is similar to \n\ncangle, but both \p{armA} and \p{armB} are used. The
+arms are connected by a right angle that meets arm "A" at a right angle as
+well. Generally there are four segments (hence one more angle than \n\ncangle,
+and hence the "s" in \n\ncangles). The value of \p{linearc} is used for
+rounding the corners. Compare this example with the previous one:
+\begin{MEx}(4,3)
+  \rput[tl](0,3){\rnode{A}{\psframebox{Node A}}}
+  \rput[br](4,0){\ovalnode{B}{Node B}}
+  \ncangles[angleA=-90,arm=.4cm,linearc=.15]{A}{B}
+\end{MEx}
+
+\oitem  \ncloop`{arrows}'{nodeA}{nodeB}
+
+  The first segment is \p{armA}, then it makes a 90 degree turn to the left,
+drawing a segment of length \p{loopsize}. The next segment is again at a right
+angle; it connects to \p{armB}. For example:
+\begin{example**}
+  "\vrule width 0pt height 1cm
+  \rnode{a}{\psframebox{\Huge A loop}}
+  \ncloop[angleB=180,loopsize=1,arm=.5,linearc=.2]{->}{a}{a}
+  "\kern .5cm
+\end{example**}
+
+
+\oitem \nccircle`{arrows}'{node}{radius}
+
+  This draws a circle from a node to itself. It is the only node connection
+command of this sort. The circle starts at angle \p{angleA} and goes around
+the node counterclockwise, at a distance \p{nodesepA} from the node.
+
+\end{description}
+
+The node connection commands make interesting drawing tools as well, as an
+alternative to \n\psline\ for connecting two points. There are variants of the
+node connection commands for this purpose. Each begins with "pc" (for ``point
+connection'') rather than "nc". E.g.,
+\begin{LVerb}
+  \pcarc{<->}(3,4)(6,9)
+\end{LVerb}
+gives the same result as
+\begin{LVerb}
+  \pnode(3,4){A}\pnode(6,9){B}\pcarc{<->}{A}{B}
+\end{LVerb}
+
+Only \n\ncLine\ and \n\nccircle\ do not have "pc" variants:
+\begin{description}
+
+\oitem  \pcline`{arrows}'\c1\c2
+
+  Like \n\ncline.
+
+\oitem  \pccurve`{arrows}'\c1\c2
+
+  Like \n\nccurve.
+
+\oitem  \pcarc`{arrows}'\c1\c2
+
+  Like \n\ncarc.
+
+\oitem  \pcbar`{arrows}'\c1\c2
+
+  Like \n\ncbar.
+
+\oitem  \pcdiag`{arrows}'\c1\c2
+
+  Like \n\ncdiag.
+
+\oitem  \pcangle`{arrows}'\c1\c2
+
+  Like \n\ncangle.
+
+\oitem  \pcloop`{arrows}'\c1\c2
+
+  Like \n\ncloop.
+
+\end{description}
+
+
+\Section{Attaching labels to node connections\label{S-nodelabels}}
+
+Now we come to the commands for attaching labels to the node connections. The
+node label command must come right after the node connection to which the
+label is to be attached. You can attach more than one label to a node
+connection, and a label can include more nodes.
+
+The node label commands must end up on the same \TeX\ page as the node
+connection to which the label corresponds.
+
+The coordinate argument in other PSTricks "put" commands is a single number in
+the node label commands: "(<pos>)".  This number selects a point on the node
+connection, roughly according to the following scheme: Each node connection
+has potentially one or more segments, including the arms and connecting lines.
+A number $pos$ between 0 and 1 picks a point on the first segment from node
+"A" to "B", (fraction $pos$ from the beginning to the end of the segment), a
+number between 1 and 2 picks a number on the second segment, and so on. Each
+node connection has its own default value of the positioning coordinate, which
+is used by some short versions of the label commands.
+
+Here are the details for each node connection:
+\begin{center}
+  \catcode`\@=11\setbox\@tempboxa=\hbox{1.5}%
+  \edef\t#1{\noexpand\hbox to \the\wd\@tempboxa{\noexpand\tt\noexpand\hss#1}}
+  \begin{tabular}{lccc}
+    {\em Connection} & {\em Segments} & {\em Range} & {\em Default}\\[2pt]
+    \n\ncline    & 1 & $0\leq pos\leq 1$ & "0.5"\\
+    \n\nccurve   & 1 & $0\leq pos\leq 1$ & "0.5"\\
+    \n\ncarc     & 1 & $0\leq pos\leq 1$ & "0.5"\\
+    \n\ncbar     & 3 & $0\leq pos\leq 3$ & "1.5"\\
+    \n\ncdiag    & 3 & $0\leq pos\leq 3$ & "1.5"\\
+    \n\ncdiagg   & 2 & $0\leq pos\leq 2$ & "0.5"\\
+    \n\ncangle   & 3 & $0\leq pos\leq 3$ & "1.5"\\
+    \n\ncloop    & 5 & $0\leq pos\leq 4$ & "2.5"\\
+    \n\nccircle  & 1 & $0\leq pos\leq 1$ & "0.5"\\
+  \end{tabular}
+\end{center}
+
+There is another difference between the node label commands and other "put"
+commands. In addition to the various ways of specifying the angle of rotation
+for \n\rput, with the node label commands the angle can be of the form
+"{:<angle>}". In this case, the angle is calculated after rotating the
+coordinate system so that the node connection at the position of the label
+points to the right (from nodes "A" to "B"). E.g., if the angle is "{:U}",
+then the label runs parallel to the node connection.
+
+Here are the node label commands:
+\begin{description}
+
+\mitem  \lput`*[refpoint]{rotation}'(pos){stuff}
+
+The "l" stands for ``label''. Here is an example illustrating the use of the
+optional star and ":<angle>" with \n\lput, as well as the use of the
+\p{offset} parameter with \n\pcline:
+\begin{MEx}(4,2.3)
+  \pspolygon(0,0)(4,2)(4,0)
+  \pcline[offset=12pt]{|-|}(0,0)(4,2)
+  \lput*{:U}{Length}
+\end{MEx}
+(Remember that with the "put" commands, you can omit the coordinate if you
+include the angle of rotation. You are likely to use this feature with the
+node label commands.)
+
+With \n\lput\ and \n\rput, you have a lot of control over the position of the
+label. E.g.,
+\begin{MEx}(4,2)
+  \pcline(0,0)(4,2)
+  \lput{:U}{\rput[r]{N}(0,.4){label}}
+\end{MEx}
+puts the label upright on the page, with right side located .4 centimeters
+``above'' the position ".5" of the node connection (above if the node
+connection points to the right). However, the \n\aput\ and \n\bput\ commands
+described below handle the most common cases without \n\rput.\footnote{%
+There is also an obsolete command \n\Lput\MainIndex\Lput\ for putting labels
+next to node connections. The syntax is
+\begin{LVerb*}
+  \Lput{<labelsep>}[<refpoint>]{<rotation>}(<pos>){<stuff>}
+\end{LVerb*}
+It is a combination of \n\Rput\ and \n\lput, equivalent to
+\begin{LVerb*}
+  \lput(<pos>){\Rput{<labelsep>}[<refpoint>]{<rotation>}(0,0){<stuff>}}
+\end{LVerb*}
+\n\Mput\MainIndex\Mput\ is a short version of \n\Lput\ with no "{<rotation>}"
+or "(<pos>)" argument. \n\Lput\ and \n\Mput\ remain part of PSTricks only for
+backwards compatibility.}
+
+\mitem  \aput`*[labelsep]{angle}'(pos){stuff}
+
+  <stuff> is positioned distance \n\pslabelsep\ {\em above} the node
+connection, given the convention that node connections point to the right.
+"\aput" is a node-connection variant of \n\uput. For example:
+\begin{MEx}(4,2)
+  \pspolygon(0,0)(4,2)(4,0)
+  \pcline[linestyle=none](0,0)(4,2)
+  \aput{:U}{Hypotenuse}
+\end{MEx}
+
+\mitem  \bput`*[labelsep]{angle}'(pos){stuff}
+
+  This is like \n\aput, but <stuff> is positioned {\em below} the node
+connection.
+
+\end{description}
+
+  It is fairly common to want to use the default position and rotation with
+these node connections, but you have to include at least one of these
+arguments. Therefore, PSTricks contains some variants:
+\begin{Ex}
+  \object  \mput`*[refpoint]'{stuff}
+  \object  \Aput`*[labelsep]'{stuff}
+  \object  \Bput`*[labelsep]'{stuff}
+\end{Ex}
+of \n\lput, \n\aput\ and \n\bput, respectively, that have no angle or
+positioning argument. For example:
+\begin{MEx}(4,2)
+  \cnode*(0,0){3pt}{A}
+  \cnode*(4,2){3pt}{B}
+  \ncline[nodesep=3pt]{A}{B}
+  \mput*{1}
+\end{MEx}
+Here is another:
+\begin{MEx}(4,2)
+  \pcline{<->}(0,0)(4,2)
+  \Aput{Label}
+\end{MEx}
+
+Now we can compare \n\ncline\ with \n\ncLine, and \n\rnode\ with \n\Rnode.
+First, here is a mathematical diagram with \n\ncLine\ and \n\Rnode:
+\begin{example*}
+  \[
+    \setlength{\arraycolsep}{1cm}
+    \def\tX{\tilde{\tilde{X}}}
+    \begin{array}{cc}
+      \Rnode{a}{(X-A,N-A)} & \Rnode{b}{(\tX,a)}\\[1.5cm]
+      \Rnode{c}{(X,N)} & \Rnode{d}{\LARGE(\tX,N)}\\[1.5cm]
+    \end{array}
+    \psset{nodesep=5pt,arrows=->}
+    \everypsbox{\scriptstyle}
+    \ncLine{a}{b}\Aput{a}
+    \ncLine{a}{c}\Bput{r}
+    \ncLine[linestyle=dashed]{c}{d}\Bput{b}
+    \ncLine{b}{d}\Bput{s}
+  \]
+\end{example*}
+Here is the same one, but with \n\ncline\ and \n\rnode\ instead:
+\[
+  \def\ncLine{\ncline}
+  \def\Rnode{\rnode}
+    \setlength{\arraycolsep}{1cm}
+    \def\tX{\tilde{\tilde{X}}}
+    \begin{array}{cc}
+      \Rnode{a}{(X-A,N-A)} & \Rnode{b}{(\tX,a)}\\[1.5cm]
+      \Rnode{c}{(X,N)} & \Rnode{d}{\LARGE(\tX,N)}\\[1.5cm]
+    \end{array}
+    \psset{nodesep=5pt,arrows=->}
+    \everypsbox{\scriptstyle}
+    \ncLine{a}{b}\Aput{a}
+    \ncLine{a}{c}\Bput{r}
+    \ncLine[linestyle=dashed]{c}{d}\Bput{b}
+    \ncLine{b}{d}\Bput{s}
+\]
+
+\begin{drivers} The node macros use \n\pstVerb\ and \n\pstverbscale.
+\end{drivers}
+
+\part{Special Tricks\label{P-special}}
+
+
+\Section{Coils and zigzags}
+
+\File{pst-coil}
+The file "pst-coil.tex"/"pst-coil.sty"  (and optionally the header file
+"pst-coil.pro") defines the following graphics objects for coils and zigzags:
+\begin{Ex}
+  \object  \pscoil`*[par]{arrows}\c0'\c1
+  \object  \psCoil`*[par]'{angle1}{angle2}
+  \object  \pszigzag`*[par]{arrows}\c0'\c1
+\end{Ex}
+
+ These graphics objects use the following parameters:
+\begin{Ex}
+  \Par{coilwidth=dim}
+  \Par{coilheight=num}
+  \Par{coilarm=dim}
+  \Par{coilaspect=angle}
+  \Par{coilinc=angle}
+\end{Ex}
+
+All coil and zigzag objects draw a coil or zigzag whose width (diameter) is
+\p{coilwidth}, and with the distance along the axes for each period (360
+degrees) equal to
+\begin{quote}
+  \p{coilheight} x \p{coilwidth}.
+\end{quote}
+
+Both \n\pscoil\ and \n\psCoil\ draw a ``3D'' coil, projected onto the xz-axes.
+The center of the 3D coil lies on the yz-plane at angle p{coilaspect} to the
+z-axis. The coil is drawn with PostScript's "lineto", joining points that lie
+at angle \p{coilinc} from each other along the coil. Hence, increasing
+\p{coilinc} makes the curve smoother but the printing slower. \n\pszigzag\
+does not use the \p{coilaspect} and \p{coilinc} parameters.
+
+\n\pscoil and \n\pszigzag\ connect \c0  and \c1, starting and ending with
+straight line segments of length \p{coilarmA} and \p{coilarmB}, resp. Setting
+\p{coilarm} is the same as setting \p{coilarmA} and \p{coilarmB}.
+
+Here is an example of \n\pscoil:
+\begin{MEx}(4,2)
+  \pscoil[coilarm=.5cm,linewidth=1.5pt,coilwidth=.5cm]{<-|}(4,2)
+\end{MEx}
+
+Here is an example of \n\pszigzag:
+\begin{MEx}[0,-.5](4,.5)
+  \pszigzag[coilarm=.5,linearc=.1]{<->}(4,0)
+\end{MEx}
+Note that \n\pszigzag\ uses the \p{linearc} parameters, and that the beginning
+and ending segments may be longer than \p{coilarm} to take up slack.
+
+\n\psCoil\ just draws the coil horizontally from <angle1> to <angle2>. Use
+\n\rput\ to rotate and translate the coil, if desired. \n\psCoil\ does not use
+the \p{coilarm} parameter. For example, with \p{coilaspect=0} we get a sine
+curve:
+\begin{MEx}[0,-.375](4,.375)
+  \psCoil[coilaspect=0,coilheight=1.33,
+    coilwidth=.75,linewidth=1.5pt]{0}{1440}
+\end{MEx}
+
+\File{pst-node}
+"pst-coil.tex" also contains coil and zigzag node connections. You must also
+load "pst-node.tex" / "pst-node.sty" to use these. The node connections are:
+\begin{Ex}
+  \object \nccoil`*[par]{arrows}'{nodeA}{nodeB}
+  \object \nczigzag`*[par]{arrows}'{nodeA}{nodeB}
+  \object \pccoil`*[par]{arrows}'\c1\c2
+  \object \pczigzag`*[par]{arrows}'\c1\c2
+\end{Ex}
+The end points are chosen the same as for \n\ncline\ and \n\pcline, and
+otherwise these commands work like \n\pscoil\ and \n\pszigzag. For example:
+\begin{MEx}(4,3)
+  \cnode(.5,.5){.5}{A}
+  \cnode[fillstyle=solid,fillcolor=lightgray](3.5,2.5){.5}{B}
+  \nccoil[coilwidth=.3]{<->}{A}{B}
+\end{MEx}
+
+
+\Section{Special coordinates\label{S-SpecialCoor}}
+
+The command
+  \Mac  \SpecialCoor
+enables a special feature that lets you specify coordinates in a variety of
+ways, in addition to the usual Cartesian coordinates.\footnote{%
+  There is an obsolete command \n\Polar\MainIndex\Polar\ that causes
+coordinates in the form "(<r>,<a>)" to be interpreted as polar coordinates.
+The use of \n\Polar\ is not recommended because it does not allow one to mix
+Cartesian and polar coordinates the way \n\SpecialCoor\ does, and because it
+is not as apparent when examining an input file whether, e.g., "(3,2)" is a
+Cartesian or polar coordinate. The command for undoing \n\Polar\ is
+\n\Cartesian\MainIndex\Cartesian. It has an optional argument for setting the
+default units. I.e.,
+\begin{LVerb*}
+  \Cartesian(<x>,<y>)
+\end{LVerb*}
+has the effect of
+\begin{LVerb*}
+  \psset{xunit=<x>,yunit=<y>}
+\end{LVerb*}
+\n\Cartesian\ can be used for this purpose without using \n\Polar.}
+ Processing is slightly slower and less robust, which is why this feature is
+available on demand rather than by default, but you probably won't notice the
+difference.
+
+Here are the coordinates you can use:
+\begin{description}
+ \vitem"(<x>,<y>)" The usual Cartesian coordinate. E.g., "(3,4)".
+ \vitem"(<r>;<a>)" Polar coordinate, with radius $r$ and angle $a$. The
+default unit for $r$ is \p{unit}. E.g., "(3;110)".
+ \vitem"(<node>)" The center of <node>. E.g., "(A)".
+ \vitem"([<par>]<node>)" The position relative to <node> determined using the
+\p{angle}, \p{nodesep} and \p{offset} parameters. E.g., "([angle=45]A)".
+ \vitem"(!<ps>)" Raw PostScript code. <ps> should expand to a coordinate pair.
+The units \p{xunit} and \p{yunit} are used. For example, if I want to use a
+polar coordinate $(3,110)$ that is scaled along with \p{xunit} and \p{yunit},
+I can write
+\begin{LVerb}
+  (!3 110 cos mul 3 110 sin mul)
+\end{LVerb}
+ \vitem"(<coor1>|<coor2>)" The $x$ coordinate from <coor1> and the $y$
+coordinate from <coor2>. <coor1> and <coor2> can be any other coordinates for
+use with \n\SpecialCoor. For example, "(A|1in;30)".
+\end{description}
+
+\n\SpecialCoor\ also lets you specify angles in several ways:
+\begin{description}
+\vitem"<num>" A number, as usual, with units given by the \n\degrees\ command.
+\vitem"(<coor>)" A coordinate, indicating where the angle points to. Be sure
+to include the "()", in addition to whatever other delimiters the angle
+argument uses.  For example, the following are two ways to draw an arc of .8
+inch radius from 0 to 135 degrees:
+\begin{MEx}(3,2)
+  \SpecialCoor
+  \psarc(0,0){.8in}{0}{135}
+  \psarc(0,0){.8in}{0}{(-1,1)}
+\end{MEx}
+\vitem"!<ps>" Raw PostScript code. <ps> should expand to a number. The same
+units are used as with <num>.
+\end{description}
+
+\newbox\specialbox
+\setbox\specialbox=\hbox{%
+  \bf
+  \begin{tabular}{|c|c|l|}
+    \hline
+    {\em Coordinate}  & {\em Example} & {\em Description} \\[2pt]
+    "(<x>,<y>)" & "(3,4)" & Cartesian coordinate.\\
+    "(<r>;<a>)" & "(3;110)" & Polar coordinate.\\
+    "(<node>)"  &  "(A)" & Center of <node>.\\
+    "([<par>]<node>)" & "([angle=45]A)" & Relative to <node>.\\
+    "(!<ps>)" & "(!5 3.3 2 exp)" & Raw PostScript.\\
+    "(<coor1>|<coor2>)" & "(A|1in;30)" & Combination.\\
+    \hline\hline
+    {\em Angle}  & {\em Example} & {\em Description} \\[2pt]
+    "<num>" & "45" & Angle.\\
+    "(<coor>)" & "(-1,1)" &  Coordinate (vector).\\
+    "!<ps>" & "!33 sqrt" & Raw PostScript.\\
+    \hline
+  \end{tabular}}%
+\addtoquickref{center}{%
+  {\large\bf Special coordinates and angles}\par
+  \leavevmode\box\specialbox}
+
+The command
+  \Mac  \NormalCoor
+disables the \n\SpecialCoor\ features.
+
+\Section{Overlays\label{S-overlays}}
+
+Overlays are mainly of interest for making slides, and the overlay macros
+described in this section are mainly of interest to \TeX\ macro writers who
+want to implement overlays in a slide macro package.  For example, the
+"seminar.sty" package, a \LaTeX\ style for notes and slides, uses PSTricks to
+implement overlays.
+
+Overlays are made by creating an "\hbox" and then outputting the box several
+times, printing different material in the box each time. The box is created by
+the commands
+  \Mac  \overlaybox < stuff >\Main\endoverlaybox
+\LaTeX\ users can instead write:
+\begin{LVerb*}
+  \begin{overlaybox} <stuff> \end{overlaybox}
+\end{LVerb*}
+
+The material for overlay <string> should go within the scope of the command
+  \Mac  \psoverlay{string}
+<string> can be any string, after expansion. Anything not in the scope of any
+\n\psoverlay\ command goes on overlay "main", and material within the scope of
+{\UsageFont "\psoverlay{all}"} goes on all the overlays. \n\psoverlay\
+commands can be nested and can be used in math mode.
+
+The command
+  \Mac  \putoverlaybox{string}
+then prints overlay <string>.
+
+Here is an example:
+\begin{example}
+  \overlaybox
+    \psoverlay{all}
+    \psframebox[framearc=.15,linewidth=1.5pt]{%
+      \psoverlay{main}
+      \parbox{3.5cm}{\raggedright
+        Foam Cups Damage Environment {\psoverlay{one} Less than
+        Paper Cups,} Study Says.}}
+  \endoverlaybox
+
+  \putoverlaybox{main} \hspace{.5in} \putoverlaybox{one}
+\end{example}
+
+\begin{drivers} Overlays use \n\pstVerb\ and \n\pstverbscale.\end{drivers}
+
+\section{The gradient fill style}
+
+\File{gradient}
+The file "gradient.tex"/"gradient.sty", along with the PostScript header file
+"gradient.pro", defines the "gradient" \p{fillstyle}, for gradiated shading.
+This \p{fillstyle} uses the following parameters:
+\begin{description}
+  \pitem[gradbegin=color] The starting and ending color.
+  \pitem[gradend=color]  The color at the midpoint.
+  \pitem[gradlines=int] The number of lines. More lines means finer
+gradiation, but slower printing.
+  \pitem[gradmidpoint=num] The position of the midpoint, as a fraction of the
+distance from top to bottom. <num> should be between 0 and 1.
+  \pitem[gradangle=angle] The image is rotated by <angle>.
+\end{description}
+
+\p{gradbegin} and \p{gradend} should preferably be "rgb" colors, but grays and
+"cmyk" colors should also work. The definitions of the colors "gradbegin" and
+"gradend" are:
+\begin{LVerb}
+  \newrgbcolor{gradbegin}{0 .1 .95}
+  \newrgbcolor{gradend}{0 1 1}
+\end{LVerb}
+Here are two ways to change the gradient colors:
+\begin{LVerb}
+  \newrgbcolor{gradbegin}{1 .4 0}
+\end{LVerb}
+and
+\begin{LVerb}
+  \psset{gradbegin=blue}
+\end{LVerb}
+
+Try this example:
+\begin{LVerb}
+  \psframe[fillstyle=gradient,gradangle=45](10,-20)
+\end{LVerb}
+
+\section{Adding color to tables\label{S-colortab}}
+
+\File{colortab}
+The file "colortab.tex"/"colortab.sty" contains macros that, when used with
+color commands such as those in PSTricks, let you color the cells and lines in
+tables. See "colortab.doc" for more information.
+
+\Section{Typesetting text along a path}
+
+\File{textpath}
+The file "textpath.tex"/"textpath.sty" defines the command \n\pstextpath, for
+typesetting text along a path. It is a remarkable trick, but there are some
+caveats:
+
+\begin{itemize}\label{tp-res}
+  \item "textpath.tex" only works with certain DVI-to-PS drivers. Here is what
+is currently known:
+\begin{itemize}
+  \item It works with Rokicki's "dvips", version 5.487 or later (at least up
+to v5.495).
+  \item It does not work with earlier versions of dvips.
+  \item It does not work with TeXview (to preview files with NeXTTeX 3.0,
+convert the ".dvi" file to a PostScript file with "dvips -o" and use Preview).
+  \item ``Does not work'' means that it has no effect, for better or for
+worse.
+  \item This may work with other drivers. The requirement is that the driver
+only use PostScript's "show" operator, unbound and unloaded, to show
+characters.
+\end{itemize}
+
+  \item You must also have installed the PostScript header file "textpath.ps",
+and \n\pstheader\ must be properly defined in "pstricks.con" for your driver.
+
+ \item Like other PSTricks that involve rotating text, this works best with
+PostScript (outline) fonts.
+
+ \item PostScript rendering with "textpath.tex" is slow.
+\end{itemize}
+
+Because of all this, no samples are shown here. However, there is a test file
+"tp-test.tex" and PostScript output "tp-test.ps" that are distributed with
+PSTricks.
+
+Here is the command:
+  \Mac \pstextpath`[pos](x,y)'{graphics object}{text}
+
+<text> is placed along the path, from beginning to end, defined by the
+PSTricks graphics object. (This object otherwise behaves normally. Set
+\p{linestyle=none} if you don't want it to appear.)
+
+<text> can only contain characters. No TeX rules, no PSTricks, and no other
+"\special"'s. (These things don't cause errors; they just don't work right.)
+Math mode is OK, but math operators that are built from several characters
+(e.g., large integral signs) may break. Entire boxes (e.g., "\parbox") are OK
+too, but this is mainly for amusement.
+
+<pos> is either
+\begin{center}
+  \begin{tabular}{cl}
+    l & justify on beginning of path\\
+    c & center on path\\
+    r & justify on end of path.
+  \end{tabular}
+\end{center}
+The default is "l".
+
+"(<x>,<y>)" is an offset. Characters are shifted distance <x> along path, and
+are shifted up by <y>. ``Up'' means with respect to the path, at whatever
+point on the path corresponding to the middle of the character. "(<x>,<y>)" 
+must
+be Cartesian coordinates. Both coordinates use \n\psunit\ as the default.
+The default coordinate is "(0,\TPoffset)", where \n\TPoffset\ a command whose
+default value is "-.7ex". This value leads to good spacing of the characters.
+Remember that "ex" units are for the font in effect when \n\pstextpath\
+occurs, not inside the <text> argument.
+
+More things you might want to know:
+\begin{itemize}
+ \item Like with "\rput" and the graphics objects, it is up to you to leave
+space for "\pstextpath".
+ \item Results are unpredictable if <text> is wider than length of path.
+ \item "\pstextpath" leaves the typesetting to \TeX. It just intercepts the
+"show" operator to remap the coordinate system.
+\end{itemize}
+
+\Section{Stroking and filling character paths}
+
+\File{charpath}
+The file "charpath.tex"/"charpath.sty" defines the command:
+  \Mac \pscharpath`*[par]'{text}
+It strokes and fills the <text> character paths using the PSTricks
+\p{linestyle} and \p{fillstyle}.
+
+The restrictions on DVI-to-PS drivers listed on page \pageref{tp-res} for
+"\pstextpath" apply to "\pscharpath". Furthermore, only outline (PostScript)
+fonts are affected.
+
+Sample input and output files "chartest.tex" and "chartest.ps" are distributed
+with PSTricks.
+
+With the optional "*", the character path is not removed from the PostScript
+environment at the end. This is mainly for special hacks. For example, you can
+use "\pscharpath*" in the first argument of "\pstextpath", and thus typeset
+text along the character path of some other text. See the sample file
+"denis1.tex". (However, you cannot combine "\pscharpath" and "\pstextpath" in
+any other way. E.g., you cannot typeset character outlines along a path, and
+then fill and stroke the outlines with "\pscharpath".)
+
+The command
+  \Mac \pscharclip`*[par]'{text} ... \Main  \endpscharclip
+works just like \n\pscharpath, but it also sets the clipping path to the
+character path. You may want to position this clipping path using \n\rput\
+{\em inside} \n\pscharclip's argument.  Like \n\psclip\ and \n\endpsclip,
+\n\pscharclip\ and \n\endpscharclip\ should come on the same page and should
+be properly nested with respect to \TeX\ groups (unless \n\AltClipMode\ is in
+effect). The file "denis2.tex" contains a sample of \n\pscharclip.
+
+
+\section{Importing EPS files}
+
+PSTricks does not come with any facility for including Encapsulated PostScript
+files, because there are other very good and well-tested macros for exactly
+that. If using Rokicki's "dvips", then try "epsf.tex"/"epsf.sty", by the man
+himself!
+
+What PSTricks {\em is} good for is embellishing your EPS picture. You can
+include an EPS file in in the argument of \n\rput, as in
+\begin{LVerb}
+  \rput(3,3){\epsfbox{myfile.eps}}
+\end{LVerb}
+and hence you can include an EPS file in the \n\pspicture\ environment. Turn
+on \n\psgrid, and you can find the coordinates for whatever graphics or text
+you want to add. This works even when the picture has a weird bounding box,
+because with the arguments to \n\pspicture\ you control the bounding box from
+\TeX's point of view.
+
+This isn't always the best way to work with an EPS file, however. If the
+PostScript file's bounding box is the size you want the resulting picture to
+be, after your additions, then try
+\begin{LVerb*}
+  \hbox{<picture objects> \epsfbox{<file.eps>}
+\end{LVerb*}
+This will put all your picture objects at the lower left corner of the EPS
+file. "\epsfbox" takes care of leaving the right amount of space.
+
+If you need to determine the bounding box of an EPS file, then you can try of
+the automatic bounding box calculating programs, such as "bbfig" (distributed
+with Rokicki's "dvips"). However, all such programs are easily fooled; the
+only sure way to determine the bounding box is visually. \n\psgrid\ is a good
+tool for this.
+
+\Section{Exporting EPS files}
+
+\File{pst2eps}
+You must load "pst2eps.tex" or "pst2eps.sty" to use the PSTricks macros
+described in this section.
+
+If you want to export an EPS file that contains both graphics and text, then
+you need to be using a DVI-to-PS driver that suports such a feature. If you
+just want to export pure graphics, then you can use the \n\PSTricksEPS\
+command. Both of these options are described in this section.
+
+Newer versions of Rokicki's "dvips" support an "-E" option for creating EPS
+files from \TeX\ ".dvi" files. E.g.,
+\[
+  dvips foo.dvi -E -o foo.eps
+\]
+Your document should be a single page. "dvips" will find a tight bounding box
+that just encloses the printed characters on the page. This works best with
+outline (PostScript) fonts, so that the EPS file is scalable and resolution
+independent.
+
+There are two inconvenient aspects of this method. You may want a different
+bounding box than the one calculated by "dvips" (in particular, "dvips"
+ignores all the PostScript generated by PSTricks when calculating the bounding
+box), and you may have to go out of your way to turn off any headers and
+footers that would be added by output routines.
+
+PSTricks contains an environment that tries to get around these two problems:
+\begin{Ex}
+  \object  \TeXtoEPS
+  "  "<stuff>\\
+  \object  \endTeXtoEPS
+\end{Ex}
+This is all that should appear in your document, but headers and whatever that
+would normally be added by output routines are ignored. "dvips" will again try
+to find a tight bounding box, but it will treat <stuff> as if there was a
+frame around it. Thus, the bounding box will be sure to include <stuff>, but
+might be larger if there is output outside the boundaries of this box. If the
+bounding box still isn't right, then you will have to edit the
+\begin{LVerb*}
+  %%BoundingBox <llx lly urx ury>
+\end{LVerb*}
+specification in the EPS file by hand.
+
+If your goal is to make an EPS file for inclusion in other documents, then
+"dvips -E" is the way to go. However, it can also be useful to generate an EPS
+file from PSTricks graphics objects and include it in the same
+document,\footnote{See the preceding section on importing EPS files.} rather
+than just including the PSTricks graphics directly, because \TeX\ gets
+involved with processing the PSTricks graphics only when the EPS file is
+initially created or updated. Hence, you can edit your file and preview the
+graphics, without having to process all the PSTricks graphics each time you
+correct a typo. This speed-up can be significant with complex graphics such as
+"\pslistplot"'s with a lot of data.
+
+To create an EPS file from PSTricks graphics objects, use
+  \Mac  \PSTtoEPS`[par]'{file}{graphics objects}
+The file is created immediately, and hence you can include it in the same
+document (after the \n\PSTtoEPS\ command) and as many times as you want.
+Unlike with "dvips -E", only pure graphics objects are processed (e.g.,
+"\rput" commands have no effect).
+
+\n\PSTtoEPS\ cannot calculate the bounding box of the EPS file. You have to
+specify it yourself, by setting the following parameters:
+\begin{Ex}
+  \Par{bbllx=dim}
+  \Par{bblly=dim}
+  \Par{bburx=dim}
+  \Par{bbury=dim}
+\end{Ex}
+Note that if the EPS file is only to be included in a PSTricks picture with
+\n\rput\, you might as well leave the default bounding box.
+
+\n\PSTricksEPS\ also uses the following parameters:
+\begin{description}
+  \pitem[headerfile=file(s)]
+  This parameter is for specifying PostScript header files that are to be
+included in the EPS file. The argument should contain one or more file names,
+separated by commas. If you have more than one file, however, the entire list
+must be enclosed in braces "{}".
+
+  \pitem[headers=none/all/user]
+  When "none", no header files are included. When "all", the header files used
+by PSTricks plus the header files specified by the \p{headerfile} parameter
+are included. When "user", only the header files specified by the
+\p{headerfile} parameter are included. If the EPS file is to be included in a
+\TeX\ document that uses the same PSTricks macros and hence loads the relevant
+PSTricks header files anyway (in particular, if the EPS file is to be included
+in the same document), then \p{headers} should be "none" or "user".
+\end{description}
+
+
+\appendix\part*{Help}
+
+\Section{Boxes\label{S-boxes}}
+
+Many of the PSTricks macros have an argument for text that is processed in
+restricted horizontal mode (in \LaTeX\ parlance, LR-mode) and then transformed
+in some way. This is always the macro's last argument, and it is written
+"{<stuff>}" in this {\em User's Guide}. Examples are the framing, rotating,
+scaling, positioning and node macros. I will call these ``LR-box'' macros, and
+use framing as the leading example in the discussion below.
+
+In restricted horizontal mode, the input, consisting of regular characters and
+boxes, is made into one (long or short) line. There is no line-breaking, nor
+can there be vertical mode material such as an entire displayed equation.
+However, the fact that you can include another box means that this isn't
+really a restriction.
+
+For one thing, alignment environments such as "\halign" or \LaTeX's "tabular"
+are just boxes, and thus present no problem. Picture environments and the box
+macros themselves are also just boxes. Actually, there isn't a single PSTricks
+command that cannot be put directly in the argument of an LR-box macro.
+However, entire paragraphs or other vertical mode material such as displayed
+equations need to be nested in a "\vbox" or \LaTeX\ "\parbox" or "minipage".
+\LaTeX\ users should see "fancybox.sty" and its documentation, "fancybox.doc",
+for extensive tips and trick for using LR-box commands.
+
+The PSTricks LR-box macros have some features that are not found in most other
+LR-box macros, such as the standard \LaTeX\ LR-box commands.
+
+With \LaTeX\ LR-box commands, the contents is always processed in text mode,
+even when the box occurs in math mode. PSTricks, on the other hand, preserves
+math mode, and attempts to preserve the math style as well. \TeX\ has four
+math styles: text, display, script and scriptscript. Generally, if the box
+macro occurs in displayed math (but not in sub- or superscript math), the
+contents are processed in display style, and otherwise the contents are
+processed in text style (even here the PSTricks macros can make mistakes, but
+through no fault of their own). If you don't get the right style, explicitly
+include a "\textstyle", "\displaystyle", "\scriptstyle" or
+"\scriptscriptstyle" command at the beginning of the box macro's argument.
+
+  In case you want your PSTricks LR-box commands to treat math in the same as
+your other LR-box commands, you can switch this feature on and off with the
+commands
+\begin{Ex}
+  \object  \psmathboxtrue
+  \object  \psmathboxfalse
+\end{Ex}
+
+You can  have commands (such as, but not restricted to, the math style
+commands) automatically inserted at the beginning of each LR-box using the
+  \Mac  \everypsbox{commands}
+command.\footnote{This is a token register.}
+
+If you would like to define an LR-box environment <name> from an LR-box
+command <cmd>, use
+  \Mac  \pslongbox{name}{cmd}
+For example, after
+\begin{LVerbatim}
+  \pslongbox{MyFrame}{\psframebox}
+\end{LVerbatim}
+you can write
+\begin{LVerbatim}
+  \MyFrame <stuff>\endMyFrame
+\end{LVerbatim}
+instead of
+\begin{LVerbatim}
+  \psframebox{<stuff>}
+\end{LVerbatim}
+Also, \LaTeX\ users can write
+\begin{LVerbatim}
+  \begin{MyFrame} <stuff>\end{MyFrame}
+\end{LVerbatim}
+It is up to you to be sure that <cmd> is a PSTricks LR-box command; if it
+isn't, nasty errors can arise.
+
+Environments like have nice properties:
+\begin{itemize}
+  \item The syntax is clearer when <stuff> is long.
+  \item It is easier to build composite LR-box commands. For example, here is
+a framed minipage environment for \LaTeX:
+\begin{LVerb}
+  \pslongbox{MyFrame}{\psframebox}
+  \newenvironment{fminipage}%
+    {\MyFrame\begin{minipage}}%
+    {\end{minipage}\endMyFrame}
+\end{LVerb}
+  \item You include verbatim text and other "\catcode" tricks in <stuff>.
+\end{itemize}
+
+The rest of this section elaborates on the inclusion of verbatim text in
+LR-box environments and commands, for those who are interested. "fancybox.sty"
+also contains some nice verbatim macros and tricks, some of which are useful
+for LR-box commands.
+
+The reason that you cannot normally include verbatim text in an LR-box
+commands argument is that \TeX\ reads the whole argument before processing the
+"\catcode" changes, at which point it is too late to change the category
+codes. If this is all Greek to you,\footnote{Incidentally, many foreign
+language macros, such as "greek.tex", use "\catcode" tricks which can cause
+problems in LR-box macros.} then just try this \LaTeX\ example to see the
+problem:
+\begin{LVerbatim}
+  \psframebox{\verb+\foo{bar}+}
+\end{LVerbatim}
+
+The LR-box environments defined with \n\pslongbox\ do not have this problem
+because <stuff> is not processed as an argument. Thus, this works:
+\begin{example}
+  \pslongbox{MyFrame}{\psframebox}
+  \MyFrame \verb+\foo{bar}+\endMyFrame
+\end{example}
+
+The commands
+\begin{Ex}
+  \object  \psverbboxtrue
+  \object  \psverbboxfalse
+\end{Ex}
+switch into and out of, respectively, a special PSTricks mode that lets you
+include verbatim text in any LR-box command. For example:
+\begin{example}
+  \psverbboxtrue
+  \psframebox{\verb+\foo{bar}+}
+\end{example}
+However, this is not as robust. You must explicitly group color commands in
+<stuff>, and LR-box commands that usually ignore spaces that follow
+"{<stuff>}" might not do so when \n\psverbboxtrue\ is in effect.
+
+
+\Section{Tips and More Tricks\label{tips}}
+
+\faq{How do I rotate/frame this or that with \LaTeX?}
+
+See "fancybox.sty" and its documentation.
+
+\faq{How can I suppress the PostScript so that I can use my document with a
+non-PostScript dvi driver?}
+
+Put the command
+  \Mac  \PSTricksOff
+at the beginning of your document. You should then be able to print or preview
+drafts of your document (minus the PostScript, and perhaps pretty strange
+looking) with any dvi driver.
+
+
+\faq{How can I improve the rendering of halftones?}
+
+This can be an important consideration when you have a halftone in the
+background and text on top. You can try putting
+\begin{LVerb}
+  \pstverb{106 45 {dup mul exch dup mul add 1.0 exch sub} setscreen}
+\end{LVerb}
+before the halftone, or in a header (as in headers and footers, not as in
+PostScript header files),  if you want it to have an effect on every page.
+
+"setscreen" is a device-dependent operator.
+
+\faq{What special characters can be active with PSTricks?}
+
+\Section{Including PostScript code\label{S-raw}}
+
+To learn about the PostScript language, consult Adobe's {\em PostScript
+Language Tutorial and Cookbook} (the ``Blue Book''), or Henry McGilton and
+Mary Campione's {\em PostScript by Example} (1992). Both are published by
+Addison-Wesley. You may find that the Appendix of the Blue Book, plus an
+understanding of how the stack works, is all you need to write simple code for
+computing numbers (e.g., to specify coordinates or plots using PostScript).
+
+You may want to define \TeX\ macros for including PostScript fragments in
+various places. All \TeX\ macros are expanded before being passed on to
+PostScript. It is not always clear what this means. For example, suppose you
+write
+\begin{LVerb}
+  \SpecialCoor
+  \def\mydata{23 43}
+  \psline(!47 \mydata add)
+  \psline(!47 \mydata\ add)
+  \psline(!47 \mydata~add)
+  \psline(!47 \mydata{} add)
+\end{LVerb}
+You will get a PostScript error in each of the \n\psline\ commands. To see
+what the argument is expanding to, try use \TeX's "\edef" and "\show". E.g.,
+\begin{LVerb}
+  \def\mydata{23 43}
+  \edef\temp{47 \mydata add}
+  \show\temp
+  \edef\temp{47 \mydata\ add}
+  \show\temp
+  \edef\temp{47 \mydata~add}
+  \show\temp
+  \edef\temp{47 \mydata{} add}
+  \show\temp
+\end{LVerb}
+\TeX\ expands the code, assigns its value to "\temp", and then displays the
+value of "\temp" on your console. Hit <return> to procede. You fill find that
+the four samples expand, respectively, to:
+\begin{LVerb}
+  47 23 43add
+  47 23 43\ add
+  47 23 43\penalty \@M \ add
+  47 23 43{} add
+\end{LVerb}
+All you really wanted was a space between the "43" and "add". The command
+"\space" will do the trick:
+\begin{LVerb}
+  \psline(!47 \mydata\space add)
+\end{LVerb}
+
+You can include balance braces "{"~"}"; these will be passed on verbatim to
+PostScript. However, to include an unbalanced left or right brace, you have to
+use, respectively,
+\begin{Ex}
+  \object  \pslbrace
+  \object  \psrbrace
+\end{Ex}
+Don't bother trying "\}" or "\{".
+
+Whenever you insert PostScript code in a PSTricks argument, the dictionary on
+the top of the dictionary stack is "tx@Dict", which is PSTrick's main
+dictionary. If you want to define you own variables, you have two options:
+\begin{description}
+  \item[Simplest] Always include a "@" in the variable names, because PSTricks
+never uses "@" in its variables names. You are at a risk of overflowing the
+"tx@Dict" dictionary, depending on your PostScript interpreter. You are also
+more likely to collide with someone else's definitions, if there are multiple
+authors contributing to the document.
+  \item[Safest] Create a dictionary named "TDict" for your scratch
+computations. Be sure to remove it from the dictionary stack at the end of any
+code you insert in an argument. E.g.,
+\begin{LVerb}
+  TDict 10 dict def TDict begin <your code> end
+\end{LVerb}
+\end{description}
+
+\section{Troubleshooting\label{troubleshooting}}
+\setcounter{faq}{0}
+
+\faq{Why does the document bomb in the printer when the first item in a
+\LaTeX\ file is a float?}
+
+When the first item in a \LaTeX\ file is a float, "\special"'s in the preamble
+are discarded. In particular, the "\special" for including PSTricks's header
+file is lost. The workaround is to but something before the float, or to
+include the header file by a command-line option with your dvi-to-ps driver.
+
+\faq{I converted a {\tt .dvi} file to PostScript, and then mailed it to a
+colleague. It prints fine for me but bombs on her printer.}
+
+Here is the most likely (but not the only) cause of this problem. The
+PostScript files you get when using PSTricks can contain long lines. This
+should be acceptable to any proper PostScript interpreter, but the lines can
+get chopped when mailing the file. There is no way to fix this in PSTricks,
+but you can make a point of wrapping the lines of your PostScript files when
+mailing them. E.g., on UNIX you can use "uuencode" and "uudecode", or you can
+use the following AWK script to wrap the lines:
+\begin{LVerb}
+  #! /bin/sh
+  # This script wraps all lines
+  # Usage (if script is named wrap):
+  #    wrap < infile > outfile
+  awk '
+  BEGIN {
+    N = 78    # Max line length
+  }
+  {  if (length($0)<=N)
+      print
+    else {
+      currlength = 0
+      for (i = 1; i <=NF; i++) {
+        if ((currlength = currlength + length($i) + 1) > N) {
+          printf "\n"
+          printf "%s", $i
+          currlength = length($i)
+          }
+        else
+          printf \ %s", $i
+        }
+      printf "\n"
+    }
+  } '
+\end{LVerb}
+
+\faq{The color commands cause extraneous vertical space to be inserted.}
+
+For example, this can happen if you start a \LaTeX\ "\parbox" or a "p{}"
+column with a color command. The solution usually is to precede the color
+command with "\leavevmode".
+
+
+\faq{The color commands interfere with other color macros I use.}
+
+Try putting the command \Main\altcolormode\ at the beginning of your document.
+This may or may not help. Be extra careful that the scope of color commands
+does not extend across pages. This is generally a less robust color scheme.
+
+\faq{How do I stop floats from being the same color as surrounding material?}
+
+That's easy: Just put an explicit color command at the beginning of the float,
+e.g., \n\black.
+
+\faq{When I use some color command in box macros or with {\tt\string\setbox},
+the colors get all screwed up.}
+
+\label{colorboxproblems}%
+If "\mybox" is a box register, and you write
+\begin{LVerb}
+  \green Ho Hum.
+  \setbox\mybox=\hbox{Foo bar \blue fee fum}
+  Hi Ho. \red Diddley-dee
+  \box\mybox hum dee do
+\end{LVerb}
+then when "\mybox" is inserted, the current color is red and so "Foo bar"
+comes out red (rather than green, which was the color in effect when the box
+was set). The command that returns from \n\blue\ to the current color "green",
+when the box is set, is executed after the "\hbox" is closed, which means that
+"Hi Ho" is green, but "hum dee do" is still blue.
+
+This odd behavior is due to the fact that \TeX{} does not support color
+internally, the way it supports font commands. The first thing to do is to
+explicitly bracket any color commands inside the box. Second, be sure that the
+current color is black when setting the box. Third, make other explicit color
+changes where necessary if you still have problems. The color scheme invoked
+by \n\altcolormode\ is slightly better behaved if you follow the first two
+rules.
+
+Note that various box macros use "\setbox" and so these anomalies can arise
+unexpectedly.
+
+
+\PrintUserIndex
+\QuickReference
+\end{document}
+%% END pst-user.tex

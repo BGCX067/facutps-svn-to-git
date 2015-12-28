@@ -1,0 +1,14 @@
+Partimos del archivo de la cátedra y modificamos, además de los nombres del dispositivo y modulo, las funciones de escritura y lectura.
+
+Lectura:
+  Actualizamos las variables que contienen los valores anteriores a la sucesión, calculamos el siguiente término y lo devolvemos al usuario.
+  Sin embargo, no pudimos hacerlo basandonos en el archivo de la cátedra, pues tuvimos varios problemas con la función copy_to_user.
+  Luego de buscar por internet, leer ejemplos y no hacerlo andar, optamos por la solución que entregamos.
+
+Escritura:
+  La escritura fue más sencilla, ya que nos encontramos con el mismo problema con la función copy_from_user pero tomamos inmediatamente la decisión de resolverlo sin esa función.
+  Por eso tomamos los valores del buffer y los copiamos usando la función sscanf.
+
+
+Modo de uso:
+  Es el modo de uso detallado por la cátedra. Se encuentra al final del archivo fibonacci.c

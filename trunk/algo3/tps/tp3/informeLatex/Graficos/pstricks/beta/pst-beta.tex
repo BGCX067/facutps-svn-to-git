@@ -1,0 +1,2696 @@
+%% BEGIN: pst-beta.tex
+%% Generated on <1993/4/16> from `pst-beta.doc'.
+%% For use without a PostScript header file.
+%%
+\ifx\PSTricksLoaded\endinput\else
+\def\next{\input pstricks.tex}\expandafter\next
+\fi
+\edef\TheAtCode{\the\catcode`\@}
+\catcode`\@=11
+%%% Misc
+\def\pst@@killglue{\unskip\ifdim\lastskip>\z@\expandafter\pst@@killglue\fi}
+%%% Arrows
+\psset@arrowsize{1.5pt 2}
+\@namedef{psas@>|}{%
+\psk@tbarsize \tx@Tbar
+0 CLW 2 div T
+newpath
+false \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow}
+\@namedef{psas@>|*}{%
+0 CLW -2 div T
+\psk@tbarsize \tx@Tbar
+0 CLW 2 div T
+newpath
+false \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow}
+\edef\pst@arrowtable{\pst@arrowtable,|<*->|*,|<->|}
+\def\psset@dotsize#1{%
+\pst@expandafter\pst@getdimnum{#1} 0 {} {}\@nil
+\edef\psk@@dotsize{\pst@number\pst@dimg}%
+\let\psk@@@dotsize\pst@tempg
+\edef\psk@dotsize{%
+/DS \psk@@dotsize \psk@@@dotsize CLW mul add 2 div def }}
+\psset@dotsize{2pt 2}
+\def\psset@dotscale#1{%
+\pst@getscale{#1}\psk@dotscale
+\ifx\psk@dotscale\@empty
+\def\psk@xdotscale{1 }%
+\def\psk@ydotscale{1 }%
+\else
+\let\psk@xdotscale\pst@tempg
+\let\psk@ydotscale\pst@temph
+\fi}
+\psset@dotscale{1}
+\def\psset@dotangle#1{%
+\pst@Getangle{#1}\psk@dotangle
+\let\psk@@dotangle\pst@temph}
+\psset@dotangle{0}
+\def\pst@getdotsize{%
+\pst@dimg=\psk@@@dotsize\pslinewidth
+\advance\pst@dimg\psk@@dotsize\p@
+\pst@dimh=\psk@ydotscale\pst@dimg
+\pst@dimg=\psk@xdotscale\pst@dimg
+\divide\pst@dimh 2
+\divide\pst@dimg 2\relax}
+\def\psdot{\def\pst@par{}\pst@object{psdot}}
+\def\psdot@i{\@ifnextchar({\psdot@ii}{\psdot@ii(\z@,\z@)}}
+\def\psdot@ii(#1){%
+\begin@SpecialObj
+\pst@@getcoor{#1}%
+\addto@pscode{%
+\psk@dotsize
+\@nameuse{psds@\psk@dotstyle}%
+\pst@coor Dot}%
+\end@SpecialObj}
+\def\psdots{\def\pst@par{}\pst@object{psdots}}
+\def\psdots@i{%
+\begin@SpecialObj
+\pst@getcoors[\psdots@ii}
+\def\psdots@ii{%
+\addto@pscode{false \tx@NArray \psdots@iii}%
+\end@SpecialObj}
+\def\psdots@iii{%
+\psk@dotsize
+\@nameuse{psds@\psk@dotstyle}
+newpath
+n { Dot } repeat}
+\pst@def{SD}<%
+0 360 arc fill>
+\pst@def{SQ}<%
+/r ED
+r r moveto
+r r neg L
+r neg r neg L
+r neg r L
+fill>
+\pst@def{ST}<%
+/y ED /x ED
+x y moveto
+x neg y L
+0 x L
+fill>
+\pst@def{SP}<%
+/r ED
+gsave
+0 r moveto
+4 { 72 rotate 0 r L } repeat
+fill
+grestore>
+\def\pst@gdot#1{/Dot { gsave T \psk@dotangle \psk@dotscale #1 grestore } def }
+\@namedef{psds@*}{\pst@gdot{0 0 DS \tx@SD}}
+\@namedef{psds@o}{%
+/r2 DS CLW sub def
+\pst@gdot{0 0 DS \tx@SD \pst@usecolor\psfillcolor 0 0 r2 \tx@SD}}
+\@namedef{psds@square*}{%
+/r1 DS .886 mul def
+\pst@gdot{r1 \tx@SQ}}
+\@namedef{psds@square}{%
+/r1 DS .886 mul def /r2 r1 CLW sub def
+\pst@gdot{r1 \tx@SQ \pst@usecolor\psfillcolor r2 \tx@SQ}}
+\@namedef{psds@triangle*}{%
+/y1 DS .778 mul neg def /x1 y1 1.732 mul neg def
+\pst@gdot{x1 y1 \tx@ST}}
+\@namedef{psds@triangle}{%
+/y1 DS .778 mul neg def /x1 y1 1.732 mul neg def
+/y2 y1 CLW add def /x2 y2 1.732 mul neg def
+\pst@gdot{x1 y1 \tx@ST \pst@usecolor\psfillcolor x2 y2 \tx@ST}}
+\@namedef{psds@pentagon*}{%
+/r1 DS 1.149 mul def
+\pst@gdot{r1 \tx@SP}}
+\@namedef{psds@pentagon}{%
+DS .93 mul dup 1.236 mul /r1 ED CLW sub 1.236 mul /r2 ED
+\pst@gdot{r1 \tx@SP \pst@usecolor\psfillcolor r2 \tx@SP}}
+\@namedef{psds@+}{%
+/DS DS 1.253 mul def
+\pst@gdot{DS 0 moveto DS neg 0 L stroke 0 DS moveto 0 DS neg L stroke}}
+\@namedef{psds@|}{%
+\psk@tbarsize CLW mul add 2 div /DS ED
+\pst@gdot{0 DS moveto 0 DS neg L stroke}}
+\def\psset@dotstyle#1{%
+\@ifundefined{psds@#1}%
+{\@pstrickserr{Dot style `#1' not defined}\@eha}%
+{\edef\psk@dotstyle{#1}}}
+\psset@dotstyle{*}
+\pst@def{FontDot}<%
+DS 2 mul dup matrix scale
+matrix concatmatrix
+exch matrix rotate
+matrix concatmatrix
+exch findfont
+exch makefont
+setfont
+{ moveto 0 show } dup 1 4 -1 roll put bind /Dot ED>
+\def\newpsfontdot#1[#2]#3#4{%
+\@namedef{psds@#1}{<#4> /#3 \psk@@dotangle [#2] \tx@FontDot}}
+\newpsfontdot{diamond*}%
+[1.9 0.0 0.0 1.9 -0.4598 -0.70775]{Symbol}{E0}
+\newpsfontdot{diamond}%
+[2.3 0.0 0.0 2.3 -0.8533 -0.5336]{Symbol}{A8}
+\newpsfontdot{oplus}%
+[1.44928 0.0 0.0 1.44928 -0.562319 -0.478261]{Symbol}{C5}
+\newpsfontdot{otimes}%
+[1.44928 0.0 0.0 1.44928 -0.562319 -0.475362]{Symbol}{C4}
+\newpsfontdot{+}%
+[2.2 0.0 0.0 2.2 -0.6039 -0.5863]{Symbol}{2B}
+\newpsfontdot{x}%
+[1.8 0.0 0.0 1.8 -0.495 -0.4788]{Symbol}{B4}
+\newpsfontdot{*}%
+[2.77778 0.0 0.0 2.77778 -0.638889 -0.813889]{Symbol}{B7}
+\newpsfontdot{asterisk}%
+[2.39808 0.0 0.0 2.39808 -0.589928 -0.821343]{Symbol}{2A}
+%%% This will go into pst-plot.tex
+\def\beginqp@dots{%
+\psk@dotsize
+\@nameuse{psds@\psk@dotstyle}
+Dot }
+\def\doqp@dots{Dot }
+\def\endqp@dots{\end@SpecialObj}
+\def\testqp@dots{\@psttrue}
+%%%%
+\def\pst@OpenShowPoints{%
+\addto@pscode{%
+gsave
+\psk@dotsize
+\@nameuse{psds@\psk@dotstyle}
+newpath
+Points aload length 2 div 2 sub cvi /N ED
+N 0 ge
+{ \ifx\psk@arrowA\@empty
+Dot
+\else
+pop pop
+\fi
+N { Dot } repeat
+\ifx\psk@arrowB\@empty
+Dot
+\else
+pop pop
+\fi }
+{ N 2 mul { pop } repeat }
+ifelse
+grestore}}
+%%%% Boxes:
+\def\pscirclebox{\def\pst@par{}\pst@object{pscirclebox}}
+\def\pscirclebox@i{\pst@makebox{\pscirclebox@ii{}}}
+\def\pscirclebox@ii#1{%
+\begingroup
+\pst@useboxpar
+\setbox\pst@hbox=\hbox{#1\pscirclebox@iii\box\pst@hbox}%
+\ifpsboxsep \pscirclebox@sep \fi
+\leavevmode
+\box\pst@hbox
+\endgroup}
+\def\pscirclebox@iii{%
+\if@star
+\pslinewidth\z@
+\pstverb{\pst@dict \tx@STP \pst@usecolor\psfillcolor
+newpath \pscirclebox@iv \tx@SD end}%
+\else
+\begin@ClosedObj
+\def\pst@linetype{4}\showpointsfalse
+\addto@pscode{%
+\pscirclebox@iv CLW 2 div add 0 360 arc closepath}%
+\end@ClosedObj
+\fi}
+\def\pscirclebox@iv{%
+\pst@number{\wd\pst@hbox}2 div
+\pst@number{\ht\pst@hbox}\pst@number{\dp\pst@hbox}add 2 div
+2 copy \pst@number{\dp\pst@hbox}sub 4 2 roll
+\tx@Pyth \pst@number\psframesep add }
+\def\pscirclebox@sep{%
+\pst@dimb=\ht\pst@hbox
+\advance\pst@dimb\dp\pst@hbox
+\divide\pst@dimb 2
+\pst@dima=.5\wd\pst@hbox
+\pst@pyth\pst@dima\pst@dimb\pst@dimc
+\advance\pst@dimc\pslinewidth
+\advance\pst@dimc\psframesep
+\advance\pst@dimb-\pst@dimc
+\setbox\pst@hbox=\hbox to2\pst@dimc{%
+\hss
+\vbox{\kern-\pst@dimb\box\pst@hbox}%
+\hss}%
+\advance\pst@dimb-\dp\pst@hbox
+\dp\pst@hbox=-\pst@dimb}
+\pst@def{Ellipse}<%
+/mtrx CM def
+T
+scale
+0 0 1 5 3 roll arc
+mtrx setmatrix>
+\def\psellipse{\def\pst@par{}\pst@object{psellipse}}
+\def\psellipse@i(#1){\@ifnextchar(%
+{\psellipse@ii(#1)}{\psellipse@ii(0,0)(#1)}}
+\def\psellipse@ii(#1)(#2){%
+\begin@ClosedObj
+\pst@getcoor{#1}\pst@tempa
+\pst@@getcoor{#2}%
+\addto@pscode{%
+0 360
+\pst@coor
+\ifdim\psk@dimen\p@=\z@\else
+\psk@dimen CLW mul
+dup 4 -1 roll sub neg 3 1 roll sub
+\fi
+\pst@tempa
+\tx@Ellipse
+closepath}%
+\def\pst@linetype{2}%
+\end@ClosedObj}
+\def\psovalbox{\def\pst@par{}\pst@object{psovalbox}}
+\def\psovalbox@i{\pst@makebox{\psovalbox@ii}}
+\def\psovalbox@ii{%
+\begingroup
+\pst@useboxpar
+\psovalbox@iii
+\ifpsboxsep\psovalbox@sep\fi
+\leavevmode
+\box\pst@hbox
+\endgroup}
+\def\psovalbox@iii{%
+\psovalbox@iv
+\setbox\pst@hbox=\hbox{%
+\begin@ClosedObj
+\addto@pscode{%
+0 360
+\pst@number\pst@dimc CLW 2 div sub
+\pst@number\pst@dimd CLW 2 div sub
+\pst@number\pst@dima
+\pst@number\pst@dimb
+\tx@Ellipse
+closepath}%
+\def\pst@linetype{2}%
+\end@ClosedObj
+\unhbox\pst@hbox}}
+\def\psovalbox@iv{%
+\pst@dimc=\pslinewidth\advance\pst@dimc\psframesep
+\pst@dimd=\ht\pst@hbox\advance\pst@dimd\dp\pst@hbox
+\pst@dima=.5\wd\pst@hbox
+\pst@dimb=.5\pst@dimd\advance\pst@dimb-\dp\pst@hbox
+\pst@dimd=.707\pst@dimd
+\advance\pst@dimd\pst@dimc
+\advance\pst@dimc.707\wd\pst@hbox}
+\def\psovalbox@sep{%
+\setbox\pst@hbox\hbox to 2\pst@dimc{\hss\unhbox\pst@hbox\hss}%
+\pst@dimg=\pst@dimd
+\advance\pst@dimg-\pst@dimb
+\dp\pst@hbox=\pst@dimg
+\advance\pst@dimd\pst@dimb
+\ht\pst@hbox=\pst@dimd}
+\def\psset@gangle#1{\pst@getangle{#1}\psk@gangle}
+\psset@gangle{0}
+\pst@def{Diamond}<%
+/mtrx CM def
+T
+rotate
+/h ED
+/w ED
+dup 0 eq
+{ pop }
+{ CLW mul neg /d ED
+/a w h \tx@Atan def
+/h d a sin \tx@Div h add def
+/w d a cos \tx@Div w add def }
+ifelse
+mark
+w 2 div h 2 div
+w 0
+0 h neg
+w neg 0
+0 h
+w 2 div h 2 div
+/ArrowA { moveto } def
+/ArrowB { } def
+false \tx@Line
+closepath
+mtrx setmatrix>
+\def\psdiamond{\def\pst@par{}\pst@object{psdiamond}}
+\def\psdiamond@i(#1){%
+\@ifnextchar({\psdiamond@ii(#1)}{\psdiamond@ii(0,0)(#1)}}
+\def\psdiamond@ii(#1)(#2){%
+\begin@ClosedObj
+\pst@getcoor{#1}\pst@tempa
+\pst@getcoor{#2}\pst@tempb
+\addto@pscode{%
+\psline@iii
+pop
+\psk@dimen
+\pst@tempb
+\psk@gangle
+\pst@tempa
+\tx@Diamond}%
+\def\pst@linetype{4}%
+\end@ClosedObj}
+\def\psdiabox{\def\pst@par{}\pst@object{psdiabox}}
+\def\psdiabox@i{\pst@makebox{\psdiabox@ii}}
+\def\psdiabox@ii{%
+\begingroup
+\pst@useboxpar
+\psdiabox@iii
+\ifpsboxsep\psdiabox@sep\fi
+\leavevmode
+\box\pst@hbox
+\endgroup}
+\def\psdiabox@iv{%
+\pst@dimg=.707\pslinewidth
+\advance\pst@dimg.707\psframesep
+\pst@dima=\wd\pst@hbox
+\divide\pst@dima 2
+\pst@dimc=\pst@dima
+\advance\pst@dimc\pst@dimg
+\pst@dimd=\ht\pst@hbox
+\advance\pst@dimd\dp\pst@hbox
+\divide\pst@dimd 2
+\pst@dimb=\pst@dimd
+\advance\pst@dimb-\dp\pst@hbox
+\advance\pst@dimd\pst@dimg}
+\def\psdiabox@iii{%
+\psdiabox@iv
+\setbox\pst@hbox=\hbox{%
+\begin@ClosedObj
+\addto@pscode{%
+\psline@iii
+pop
+.5
+\pst@number\pst@dimc 2 mul \pst@number\pst@dimd 2 mul
+0
+\pst@number\pst@dima \pst@number\pst@dimb
+\tx@Diamond}%
+\def\pst@linetype{4}%
+\end@ClosedObj
+\box\pst@hbox}}
+\def\psdiabox@sep{%
+\setbox\pst@hbox\hbox to 4\pst@dimc{\hss\unhbox\pst@hbox\hss}%
+\multiply\pst@dimd 2
+\advance\pst@dimd\pst@dimb
+\ht\pst@hbox\pst@dimd
+\advance\pst@dimd-2\pst@dimb
+\dp\pst@hbox\pst@dimd}
+\pst@def{Triangle}<%
+/mtrx CM def
+translate
+rotate
+/h ED 2 div /w ED
+dup 0 eq
+{ pop }
+{ CLW mul /d ED
+/h h d w h \tx@Atan sin \tx@Div sub def
+/w w d h w \tx@Atan 2 div dup cos exch sin \tx@Div mul sub def }
+ifelse
+mark
+0 d
+w neg d
+0 h
+w d
+0 d
+/ArrowA { moveto } def
+/ArrowB { } def
+false \tx@Line
+closepath
+mtrx setmatrix>
+\def\pstriangle{\def\pst@par{}\pst@object{pstriangle}}
+\def\pstriangle@i(#1){%
+\@ifnextchar({\pstriangle@ii(#1)}{\pstriangle@ii(0,0)(#1)}}
+\def\pstriangle@ii(#1)(#2){%
+\begin@ClosedObj
+\pst@getcoor{#1}\pst@tempa
+\pst@getcoor{#2}\pst@tempb
+\addto@pscode{%
+\psline@iii
+pop
+\psk@dimen
+\pst@tempb
+\psk@gangle
+\pst@tempa
+\tx@Triangle}%
+\def\pst@linetype{2}%
+\end@ClosedObj}
+\def\psset@trimode#1{\pst@expandafter\psset@@trimode{#1}\@empty\@empty\@nil}
+\def\psset@@trimode#1#2#3\@nil{%
+\let\pst@tempg#1\relax
+\ifx\pst@tempg*%
+\let\psk@@trimode\@empty
+\let\pst@tempg#2\relax
+\else
+\let\psk@@trimode\relax
+\fi
+\edef\psk@trimode{%
+\ifx R\pst@tempg 1 \else\ifx D\pst@tempg 2
+\else\ifx L\pst@tempg 3 \else 0 \fi\fi\fi}}
+\psset@trimode{U}
+\def\pstribox{\def\pst@par{}\pst@object{pstribox}}
+\def\pstribox@i{\pst@makebox{\pstribox@ii}}
+\def\pstribox@ii{%
+\begingroup
+\pst@useboxpar
+\pstribox@iii
+\ifpsboxsep\pstribox@sep\fi
+\leavevmode
+\box\pst@hbox
+\endgroup}
+\def\pstribox@iii{%
+\pstribox@iv
+\setbox\pst@hbox=\hbox{%
+\begin@ClosedObj
+\addto@pscode{%
+\psline@iii
+pop
+.5
+\pst@number\pst@dimc \pst@number\pst@dimd
+\ifodd\psk@trimode exch \fi
+\psk@trimode -90 mul
+\pst@number\pst@dima \pst@number\pst@dimb
+\tx@Triangle}%
+\def\pst@linetype{2}%
+\end@ClosedObj
+\box\pst@hbox}}
+\def\pstribox@iv{%
+\pst@dimh=\pslinewidth
+\advance\pst@dimh\psframesep
+\pst@dimg=\ht\pst@hbox
+\advance\pst@dimg-\dp\pst@hbox
+\divide\pst@dimg 2
+\edef\pst@tempa{\number\pst@dimg sp}% For use by nodes.
+\ifodd\psk@trimode
+\pst@dimb\pst@dimg
+\else
+\pst@dima=\wd\pst@hbox
+\divide\pst@dima 2
+\fi
+\ifcase\psk@trimode
+\pst@dimb=-\dp\pst@hbox
+\advance\pst@dimb-\pst@dimh
+\or
+\pst@dima=-\pst@dimh
+\or
+\pst@dimb=\ht\pst@hbox
+\advance\pst@dimb\pst@dimh
+\or
+\pst@dima=\wd\pst@hbox
+\advance\pst@dima\pst@dimh
+\fi
+\pst@dimd=\dp\pst@hbox
+\advance\pst@dimd\ht\pst@hbox
+\ifx\psk@@trimode\relax
+\pst@dimc=\wd\pst@hbox
+\advance\pst@dimc\ifodd\psk@trimode 1.447\else 1.789\fi\pst@dimh
+\multiply\pst@dimc 2
+\advance\pst@dimd\ifodd\psk@trimode 1.789\else 1.447\fi\pst@dimh
+\multiply\pst@dimd 2
+\else
+\ifodd\psk@trimode
+\advance\pst@dimd 1.1547\wd\pst@hbox
+\advance\pst@dimd 3.4641\pst@dimh
+\pst@dimc=.866\pst@dimd
+\else
+\advance\pst@dimd .866\wd\pst@hbox %.866=(sqrt(3)/2)
+\advance\pst@dimd 3\pst@dimh
+\pst@dimc=1.1547\pst@dimd % 1.1547=(2/sqrt(3))
+\fi
+\fi}
+\def\pstribox@sep{%
+\ifodd\psk@trimode
+\advance\pst@dimb.5\pst@dimd
+\ht\pst@hbox=\pst@dimb
+\advance\pst@dimd-\pst@dimb
+\dp\pst@hbox=\pst@dimd
+\else
+\setbox\pst@hbox\hbox to \pst@dimc{\hss\unhbox\pst@hbox\hss}%
+\global\pst@dimg=.5\pst@dimc
+\fi
+\ifcase\psk@trimode
+\dp\pst@hbox-\pst@dimb
+\advance\pst@dimd\pst@dimb
+\ht\pst@hbox\pst@dimd
+\or
+\pst@dimg=.5\wd\pst@hbox
+\global\advance\pst@dimg-\pst@dima
+\setbox\pst@hbox\hbox to \pst@dimc{\kern-\pst@dima\box\pst@hbox\hss}%
+\or
+\ht\pst@hbox\pst@dimb
+\advance\pst@dimd-\pst@dimb
+\dp\pst@hbox\pst@dimd
+\or
+\pst@dimg=\pst@dimc
+\advance\pst@dimg-\pst@dima
+\global\advance\pst@dimg.5\wd\pst@hbox
+\setbox\pst@hbox\hbox to \pst@dimc{%
+\hss\box\pst@hbox\kern\psframesep\kern\pslinewidth}%
+\fi}
+\long\def\pst@makenotverbbox#1#2{%
+\edef\pst@mathflag{%
+\ifpsmathbox\ifmmode\ifinner 1\else 2\fi\else \z@\fi\else \z@\fi}%
+\setbox\pst@hbox=\hbox{%
+\ifcase\pst@mathflag\or$\m@th\textstyle\or$\m@th\displaystyle\fi
+{\pst@thisbox\the\everypsbox#2}%
+\ifnum\pst@mathflag>\z@$\fi}%
+#1}
+\def\pst@beginbox{%
+\ifcase\pst@mathflag\or$\m@th\or$\m@th\displaystyle\fi
+\bgroup\aftergroup\pst@endbox
+\pst@thisbox
+\the\everypsbox}
+\def\pst@makelongbox#1{%
+\def\pst@afterbox{#1}%
+\edef\pst@mathflag{%
+\ifpsmathbox\ifmmode\ifinner 1\else 2\fi\else \z@\fi\else \z@\fi}%
+\setbox\pst@hbox\hbox\bgroup
+\aftergroup\pst@afterbox
+\ifcase\pst@mathflag\or$\m@th\or$\m@th\displaystyle\fi
+\begingroup
+\pst@thisbox
+\the\everypsbox}
+\let\pst@thisbox\relax
+\def\pst@@makesmall#1{%
+\setbox#1=\hbox to\z@{\hss\vbox to \z@{\vss\box#1\vss}\hss}}
+\def\pst@@@makesmall#1{%
+\pst@dimh=\psk@xref\wd#1%
+\ifx\psk@yref\relax
+\pst@dimg=\dp#1%
+\else
+\pst@dimg=\psk@yref\ht#1%
+\advance\pst@dimg\psk@yref\dp#1%
+\fi
+\setbox#1=\hbox to\z@{%
+\kern-\pst@dimh\vbox to\z@{\vss\box#1\kern-\pst@dimg}\hss}}
+\def\psset@ref#1{\pst@expandafter\psset@@ref{#1}\@empty,,\@nil}
+\def\psset@@ref#1#2,#3,#4\@nil{%
+\def\psk@xref{.5}%
+\def\psk@yref{.5}%
+\let\pst@makesmall\pst@@@makesmall
+\ifx\@empty#3\@empty
+\@nameuse{getref@#1}%
+\@nameuse{getref@#2}%
+\else
+\pst@checknum{#1#2}\psk@xref
+\pst@checknum{#3}\psk@yref
+\fi}
+\def\getref@c{\let\pst@makesmall\pst@@makesmall}
+\def\getref@t{\def\psk@yref{1}}
+\def\getref@b{\def\psk@yref{0}}
+\def\getref@B{\let\psk@yref\relax}
+\def\getref@l{\def\psk@xref{0}}
+\def\getref@r{\def\psk@xref{1}}
+\psset@ref{c}
+\def\psset@rot#1{%
+\pst@expandafter{\@ifnextchar*{\psset@@@rot}{\psset@@rot}}{#1}\@nil}
+\def\psset@@rot#1\@nil{%
+\def\next##1@#1=##2@##3\@nil{%
+\ifx\relax##2%
+\pst@getangle{#1}\psk@rot
+\else
+\def\psk@rot{##2}%
+\fi}%
+\expandafter\next\pst@rottable @#1=\relax @\@nil}
+\def\psset@@@rot#1#2\@nil{%
+\psset@@rot#2\@nil
+\edef\psk@rot{\pst@rotlist \ifx\psk@rot\@empty\else\psk@rot add \fi}}
+\def\pst@rotlist{mark RAngle /a ED cleartomark a neg }
+\def\pst@rottable{%
+@0=%
+@U=%
+@L=90 %
+@D=180 %
+@R=-90 %
+@N=\pst@rotlist
+@W=\pst@rotlist 90 add %
+@S=\pst@rotlist 180 add %
+@E=\pst@rotlist 90 sub }
+\psset@rot{0}
+\pst@def{RotBegin}<%
+tx@Dict /TMatrix known not { /TMatrix { } def /RAngle { 0 } def } if %???REmove
+/TMatrix [ TMatrix CM ] cvx def
+/a ED
+a \tx@Rot
+/RAngle [ RAngle dup a add ] cvx def>
+\pst@def{RotEnd}<%
+/TMatrix [ TMatrix setmatrix ] cvx def
+/RAngle [ RAngle pop ] cvx def>
+\def\pst@rotate#1#2{%
+\ifx#1\@empty\else
+\setbox#2=\hbox{\pst@Verb{#1 \tx@RotBegin}\box#2\pst@Verb{\tx@RotEnd}}%
+\fi}
+\def\pst@starbox{%
+\setbox\pst@hbox\hbox{\psframebox*[boxsep=false]{\unhbox\pst@hbox}}}
+\def\rput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\rput@i}{\rput@ii}}}
+\def\rput@i[#1]{\addto@par{ref={#1}}\rput@ii}
+\def\rput@ii{\@ifnextchar({\rput@iv}{\rput@iii}}
+\def\rput@iii#1{\addto@par{rot={#1}}\@ifnextchar({\rput@iv}{\rput@iv(\z@,\z@)}}
+\def\rput@iv(#1){\pst@killglue\pst@makebox{\rput@v{#1}}}
+\def\rput@v#1{%
+\begingroup
+\use@par
+\if@star\pst@starbox\fi
+\pst@makesmall\pst@hbox
+\pst@rotate\psk@rot\pst@hbox
+\psput@{#1}\pst@hbox
+\endgroup
+\ignorespaces}
+\def\cput{\def\pst@par{}\pst@object{cput}}
+\def\cput@i{\@ifnextchar({\cput@iii}{\cput@ii}}
+\def\cput@ii#1{%
+\addto@par{rot={#1}}\@ifnextchar({\cput@iii}{\cput@iii(\z@,\z@)}}
+\def\cput@iii(#1){\pst@killglue\pst@makebox{\cput@iv{}{#1}}}
+\def\cput@iv#1#2{%
+\begingroup
+\use@par
+\setbox\pst@hbox=\hbox{\psboxsepfalse\pscirclebox@ii{#1}}%
+\pst@@makesmall\pst@hbox
+\pst@rotate\psk@rot\pst@hbox
+\psput@{#2}\pst@hbox
+\endgroup
+\ignorespaces}
+\newdimen\pslabelsep
+\def\psset@labelsep#1{\pssetlength\pslabelsep{#1}}
+\psset@labelsep{5pt}
+\def\psset@refangle#1{\pst@expandafter\psset@@refangle{#1}\@nil}
+\def\psset@@refangle#1\@nil{%
+\def\next##1@#1=##2"##3@##4\@nil{%
+\ifx\relax##2%
+\pst@getangle{#1}\psk@refangle
+\def\psk@uputref{}%
+\else
+\edef\pskt@refangle{##2}%
+\edef\psk@uputref{##3}%
+\fi}%
+\expandafter\next\pst@refangletable @#1=\relax"@\@nil}
+\def\pst@refangletable{%
+@r=0"20%
+@u=90"02%
+@l=180"10%
+@d=-90"01%
+@ur=45"22%
+@ul=135"12%
+@dr=-135"21%
+@dl=-45"11}
+\psset@refangle{0}
+\def\uput{\def\pst@par{}\@ifnextchar[{\uput@ii}{\uput@i}}
+\def\uput@i#1{\addto@par{labelsep=#1}\uput@ii}
+\def\uput@ii[#1]{%
+\addto@par{refangle={#1}}%
+\@ifnextchar({\uput@iv}{\uput@iii}}
+\def\uput@iii#1{%
+\addto@par{rot={#1}}%
+\@ifnextchar({\uput@iv}{\uput@iv(\z@,\z@)}}
+\def\uput@iv(#1){\pst@killglue\pst@makebox{\uput@v{#1}}}
+\def\uput@v#1{%
+\begingroup
+\use@par
+\if@star\pst@starbox\fi
+\uput@vi
+\psput@{#1}\pst@hbox
+\endgroup
+\ignorespaces}
+\def\uput@vi{%
+\ifx\psk@uputref\@empty
+\uput@vii\tx@UUput{}%
+\else
+\ifx\psk@rot\@empty
+\expandafter\uput@viii\psk@uputref
+\else
+\uput@vii\tx@UUput{}%
+\fi
+\fi}
+\def\uput@vii#1#2{%
+\edef\pst@coor{%
+\pst@number\pslabelsep
+#2%
+\pst@number{\wd\pst@hbox}%
+\pst@number{\ht\pst@hbox}%
+\pst@number{\dp\pst@hbox}%
+\psk@refangle\space \ifx\psk@rot\@empty\else\psk@rot\space sub \fi
+\tx@Uput #1}%
+\setbox\pst@hbox=\hbox to\z@{\hss\vbox to\z@{\vss\box\pst@hbox\vss}\hss}%
+\setbox\pst@hbox=\psput@special\pst@hbox
+\ifx\psk@rot\@empty\else\pst@rotate\psk@rot\pst@hbox\fi}
+\def\uput@viii#1#2{%
+\ifnum#1>\z@\ifnum#2>\z@\pslabelsep=.707\pslabelsep\fi\fi
+\setbox\pst@hbox=\vbox to\z@{%
+\ifnum#2=1 \vskip\pslabelsep\else\vss\fi
+\hbox to\z@{%
+\ifnum#1=2 \hskip\pslabelsep\else\hss\fi
+\box\pst@hbox
+\ifnum#1=1 \hskip\pslabelsep\else\hss\fi}%
+\ifnum#2=2 \vskip\pslabelsep\else\vss\fi}}
+\pst@def{Uput}<%
+/a ED
+add 2 div /h ED
+2 div /w ED
+/s a sin def
+/c a cos def
+/b
+s abs c abs 2 copy gt
+dup /q ED
+{ pop } { exch pop } ifelse
+def
+/w1 c b div w mul def
+/h1 s b div h mul def
+q
+{ w1 abs w sub dup c mul abs }
+{ h1 abs h sub dup s mul abs }
+ifelse>
+\pst@def{UUput}<%
+/z ED
+abs /y ED
+/x ED
+q
+{ x s div c mul abs y gt }
+{ x c div s mul abs y gt }
+ifelse
+{ x x mul y y mul sub z z mul add sqrt z add }
+{ q { x s div } { x c div } ifelse abs }
+ifelse
+a \tx@PtoC h1 add exch w1 add exch>
+\def\Rput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\Rput@ii}{\Rput@i}}}
+\def\Rput@i#1{\addto@par{labelsep=#1}\Rput@ii}
+\def\Rput@ii[#1]{\addto@par{ref={#1}}\@ifnextchar({\Rput@iv}{\Rput@iii}}
+\def\Rput@iii#1{\addto@par{rot={#1}}\@ifnextchar({\Rput@iv}{\Rput@iv(\z@,\z@)}}
+\def\Rput@iv(#1){\pst@killglue\pst@makebox{\Rput@v{#1}}}
+\def\Rput@v#1{%
+\begingroup
+\use@par
+\if@star\pst@starbox\fi
+\Rput@vi
+\pst@makesmall\pst@hbox
+\pst@rotate\psk@rot\pst@hbox
+\psput@{#1}\pst@hbox
+\endgroup
+\ignorespaces}
+\def\Rput@vi{%
+\pst@dimg=\dp\pst@hbox
+\advance\pst@dimg\pslabelsep
+\dp\pst@hbox=\pst@dimg
+\pst@dimg=\ht\pst@hbox
+\advance\pst@dimg\pslabelsep
+\ht\pst@hbox=\pst@dimg
+\setbox\pst@hbox\hbox{\kern\pslabelsep\box\pst@hbox\kern\pslabelsep}}%
+\def\oldpsput{%
+\def\pst@par{}\pst@ifstar{\@ifnextchar[{\oldpsput@i}{\oldpsput@ii}}}
+\def\oldpsput@i[#1]{\addto@par{ref={#1}}\oldpsput@ii}
+\def\oldpsput@ii{\@ifnextchar<{\oldpsput@iii}{\oldpsput@iv}}
+\def\oldpsput@iii<#1>{\rput@iii{#1}}
+\def\OldPsput{\let\psput\oldpsput}
+\def\NewPsput{\let\psput\rput}
+\catcode`\@=\TheAtCode\relax
+%%
+%% END: pst-beta.tex
+%% BEGIN: psn-beta.tex
+%% Generated on <1993/4/16> from `psn-beta.doc'.
+%% For use with the PostScript header file `psn-beta.pro'.
+%%
+\def\fileversion{0.94-beta}
+\def\filedate{93/04/09}
+%%
+%% pst-node.tex: Node macros for PSTricks.
+%% See the PSTricks read-me file and the User's Guide for documentation.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%%
+%% Copying of part or all of any file in the pstricks.tex package
+%% is allowed under the following conditions only:
+%% (1) You may freely distribute unchanged copies of the files. Please
+%% include the documentation when you do so.
+%% (2) You may modify a renamed copy of any file, but only for personal
+%% use or use within an organization.
+%% (3) You may copy fragments from the files, for personal use or for use
+%% in a macro package for distribution, as long as credit is given
+%% where credit is due.
+%%
+%% You are NOT ALLOWED to take money for the distribution or use of
+%% these files or modified versions or fragments thereof, except for
+%% a nominal charge for copying etc.
+%%
+\iffalse
+\csname PSTnodesLoaded\endcsname
+\let\PSTnodesLoaded\endinput
+\fi
+\ifx\PSTricksLoaded\endinput\else
+\def\next{\input pstricks.tex}\expandafter\next
+\fi
+\edef\TheAtCode{\the\catcode`\@}
+\catcode`\@=11
+\pstheader{psn-beta.pro}
+\def\pst@nodedict{tx@NodeDict begin }
+\def\pst@getnode#1#2{%
+\pst@expandafter\pst@@getnode{#1} * \@nil{#1}#2}
+\def\pst@@getnode#1#2 #3\@nil#4#5{%
+\ifcat#1a\relax
+\def#5{/TheNode#1#2 }%
+\else
+\pst@@@getnode#1#2,,\@nil{#4}{#5}%
+\fi}
+\def\pst@@@getnode#1,#2,#3\@nil#4#5{%
+\ifx\@empty#3\@empty
+\def#5{/BadNode }%
+\@pstrickserr{Bad node name: `#4'}\@ehpa
+\else
+\pst@cntg=#1\relax
+\pst@cnth=#2\relax
+\edef#5{/TheNodeM-\ifnum\psmatrixcnt=\z@ 1\else\the\psmatrixcnt\fi
+-\the\pst@cntg-\the\pst@cnth\space}%
+\fi}
+\def\tx@NewNode{NewNode }
+\def\pst@newnode#1#2#3#4{%
+\leavevmode
+\pst@getnode{#1}\pst@thenode
+\pst@Verb{%
+gsave
+\tx@STV CP T
+#3
+\pst@nodedict
+\pst@thenode #2 \tx@NewNode #4 end
+\ifx\psk@name\relax\else
+\psk@name \pst@thenode load def
+\fi
+end
+grestore}%
+\global\let\psk@name\relax
+\pstree@nodehook
+\global\let\pstree@nodehook\relax}
+\let\pstree@nodehook\relax
+\newif\ifnodealign
+\def\psset@nodealign#1{\@nameuse{nodealign#1}}
+\psset@nodealign{false}
+\def\pst@nodealign{%
+\pst@dimg=\ht\pst@hbox
+\advance\pst@dimg-\dp\pst@hbox
+\divide\pst@dimg2
+\lower\pst@dimg}
+\def\tx@InitPnode{InitPnode }
+\def\pnode{\@ifnextchar({\pnode@}{\pnode@(0,0)}}
+\def\pnode@(#1)#2{%
+\pst@@getcoor{#1}%
+\pst@newnode{#2}{10}{\pst@coor}{\tx@InitPnode}%
+\ignorespaces}
+\def\tx@InitCnode{InitCnode }
+\def\cnode{\def\pst@par{}\pst@object{cnode}}
+\def\cnode@i{\@ifnextchar({\cnode@ii}{\cnode@ii(0,0)}}
+\def\cnode@ii(#1)#2#3{%
+\leavevmode
+\hbox{%
+\use@par
+\pst@@getcoor{#1}%
+\pssetlength\pst@dimc{#2}%
+\pst@dimg=\psk@dimen\pslinewidth
+\advance\pst@dimc-\pst@dimg
+\advance\pst@dimc.5\pslinewidth
+\ifnodealign
+\kern\pst@dimc
+\vrule width\z@ height \pst@dimc depth \pst@dimc
+\fi
+\pscircle@do(#1){#2}%
+\pst@newnode{#3}{11}{\pst@coor \pst@number\pst@dimc}{\tx@InitCnode}%
+\ifnodealign \kern\pst@dimc\egroup \fi}%
+\ignorespaces}
+\def\psset@radius#1{\pst@@getlength{#1}\psk@radius}
+\psset@radius{2pt}
+\def\Cnode{\def\pst@par{}\pst@object{Cnode}}
+\def\Cnode@i{\@ifnextchar({\Cnode@ii}{\Cnode@ii(0,0)}}
+\def\Cnode@ii(#1)#2#{\cnode@ii(#1){#2}{\psk@radius}}%
+\def\cnodeput{\def\pst@par{}\pst@object{cnodeput}}
+\def\cnodeput@i{\@ifnextchar({\cnodeput@iii}{\cnodeput@ii}}
+\def\cnodeput@ii#1{%
+\addto@par{rot={#1}}%
+\@ifnextchar({\cnodeput@iii}{\cnodeput@iii(\z@,\z@)}}
+\def\cnodeput@iii(#1)#2{%
+\pst@killglue
+\pst@makebox{\cput@iv{\cnodeput@iv{#2}}{#1}}}
+\def\cnodeput@iv#1{%
+\pst@newnode{#1}{11}{\pscirclebox@iv \pst@number\pslinewidth add}%
+{\tx@InitCnode}}
+\def\circlenode{\def\pst@par{}\pst@object{circlenode}}
+\def\circlenode@i#1{\pst@makebox{\circlenode@ii{#1}}}
+\def\circlenode@ii#1{%
+\begingroup
+\pst@useboxpar
+\setbox\pst@hbox=\hbox{\cnodeput@iv{#1}\pscirclebox@iii\box\pst@hbox}%
+\ifnodealign \psboxseptrue \fi
+\ifpsboxsep \pscirclebox@sep \fi
+\leavevmode
+\ifnodealign\pst@nodealign\fi
+\box\pst@hbox
+\endgroup}
+\def\tx@GetRnodePos{GetRnodePos }
+\def\tx@InitRnode{InitRnode }
+\def\rnode{\begingroup\pst@getref\rnode@i}
+\def\rnode@i#1{\pst@makebox{\rnode@ii{#1}}}
+\def\rnode@ii{%
+\pst@dima=\psk@xref\wd\pst@hbox
+\ifx\psk@yref\relax
+\pst@dimb=\z@
+\else
+\pst@dimb=\ht\pst@hbox
+\advance\pst@dimb\dp\pst@hbox
+\pst@dimb=\psk@yref\pst@dimb
+\advance\pst@dimb-\dp\pst@hbox
+\fi
+\rnode@iii}
+\def\rnode@iii#1{%
+\ifnodealign\lower\pst@dimb\fi
+\hbox{%
+\pst@newnode{#1}{16}{%
+\pst@number{\ht\pst@hbox}%
+\pst@number{\dp\pst@hbox}%
+\pst@number{\wd\pst@hbox}%
+\pst@number\pst@dima
+\pst@number\pst@dimb}%
+{\tx@InitRnode}%
+\box\pst@hbox}%
+\endgroup}
+\def\psset@href#1{\pst@checknum{#1}\psk@href}
+\psset@href{0}
+\def\psset@vref#1{\def\psk@vref{#1}}
+\psset@vref{.7ex}
+\def\Rnode{\def\pst@par{}\pst@object{Rnode}}
+\def\Rnode@i#1{\pst@makebox{\Rnode@ii{#1}}}
+\def\Rnode@ii{%
+\begingroup
+\pst@dima=\psk@href\wd\pst@hbox
+\advance\pst@dima\wd\pst@hbox
+\divide\pst@dima 2
+\pssetlength\pst@dimb{\psk@vref}%
+\rnode@iii}
+\def\tx@DiaNodePos{DiaNodePos }
+\def\dianode{\def\pst@par{}\pst@object{dianode}}
+\def\dianode@i#1{\pst@makebox{\dianode@ii{#1}}}
+\def\dianode@ii#1{%
+\begingroup
+\pst@useboxpar
+\psdiabox@iii
+\setbox\pst@hbox=\hbox{%
+\pst@newnode{#1}{14}{}{%
+/X \pst@number\pst@dima def
+/Y \pst@number\pst@dimb def
+/w \pst@number\pst@dimc 2 mul def
+/h \pst@number\pst@dimd 2 mul def
+/NodePos { \tx@DiaNodePos } def}%
+\box\pst@hbox}%
+\ifnodealign\psboxseptrue\fi
+\ifpsboxsep\psdiabox@sep\fi
+\ifnodealign\lower\pst@dimb\fi
+\box\pst@hbox
+\endgroup}
+\def\tx@TriNodePos{TriNodePos }
+\def\tx@InitTriNode{InitTriNode }
+\def\trinode{\def\pst@par{}\pst@object{trinode}}
+\def\trinode@i#1{\pst@makebox{\trinode@ii{#1}}}
+\def\trinode@ii#1{%
+\begingroup
+\pst@useboxpar
+\pstribox@iii
+\setbox\pst@hbox=\hbox{%
+\pst@newnode{#1}{14}{}{%
+\pst@number\pst@dimc
+\pst@number\pst@dimd
+\ifodd\psk@trimode
+exch
+\pst@number\pst@dima
+\else
+\pst@number\pst@dimb
+\fi
+\psk@trimode
+\pst@number{\wd\pst@hbox}%
+\pst@number{\ht\pst@hbox}%
+\pst@number{\dp\pst@hbox}%
+\tx@InitTriNode}%
+\box\pst@hbox}%
+\ifnodealign\psboxseptrue\fi
+\ifpsboxsep\pstribox@sep\fi
+\ifnodealign\lower\pst@tempa\fi
+\box\pst@hbox
+\endgroup}
+\def\tx@OvalNodePos{OvalNodePos }
+\def\ovalnode{\def\pst@par{}\pst@object{ovalnode}}
+\def\ovalnode@i#1{\pst@makebox{\ovalnode@ii{#1}}}
+\def\ovalnode@ii#1{%
+\begingroup
+\pst@useboxpar
+\psovalbox@iii
+\setbox\pst@hbox=\hbox{%
+\pst@newnode{#1}{14}{}{%
+/X \pst@number\pst@dima def
+/Y \pst@number\pst@dimb def
+/w \pst@number\pst@dimc def
+/h \pst@number\pst@dimd def
+/NodePos { \tx@OvalNodePos } def}%
+\unhbox\pst@hbox}%
+\ifnodealign\psboxseptrue\fi
+\ifpsboxsep\psovalbox@sep\fi
+\ifnodealign\lower\pst@dimb\fi
+\box\pst@hbox
+\endgroup}
+\def\dotnode{\def\pst@par{}\pst@object{dotnode}}
+\def\dotnode@i{\@ifnextchar({\dotnode@ii}{\dotnode@ii(\z@,\z@)}}
+\def\dotnode@ii(#1)#2{%
+\leavevmode
+\hbox{%
+\use@par
+\pst@@getcoor{#1}%
+\pst@getdotsize
+\ifnodealign
+\pst@dima=\pst@dimg
+\kern\pst@dima
+\vrule width\z@ height \pst@dimh depth \pst@dimh
+\fi
+\pst@newnode{#2}{14}{}{%
+\pst@coor
+/Y ED /X ED
+/w \pst@number\pst@dimg def
+/h \pst@number\pst@dimh def
+/NodePos { \tx@OvalNodePos } def}%
+\psdot@ii(#1)%
+\ifnodealign\kern\pst@dima\fi}%
+\ignorespaces}
+\def\psset@framesize#1{\pst@expandafter\psset@@framesize{#1} \@nil}
+\def\psset@@framesize#1 #2\@nil{%
+\pssetlength\pst@dimg{#1}%
+\divide\pst@dimg2
+\edef\psk@framewidth{\pst@number\pst@dimg}%
+\ifx\@empty#2\@empty
+\let\psk@frameheight\psk@framewidth
+\else
+\pssetlength\pst@dimg{#2}%
+\divide\pst@dimg2
+\edef\psk@frameheight{\pst@number\pst@dimg}%
+\fi}
+\psset@framesize{10pt}
+\def\fnode{\def\pst@par{}\pst@object{fnode}}
+\def\fnode@i{\@ifnextchar({\fnode@ii}{\fnode@ii(\z@,\z@)}}
+\def\fnode@ii(#1)#2{%
+\leavevmode
+\pst@killglue
+\hbox{%
+\use@par
+\begin@ClosedObj
+\ifnodealign
+\kern\psk@framewidth\p@
+\vrule width\z@ height \psk@frameheight\p@ depth \psk@frameheight\p@
+\edef\pst@coor{0 0 }%
+\else
+\pst@@getcoor{#1}%
+\fi
+\pst@newnode{#2}{14}{}{%
+\pst@coor
+/Y ED /X ED
+/d \psk@dimen .5 sub CLW mul neg def
+/r \psk@framewidth d add def
+/l r neg def
+/u \psk@frameheight d add def
+/d u neg def
+/NodePos { \tx@GetRnodePos } def}%
+\addto@pscode{%
+/x2 \psk@framewidth CLW \psk@dimen mul sub def
+/y2 \psk@frameheight CLW \psk@dimen mul sub def
+\pst@coor 2 copy
+y2 sub /y1 ED
+x2 sub /x1 ED
+y2 add /y2 ED
+x2 add /x2 ED
+\psk@cornersize
+1 index 0 eq { pop pop \tx@Rect } { \tx@OvalFrame } ifelse}%
+\def\pst@linetype{2}%
+\showpointsfalse
+\end@ClosedObj
+\ifnodealign\kern\psk@framewidth\p@\fi}%
+\ignorespaces}
+\def\psset@nodesepA#1{\pst@getlength{#1}\psk@nodesepA}
+\def\psset@nodesepB#1{\pst@getlength{#1}\psk@nodesepB}
+\def\psset@nodesep#1{\psset@nodesepA{#1}\let\psk@nodesepB\psk@nodesepA}
+\psset@nodesep{0pt}
+\def\psset@offsetA#1{\pst@getlength{#1}\psk@offsetA}
+\def\psset@offsetB#1{\pst@getlength{#1}\psk@offsetB}
+\def\psset@offset#1{\psset@offsetA{#1}\let\psk@offsetB\psk@offsetA}
+\psset@offset{0pt}
+\def\psset@armA#1{\pst@getlength{#1}\psk@armA}
+\def\psset@armB#1{\pst@getlength{#1}\psk@armB}
+\def\psset@arm#1{\psset@armA{#1}\let\psk@armB\psk@armA}
+\psset@arm{10pt}
+\def\psset@angleA#1{\pst@getangle{#1}\psk@angleA}
+\def\psset@angleB#1{\pst@getangle{#1}\psk@angleB}%
+\def\psset@angle#1{%
+\pst@getangle{#1}\psk@angleA
+\let\psk@angleB\psk@angleA}
+\psset@angle{0}
+\def\psset@arcangleA#1{\pst@getangle{#1}\psk@arcangleA}
+\def\psset@arcangleB#1{\pst@getangle{#1}\psk@arcangleB}%
+\def\psset@arcangle#1{%
+\pst@getangle{#1}\psk@arcangleA
+\let\psk@arcangleB\psk@arcangleA}
+\psset@arcangle{8}
+\def\psset@ncurvA#1{\pst@checknum{#1}\psk@ncurvA}
+\def\psset@ncurvB#1{\pst@checknum{#1}\psk@ncurvB}%
+\def\psset@ncurv#1{\psset@ncurvA{#1}\let\psk@ncurvB\psk@ncurvA}
+\psset@ncurv{.67}
+\def\tx@GetCenter{GetCenter }
+\def\tx@AddOffset{AddOffset }
+\def\tx@GetEdge{GetEdge }
+\def\tx@GetPos{GetPos }
+\def\tx@GetArmA{GetArmA }
+\def\tx@GetArmB{GetArmB }
+\def\check@arrow#1#2{%
+\check@@arrow#2-\@nil
+\if@pst
+\addto@par{arrows=#2}%
+\def\next{#1}%
+\else
+\def\next{#1{#2}}%
+\fi
+\next}
+\def\check@@arrow#1-#2\@nil{%
+\ifx\@nil#2\@nil\@pstfalse\else\@psttrue\fi}
+\def\tx@InitNC{InitNC }
+\def\nc@object#1#2#3#4#5{%
+\csname begin@#1Obj\endcsname
+\showpointsfalse
+\pst@getnode{#2}\pst@tempa
+\pst@getnode{#3}\pst@tempb
+\gdef\npos@default{#4 }%
+\addto@pscode{%
+/NCLW CLW def
+\pst@nodedict
+\psk@offsetA
+\psk@offsetB neg
+\psk@nodesepA
+\psk@nodesepB
+\pst@tempa
+\pst@tempb
+\tx@InitNC { #5 } if
+end}%
+\def\use@pscode{%
+\pst@Verb{gsave \tx@STV newpath \pst@code\space grestore}%
+\gdef\pst@code{}}%
+\csname end@#1Obj\endcsname
+\pst@shortput}
+\def\npos@default{.5 }
+\def\pc@object#1{%
+\@ifnextchar({\pc@@object#1}{\pst@getarrows{\pc@@object#1}}}
+\def\pc@@object#1(#2)(#3){%
+\pnode(#2){@@A}\pnode(#3){@@B}%
+#1{@@A}{@@B}}
+\def\tx@LPutLine{LPutLine }
+\def\tx@LPutLines{LPutLines }
+\def\tx@BezierMidpoint{BezierMidpoint }
+\def\tx@HPosBegin{HPosBegin }
+\def\tx@HPosEnd{HPosEnd }
+\def\tx@HPutLine{HPutLine }
+\def\tx@HPutLines{HPutLines }
+\def\tx@VPosBegin{VPosBegin }
+\def\tx@VPosEnd{VPosEnd }
+\def\tx@VPutLine{VPutLine }
+\def\tx@VPutLines{VPutLines }
+\def\tx@HPutCurve{HPutCurve }
+\def\tx@NCCoor{NCCoor }
+\def\tx@NCLine{NCLine }
+\def\ncline{\def\pst@par{}\pst@object{ncline}}
+\def\ncline@i{\check@arrow{\ncline@ii}}
+\def\ncline@ii#1#2{\nc@object{Open}{#1}{#2}{.5}{\tx@NCLine}}
+\def\pcline{\def\pst@par{}\pst@object{pcline}}
+\def\pcline@i{\pc@object\ncline@ii}
+\def\ncLine{\def\pst@par{}\pst@object{ncLine}}
+\def\ncLine@i{\check@arrow{\ncLine@ii}}
+\def\ncLine@ii#1#2{\nc@object{Open}{#1}{#2}{.5}%
+{\tx@NCLine /LPutPos { xB xA yB yA \tx@LPutLine } def}}
+\def\tx@NCCurve{NCCurve }
+\def\nccurve{\def\pst@par{}\pst@object{nccurve}}
+\def\nccurve@i{\check@arrow{\nccurve@ii}}
+\def\nccurve@ii#1#2{\nc@object{Open}{#1}{#2}{.5}{%
+/AngleA \psk@angleA\space def /AngleB \psk@angleB\space def
+\psk@ncurvB\space \psk@ncurvA\space
+\tx@NCCurve}}
+\def\pccurve{\def\pst@par{}\pst@object{pccurve}}
+\def\pccurve@i{\pc@object\nccurve@ii}
+\def\ncarc{\def\pst@par{}\pst@object{ncarc}}
+\def\ncarc@i{\check@arrow{\ncarc@ii}}
+\def\ncarc@ii#1#2{\nc@object{Open}{#1}{#2}{.5}{%
+yB yA sub xB xA sub \tx@Atan dup
+\psk@arcangleA\space add /AngleA ED
+\psk@arcangleB\space sub 180 add /AngleB ED
+\psk@ncurvB\space \psk@ncurvA\space
+\tx@NCCurve}}
+\def\pcarc{\def\pst@par{}\pst@object{pcarc}}
+\def\pcarc@i{\pc@object\ncarc@ii}
+\def\tx@NCAngles{NCAngles }
+\def\ncangles{\def\pst@par{}\pst@object{ncangles}}
+\def\ncangles@i{\check@arrow{\ncangles@ii}}
+\def\ncangles@ii#1#2{%
+\nc@object{Open}{#1}{#2}{1.5}{\ncangles@iii \tx@NCAngles}}
+\def\ncangles@iii{%
+tx@Dict begin \psline@iii pop end
+/AngleA \psk@angleA def
+/AngleB \psk@angleB def
+/armA \psk@armA def
+/armB \psk@armB def }
+\def\pcangles{\def\pst@par{}\pst@object{pcangles}}
+\def\pcangles@i{\pc@object\ncangles@ii}
+\def\tx@NCAngle{NCAngle }
+\def\ncangle{\def\pst@par{}\pst@object{ncangle}}
+\def\ncangle@i{\check@arrow{\ncangle@ii}}
+\def\ncangle@ii#1#2{%
+\nc@object{Open}{#1}{#2}{1.5}{\ncangles@iii \tx@NCAngle}}
+\def\pcangle{\def\pst@par{}\pst@object{pcangle}}
+\def\pcangle@i{\pc@object\ncangle@ii}
+\def\tx@NCBar{NCBar }
+\def\ncbar{\def\pst@par{}\pst@object{ncbar}}
+\def\ncbar@i{\check@arrow{\ncbar@ii}}
+\def\ncbar@ii#1#2{\nc@object{Open}{#1}{#2}{1.5}{%
+\ncangles@iii /AngleB \psk@angleA def \tx@NCBar}}
+\def\pcbar{\def\pst@par{}\pst@object{pcbar}}
+\def\pcbar@i{\pc@object\ncbar@ii}
+\def\tx@NCDiag{NCDiag }
+\def\ncdiag{\def\pst@par{}\pst@object{ncdiag}}
+\def\ncdiag@i{\check@arrow{\ncdiag@ii}}
+\def\ncdiag@ii#1#2{%
+\nc@object{Open}{#1}{#2}{1.5}{\ncangles@iii \tx@NCDiag}}
+\def\pcdiag{\def\pst@par{}\pst@object{pcdiag}}
+\def\pcdiag@i{\pc@object\ncdiag@ii}
+\def\tx@NCDiagg{NCDiagg }
+\def\ncdiagg{\def\pst@par{}\pst@object{ncdiagg}}
+\def\ncdiagg@i{\check@arrow{\ncdiagg@ii}}
+\def\ncdiagg@ii#1#2{%
+\nc@object{Open}{#1}{#2}{.5}{\ncangles@iii \tx@NCDiagg}}
+\def\pcdiagg{\def\pst@par{}\pst@object{pcdiagg}}
+\def\pcdiagg@i{\pc@object\ncdiagg@ii}
+\def\tx@NCLoop{NCLoop }
+\def\psset@loopsize#1{\pst@getlength{#1}\psk@loopsize}
+\psset@loopsize{1cm}
+\def\ncloop{\def\pst@par{}\pst@object{ncloop}}
+\def\ncloop@i{\check@arrow{\ncloop@ii}}
+\def\ncloop@ii#1#2{%
+\nc@object{Open}{#1}{#2}{2.5}%
+{\ncangles@iii /loopsize \psk@loopsize def \tx@NCLoop}}
+\def\pcloop{\def\pst@par{}\pst@object{pcloop}}
+\def\pcloop@i{\pc@object\ncloop@ii}
+\def\tx@NCCircle{NCCircle }
+\def\nccircle{\def\pst@par{}\pst@object{nccircle}}
+\def\nccircle@i{\check@arrow{\nccircle@ii}}
+\def\nccircle@ii#1#2{%
+\pssetlength\pst@dima{#2}%
+\nc@object{Open}{#1}{#1}{.5}{%
+/AngleA \psk@angleA def
+/r \pst@number\pst@dima def
+\tx@NCCircle \psarc@v end}}
+\def\tx@NCBox{NCBox }
+\def\ncbox{\def\pst@par{}\pst@object{ncbox}}
+\def\ncbox@i{\check@arrow{\ncbox@ii}}
+\def\ncbox@ii#1#2{%
+\def\pst@linetype{2}%
+\nc@object{Closed}{#1}{#2}{.5}{%
+tx@Dict begin \psline@iii pop end
+\psk@boxheight \psk@boxdepth
+\tx@NCBox}}
+\def\pcbox{\def\pst@par{}\pst@object{pcbox}}
+\def\pcbox@i{\pc@object\ncbox@ii}
+\def\tx@NCArcBox{NCArcBox }
+\def\psset@boxheight#1{\pst@getlength{#1}\psk@boxheight}
+\def\psset@boxdepth#1{\pst@getlength{#1}\psk@boxdepth}
+\def\psset@boxsize#1{%
+\psset@boxheight{#1}%
+\let\psk@boxdepth\psk@boxheight}
+\psset@boxsize{.4cm}
+\def\ncarcbox{\def\pst@par{}\pst@object{ncarcbox}}
+\def\ncarcbox@i{\check@arrow{\ncarcbox@ii}}
+\def\ncarcbox@ii#1#2{%
+\def\pst@linetype{1}%
+\nc@object{Closed}{#1}{#2}{.5}{%
+\psk@arcangleA \psk@boxheight \psk@boxdepth \pst@number\pslinearc
+\tx@NCArcBox}}
+\def\pcarcbox{\def\pst@par{}\pst@object{pcarcbox}}
+\def\pcarcbox@i{\pc@object\ncarcbox@ii}
+\def\tx@Tfan{Tfan }
+\def\psset@nrot#1{%
+\begingroup
+\pst@expandafter{\@ifnextchar:{\psset@@nrot}{\psset@@rot}}{#1}\@nil
+\global\let\pst@tempg\psk@rot
+\endgroup
+\let\psk@nrot\pst@tempg}
+\def\psset@@nrot:#1\@nil{%
+\psset@@rot#1\@nil
+\edef\psk@rot{NAngle \ifx\psk@rot\@empty\else\psk@rot add \fi}}
+\psset@nrot{0}
+\def\tx@LPutCoor{LPutCoor }
+\def\tx@LPut{LPut }
+\def\psset@npos#1{%
+\def\pst@tempa{#1}%
+\ifx\pst@tempa\@empty
+\def\psk@npos{\npos@default}%
+\else
+\pst@checknum{#1}\psk@npos
+\fi}
+\psset@npos{}
+\def\ncput{\def\pst@par{}\pst@object{ncput}}
+\def\ncput@i{\pst@killglue\pst@makebox{\ncput@ii}}
+\def\ncput@ii{%
+\begingroup
+\use@par
+\if@star\pst@starbox\fi
+\pst@makesmall\pst@hbox
+\pst@rotate\psk@nrot\pst@hbox
+\ncput@iii
+\endgroup
+\pst@shortput}
+\def\ncput@iii{%
+\leavevmode
+\hbox{%
+\pst@Verb{%
+\pst@nodedict
+/t \psk@npos def
+\tx@LPut
+end
+\tx@PutBegin}%
+\box\pst@hbox
+\pst@Verb{\tx@PutEnd}}}
+\def\naput{\def\pst@par{}\pst@object{naput}}
+\def\naput@i{\pst@killglue\pst@makebox{\naput@ii{NAngle 90 add}}}
+\def\naput@ii#1{%
+\begingroup
+\use@par
+\if@star\pst@starbox\fi
+\def\psk@refangle{#1 }%
+\let\psk@rot\psk@nrot
+\uput@vii
+{exch pop add a \tx@PtoC h1 add exch w1 add exch }%
+{tx@Dict /NCLW known { NCLW add } if }%
+\ncput@iii
+\endgroup
+\pst@shortput}
+\def\nbput{\def\pst@par{}\pst@object{nbput}}
+\def\nbput@i{\pst@killglue\pst@makebox{\naput@ii{NAngle 90 sub}}}
+\def\psset@tpos#1{%
+\pst@checknum{#1}\psk@tpos
+\ifdim\psk@tpos \p@<\z@
+\def\psk@tpos{.5}%
+\@pstrickserr{Bad `tpos' value: `#1'. Must be 0<tpos<1}\@epha
+\else
+\ifdim\psk@tpos \p@>\p@
+\def\psk@tpos{.5}%
+\@pstrickserr{Bad `tpos' value: `#1'. Must be 0<tpos<1}\@epha
+\fi
+\fi}
+\psset@tpos{.5}
+\def\tvput{\def\pst@par{}\pst@object{tvput}}
+\def\tvput@i{\pst@makebox{\psput@tput{H}{1}}}
+\def\tlput{\def\pst@par{}\pst@object{tlput}}
+\def\tlput@i{\pst@makebox{\psput@tput{H}{true}}}
+\def\trput{\def\pst@par{}\pst@object{trput}}
+\def\trput@i{\pst@makebox{\psput@tput{H}{false}}}
+\def\thput{\def\pst@par{}\pst@object{thput}}
+\def\thput@i{\pst@makebox{\psput@tput{V}{1}}}
+\def\taput{\def\pst@par{}\pst@object{taput}}
+\def\taput@i{\pst@makebox{\psput@tput{V}{true}}}
+\def\tbput{\def\pst@par{}\pst@object{tbput}}
+\def\tbput@i{\pst@makebox{\psput@tput{V}{false}}}
+\def\tx@HPutAdjust{HPutAdjust }
+\def\tx@VPutAdjust{VPutAdjust }
+\def\psput@tput#1#2{%
+\begingroup
+\use@par
+\pst@tputmakesmall
+\leavevmode
+\hbox{%
+\pst@Verb{%
+\pst@nodedict
+/t \psk@tpos \pst@tposflip def
+tx@NodeDict /HPutPos known
+{ #1PutPos }
+{ CP /Y ED /X ED /NAngle 0 def /NCLW 0 def }
+ifelse
+/Sin NAngle sin def
+/Cos NAngle cos def
+/s \pst@number\pslabelsep NCLW add def
+/l \pst@number\pst@dima def
+/r \pst@number\pst@dimb def
+/h \pst@number\pst@dimc def
+/d \pst@number\pst@dimd def
+\ifnum1=0#2\else
+/flag #2 def
+\csname tx@#1PutAdjust\endcsname
+\fi
+\tx@LPutCoor
+end
+\tx@PutBegin}%
+\box\pst@hbox
+\pst@Verb{\tx@PutEnd}}%
+\endgroup
+\pst@shortput}
+\def\pst@tposflip{}
+\def\pst@tputmakesmall{%
+\pst@dima=\wd\pst@hbox
+\divide\pst@dima 2
+\pst@dimg=\psk@href\pst@dimg
+\pst@dimb\pst@dima
+\advance\pst@dima\pst@dimg % leftsize
+\advance\pst@dimb-\pst@dimg % rightsize
+\pst@dimd=\psk@vref\relax
+\pst@dimc=\ht\pst@hbox
+\advance\pst@dimc-\pst@dimd % height
+\advance\pst@dimd\dp\pst@hbox % depth
+\setbox\pst@hbox=\hbox to\z@{%
+\kern-\pst@dima\vbox to\z@{\vss\box\pst@hbox\vskip-\pst@dimd}\hss}}
+\def\MakeShortNab#1#2{%
+\def\pst@shortput@nab{%
+\ifx#1\next
+\let\next\naput
+\else
+\ifx#2\next
+\let\next\nbput
+\else
+\ifx\@sptoken\next
+\let\next\pst@shortput
+\fi
+\fi
+\fi
+\next}}
+\MakeShortNab{^}{_}
+\def\MakeShortTablr#1#2#3#4{%
+\def\pst@shortput@tablr{%
+\ifx#1\next
+\let\next\taput
+\else
+\ifx#2\next
+\let\next\tbput
+\else
+\ifx#3\next
+\let\next\tlput
+\else
+\ifx#4\next
+\let\next\trput
+\else
+\ifx\@sptoken\next
+\let\next\pst@shortput
+\fi
+\fi
+\fi
+\fi
+\fi
+\next}}
+\MakeShortTablr{^}{_}{<}{>}
+\def\MakeShortTab#1#2{%
+\def\pst@shortput@tab{%
+\ifx#1\next
+\def\next{%
+\@nameuse{%
+t\ifodd\psk@treemode\ifpstreeflip b\else a\fi
+\else\ifpstreeflip r\else l\fi\fi put}}%
+\else
+\ifx#2\next
+\def\next{%
+\@nameuse{%
+t\ifodd\psk@treemode\ifpstreeflip a\else b\fi
+\else\ifpstreeflip l\else r\fi\fi put}}%
+\else
+\ifx\@sptoken\next
+\let\next\pst@shortput
+\fi
+\fi
+\fi
+\next}}
+\MakeShortTab{^}{_}
+\def\psset@shortput#1{%
+\def\pst@tempg{#1}%
+\ifx\pst@tempg\@none
+\let\pst@shortput\ignorespaces
+\else
+\@ifundefined{pst@shortput@#1}%
+{\@pstrickserr{Bad short put: `#1'}\@ehpa}%
+{\edef\pst@shortput{\noexpand\afterassignment\expandafter\noexpand
+\csname pst@shortput@#1\endcsname\noexpand\let\noexpand\next}}%
+\fi}
+\psset@shortput{none}
+\def\lput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\lput@i}{\lput@ii}}}
+\def\lput@i[#1]{\addto@par{ref=#1}\lput@ii}
+\def\lput@ii{\@ifnextchar({\lput@iv}{\lput@iii}}
+\def\lput@iii#1{\addto@par{nrot=#1}\@ifnextchar({\lput@iv}{\ncput@i}}
+\def\lput@iv(#1){\addto@par{npos=#1}\ncput@i}
+\def\mput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\mput@i}{\ncput@i}}}
+\def\mput@i[#1]{\addto@par{ref=#1}\ncput@i}
+\def\Lput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\Lput@ii}{\Lput@i}}}
+\def\Lput@i#1{\addto@par{labelsep=#1}\Lput@ii}
+\def\Lput@ii[#1]{\addto@par{ref={#1}}\@ifnextchar({\Lput@iv}{\Lput@iii}}
+\def\Lput@iii#1{\addto@par{nrot={#1}}\@ifnextchar({\Lput@iv}{\Lput@v}}
+\def\Lput@iv(#1){\addto@par{npos=#1}\Lput@v}
+\def\Lput@v{\pst@killglue\pst@makebox{\Lput@vi}}
+\def\Lput@vi{%
+\begingroup
+\use@par
+\if@star\pst@starbox\fi
+\Rput@vi
+\pst@makesmall\pst@hbox
+\pst@rotate\psk@nrot\pst@hbox
+\ncput@iii
+\endgroup
+\pst@shortput}
+\def\Mput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\Mput@ii}{\Mput@i}}}
+\def\Mput@i#1{\addto@par{labelsep=#1}\Mput@ii}
+\def\Mput@ii[#1]{\addto@par{ref={#1}}\Lput@v}
+\def\aput@#1{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\aput@i#1}{\aput@ii#1}}}
+\def\aput@i#1[#2]{\addto@par{labelsep=#2}\aput@ii#1}
+\def\aput@ii#1{\@ifnextchar({\aput@iv#1}{\aput@iii#1}}
+\def\aput@iii#1#2{\addto@par{nrot=#2}\@ifnextchar({\aput@iv#1}{#1}}
+\def\aput@iv#1(#2){\addto@par{npos=#2}#1}
+\def\aput{\aput@\naput@i}
+\def\bput{\aput@\nbput@i}
+\def\Aput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\Aput@i}{\naput@i}}}
+\def\Aput@i[#1]{\addto@par{labelsep=#1}\naput@i}
+\def\Bput{\def\pst@par{}\pst@ifstar{\@ifnextchar[{\Bput@i}{\nbput@i}}}
+\def\Bput@i[#1]{\addto@par{labelsep=#1}\nbput@i}
+\def\node@coor#1;#2\@nil{%
+\pst@getnode{#1}\pst@tempg
+\edef\pst@coor{%
+\pst@nodedict
+tx@NodeDict \pst@tempg known
+{ \pst@tempg load \tx@GetCenter }
+{ 0 0 }
+ifelse
+end }}
+\def\Node@coor[#1]#2;#3\@nil{%
+\begingroup
+\psset{#1}%
+\pst@getnode{#2}\pst@tempg
+\xdef\pst@tempg{%
+\pst@nodedict
+tx@NodeDict \pst@tempg known
+{ \psk@offsetA \psk@angleA \psk@nodesepA \pst@tempg load \tx@GetEdge }
+{ 0 0 }
+ifelse
+end }%
+\endgroup
+\let\pst@coor\pst@tempg}
+\def\nput{\def\pst@par{}\pst@object{nput}}
+\def\nput@i#1#2{\pst@killglue\pst@makebox{\nput@ii{#1}{#2}}}
+\def\nput@ii#1#2{%
+\begingroup
+\use@par
+\psset@refangle{#1}%
+\pst@getnode{#2}\pst@thenode
+\edef\pst@tempa{%
+\pst@nodedict
+tx@NodeDict \pst@thenode known
+{ \psk@offsetA \psk@refangle \pst@number\pslabelsep
+\pst@thenode load \tx@GetEdge }
+{ CP }
+ifelse
+end }%
+\pslabelsep\z@
+\uput@vi
+\let\pst@coor\pst@tempa
+\leavevmode
+\psput@special\pst@hbox
+\endgroup
+\ignorespaces}
+\newcount\psrow
+\newcount\pscol
+\newcount\psmatrixcnt
+\newskip\psrowsep
+\newskip\pscolsep
+\def\psset@colsep#1{\pssetlength\pscolsep{#1}}
+\def\psset@rowsep#1{\pssetlength\psrowsep{#1}}
+\psset@colsep{1.5cm}
+\psset@rowsep{1.5cm}
+\newif\ifpsmatrix
+\def\psmatrix{%
+\begingroup
+{\ifnum0=`}\fi % Don't want to expand any &.
+\@ifnextchar[{\psmatrix@i}{\ifnum0=`{\fi}{}\psmatrix@ii}}
+\def\psmatrix@i[#1]{%
+\ifnum0=`{\fi}{}%
+\psset{#1}%
+\psmatrix@ii}
+\def\psmatrix@ii{%
+\edef\psm@beginmath{%
+\ifmmode$\m@th\ifinner\textstyle\else\displaystyle\fi\fi}%
+\edef\psm@endmath{\ifmmode$\fi}%
+\let\\\psm@cr
+\advance\psmatrixcnt 1
+\def\psm@thenode{M-\the\psmatrixcnt-\the\psrow-\the\pscol}%
+\tabskip\z@
+\psrow1
+\pscol\z@
+\psset@shortput{tablr}%
+\vbox\bgroup\halign\bgroup&%
+\global\advance\pscol 1
+\csname psrowhook\romannumeral\psrow\endcsname
+\csname pscolhook\romannumeral\pscol\endcsname
+\psm@beginnode##\psm@endnode
+\cr}
+\def\endpsmatrix{%
+\crcr\egroup\unskip\egroup
+\endgroup}
+\def\psm@cr{{\ifnum0=`}\fi\@ifnextchar[{\psm@@cr}{\psm@@@cr{}}}
+\def\psm@@cr[#1]{\psm@@@cr{\vskip#1\relax}}
+\def\psm@@@cr#1{%
+\ifnum0=`{\fi}{}\cr
+\noalign{%
+\global\advance\psrow 1
+\global\pscol\z@
+\vskip\psrowsep
+#1}}
+\def\psm@beginnode{%
+\@ifnextchar\psm@endnode
+{\let\psm@endnode@i\relax\setbox\pst@hbox=\hbox{}}%
+{\def\pst@par{}\pst@object{psm@beginnode}}}
+\def\psm@beginnode@i{%
+\setbox\pst@hbox=\hbox\bgroup
+\psm@beginmath
+\begingroup
+\ignorespaces}
+\def\psm@endnode@i{%
+\unskip
+\endgroup
+\psm@endmath
+\egroup
+\use@par
+\@psttrue}
+\def\psm@endnode{%
+\@pstfalse
+\psm@endnode@i
+\ifnum\pscol>1 \hskip\pscolsep \fi
+\psk@mnodesize
+\hfil
+\nodealigntrue
+\if@pst
+\csname mnode@\psk@mnode\endcsname
+\else
+\csname mnode@\psk@emnode\endcsname
+\fi
+\psk@mcol
+\psk@@mnodesize}
+\def\psspan#1{\mscount#1\relax\loop\ifnum\mscount>\@ne \sp@n\repeat}
+\def\psset@name#1{\pst@getnode{#1}\psk@name}
+\let\psk@name\relax
+\def\psset@mcol#1{%
+\ifx r#1\relax
+\let\psk@mcol\relax
+\else
+\ifx l#1\relax
+\let\psk@mcol\hfill
+\else
+\let\psk@mcol\hfil
+\fi
+\fi}
+\psset@mcol{c}
+\def\psset@mnodesize#1{%
+\pssetlength\pst@dimg{#1}%
+\ifdim\pst@dimg<\z@
+\let\psk@mnodesize\relax
+\let\psk@@mnodesize\relax
+\else
+\edef\psk@mnodesize{\noexpand\hbox to\number\pst@dimg sp\noexpand\bgroup}%
+\let\psk@@mnodesize\egroup
+\fi}
+\psset@mnodesize{-1pt}
+\def\mnode@R{\Rnode@ii{\psm@thenode}}
+\def\mnode@r{\rnode@ii{\psm@thenode}}
+\def\mnode@oval{\ovalnode@ii{\psm@thenode}}
+\def\mnode@tri{\trinode@ii{\psm@thenode}}
+\def\mnode@dia{\dianode@ii{\psm@thenode}}
+\def\mnode@C{{\nodealigntrue\cnode@ii(\z@,\z@){\psk@radius}{\psm@thenode}}}
+\def\mnode@f{{\nodealigntrue\cnode@ii(\z@,\z@){\psk@radius}{\psm@thenode}}}
+\def\mnode@circle{\circlenode@ii{\psm@thenode}}
+\def\mnode@p{\pnode(\z@,\z@){\psm@thenode}}
+\def\mnode@none{\box\pst@hbox}
+\def\psset@mnode#1{%
+\@ifundefined{mnode@#1}%
+{\@pstrickserr{\string\psmatrix\space node `#1' not defined.}\@ehpa}%
+{\edef\psk@mnode{#1}}}
+\def\psset@emnode#1{%
+\@ifundefined{mnode@#1}%
+{\@pstrickserr{\string\psmatrix\space node `#1' not defined.}\@ehpa}%
+{\edef\psk@emnode{#1}}}
+\psset@mnode{R}
+\psset@emnode{none}
+%%%% FROM pst-coil.tex
+\def\nccoil{\def\pst@par{}\pst@object{nccoil}}
+\def\nccoil@i{\check@arrow{\nccoil@ii}}
+\def\nccoil@ii#1#2{\nc@object{Open}{#1}{#2}{.5}{%
+\tx@NCCoor
+tx@Dict begin
+\psk@coilwidth \pscoilheight
+\psk@coilarmA \psk@coilarmB
+\psk@coilaspect \psk@coilinc
+\pst@coildict \tx@Coil end
+end}}
+\def\nczigzag{\def\pst@par{}\pst@object{nczigzag}}
+\def\nczigzag@i{\check@arrow{\nczigzag@ii}}
+\def\nczigzag@ii#1#2{\nc@object{Open}{#1}{#2}{.5}{%
+\tx@NCCoor
+tx@Dict begin
+\pscoilheight
+\psk@coilwidth
+\psk@coilarmA
+\psk@coilarmB
+\pst@coildict \tx@ZigZag end
+\psline@iii
+\tx@Line
+end}}
+\catcode`\@=\TheAtCode\relax
+%%
+%% END: psn-beta.tex
+%% BEGIN: pstree.tex
+%% Generated on <1993/4/16> from `pstree.doc'.
+%% For use without a PostScript header file.
+%%
+\def\fileversion{0.93}
+\def\filedate{93/03/03}
+%%
+%% For making trees with PSTricks.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%% See pstricks.doc or pstricks.tex for copying restrictions.
+%%
+%% See the PSTricks read-me file and tree-doc.tex for documentation.
+\message{ v\fileversion, \filedate}
+\csname PSTreeLoaded\endcsname
+\let\PSTreeLoaded\endinput
+\iffalse
+\ifx\PSTnodesLoaded\endinput\else
+\def\next{\input pst-node.tex }%
+\expandafter\next
+\fi
+\fi
+\edef\TheAtCode{\the\catcode`\@}
+\catcode`\@=11
+\newbox\pstree@rootbox
+\newbox\pstree@box
+\def\pstree@succrow{%
+\ifpstreeflip
+\def\pssubtree@vertical{\pssubtree@vertical@vflip}%
+\else
+\def\pssubtree@vertical{\pssubtree@vertical@v}%
+\fi
+\def\pstree@node{\pstree@node@v}%
+\def\pssubtree@horizontal{\pssubtree@horizontal@v}}%
+\def\pssubtree@vertical@v{%
+\vrule height \pst@dimc depth \pst@dimd width \z@
+\ifnum\psnodecnt=\z@
+\global\let\pstree@theleftprofile\pstree@leftprofile
+\global\let\pstree@therightprofile\pstree@rightprofile
+\else
+\psk@thistreefit\pstree@therightprofile\pstree@leftprofile
+\kern\the\pst@cnth sp
+\pstree@zip\pstree@therightprofile
+\pstree@rightprofile\pstree@therightprofile
+\global\advance\pstree@cnt\pst@cnth
+\pst@cnth=\pstree@cnt
+\pstree@zip\pstree@leftprofile
+\pstree@theleftprofile\pstree@theleftprofile
+\fi
+\box\pstree@box
+\global\advance\psnodecnt 1\relax}%
+\def\pssubtree@vertical@vflip{%
+\vrule height \pst@dimc depth \pst@dimd width \z@
+\ifnum\psnodecnt=\z@
+\global\let\pstree@theleftprofile\pstree@leftprofile
+\global\let\pstree@therightprofile\pstree@rightprofile
+\else
+\psk@thistreefit\pstree@theleftprofile\pstree@rightprofile
+\kern-\pst@cnth sp
+\pstree@zip\pstree@theleftprofile
+\pstree@leftprofile\pstree@theleftprofile
+\global\advance\pstree@cnt\pst@cnth
+\pst@cnth=\pstree@cnt
+\pstree@zip\pstree@rightprofile
+\pstree@therightprofile\pstree@therightprofile
+\fi
+\box\pstree@box
+\global\advance\psnodecnt 1\relax}%
+\def\pstree@node@v{%
+\edef\pstree@leftprofile{\psk@thistreenodesize\pst@dima,\pstree@stop,}%
+\edef\pstree@rightprofile{\psk@thistreenodesize\pst@dimb,\pstree@stop,}%
+\pssubtree@vertical}%
+\def\pssubtree@horizontal@v{%
+\pstree@max\pstree@upprofile\pst@cntg
+\pst@dimc=\pst@cntg sp
+\pstree@max\pstree@downprofile\pst@cntg
+\pst@dimd=\pst@cntg sp
+\pstree@treebboxadjust
+\edef\pstree@leftprofile{\number\pst@dima,\pstree@stop,}%
+\edef\pstree@rightprofile{\number\pst@dimb,\pstree@stop,}%
+\pssubtree@vertical}%
+\def\pstree@tightfit#1#2{%
+\pst@cnth=\z@
+\edef\next{\noexpand\pstree@@tightfit#1\noexpand\@nil#2\noexpand\@nil}%
+\next
+\advance\pst@cnth\psk@thistreesep\relax
+\advance\pst@cnth\pstree@tspace\relax
+\gdef\pstree@tspace{\z@}}
+\def\pstree@@tightfit#1,#2\@nil#3,#4\@nil{%
+\ifnum#1=\pstree@stop
+\let\next\relax
+\else
+\ifnum#3=\pstree@stop
+\let\next\relax
+\else
+\pst@cntg=#1
+\advance\pst@cntg#3
+\ifnum\pst@cntg>\pst@cnth
+\pst@cnth=\pst@cntg
+\fi
+\def\next{\pstree@@tightfit#2\@nil#4\@nil}%
+\fi
+\fi
+\next}
+\def\pstree@loosefit#1#2{%
+\pstree@max{#1}\pst@cnth
+\pstree@max{#2}\pst@cntg
+\advance\pst@cnth\pst@cntg
+\advance\pst@cnth\psk@thistreesep\relax
+\advance\pst@cnth\pstree@tspace\relax
+\gdef\pstree@tspace{\z@}}
+\def\tspace#1{%
+\pst@@killglue
+\pssetlength\pst@dimg{#1}%
+\xdef\pstree@tspace{\number\pst@dimg}%
+\ignorespaces}
+\def\psset@treefit#1{%
+\@ifundefined{pstree@#1fit}%
+{\@pstrickserr{Bad `treefit' parameter value: `#1'}\@ehpa}%
+{\expandafter\let\expandafter\psk@treefit\csname pstree@#1fit\endcsname}}
+\psset@treefit{tight}
+\def\psset@thistreefit#1{%
+\@ifundefined{pstree@#1fit}%
+{\@pstrickserr{Bad `treefit' parameter value: `#1'}\@ehpa}%
+{\expandafter\let\expandafter\psk@thistreefit
+\csname pstree@#1fit\endcsname}}
+\psset@treefit{tight}
+\def\pstree@zip#1#2#3{%
+\def\pst@tempg{}%
+\edef\next{\noexpand\pstree@@zip#1\noexpand\@nil#2\noexpand\@nil}%
+\next
+\global\let#3\pst@tempg}
+\def\pstree@@zip#1,#2\@nil#3,#4\@nil{%
+\ifnum#1=\pstree@stop
+\edef\pst@tempg{\pst@tempg#3,#4}%
+\let\next\relax
+\else
+\ifnum#3=\pstree@stop
+\pst@cntg=#1
+\advance\pst@cntg-\pst@cnth
+\edef\pst@tempg{\pst@tempg\the\pst@cntg,}%
+\def\next{\pstree@@zip#2\@nil\pstree@stop,\@nil}%
+\else
+\edef\pst@tempg{\pst@tempg#3,}%
+\def\next{\pstree@@zip#2\@nil#4\@nil}%
+\fi
+\fi
+\next}
+\def\pstree@max#1#2{%
+\pst@cntg=\z@
+\expandafter\pstree@@max#1%
+#2=\pst@cntg}%
+\def\pstree@@max#1,{%
+\ifnum#1=\pstree@stop\else
+\ifnum#1>\pst@cntg \pst@cntg=#1 \fi
+\expandafter\pstree@@max
+\fi}
+\def\pstree@add#1{%
+\def\pst@tempg{}%
+\expandafter\pstree@@add#1%
+\xdef#1{\pst@tempg\pstree@stop,}}
+\def\pstree@@add#1,{%
+\ifnum#1=\pstree@stop\else
+\pst@cnth=#1
+\advance\pst@cnth\pst@cntg
+\xdef\pst@tempg{\pst@tempg\the\pst@cnth,}%
+\expandafter\pstree@@add
+\fi}
+\newcount\psnodecnt
+\let\c@psnodecnt\psnodecnt
+\newcount\pstreelevel
+\let\c@pstreelevel\pstreelevel
+\newcount\pstreecnt
+\let\c@pstreecnt\pstreecnt
+\newcount\pstree@cnt
+\def\pstree{\def\pst@par{}\pst@object{pstree}}
+\def\pstree@i{\def\pstree@makebox{\pst@@makebox}\pstree@ii}
+\def\psTree{\def\pst@par{}\pst@object{psTree}}
+\def\psTree@i{\def\pstree@makebox{\pst@makelongbox}\pstree@ii}
+\def\endpsTree{\pst@endlongbox\ignorespaces}
+\def\pstree@ii{%
+\ifnum\pstreelevel=\z@
+\let\pstree@savedshortput\pst@shortput
+\psset@shortput{tab}%
+\else
+\pst@@killglue
+\fi
+\begingroup
+\begingroup
+\def\pstree@node{%
+\xdef\pstree@next{%
+\noexpand\@psttrue
+\noexpand\def\noexpand\pst@tempa{\number\pst@dima}%
+\noexpand\def\noexpand\pst@tempb{\number\pst@dimb}%
+\noexpand\def\noexpand\pst@tempc{\number\pst@dimc}%
+\noexpand\def\noexpand\pst@tempd{\number\pst@dimd}}%
+\box\pstree@box}%
+\def\pssubtree@horizontal{\pssubtree@horizontal@o}%
+\def\pssubtree@vertical{\pssubtree@vertical@o}%
+\global\let\pstree@next\relax
+\pst@makebox\pstree@iii}
+\def\pstree@iii{%
+\global\setbox\pst@boxg=\box\pst@hbox
+\endgroup
+\setbox\pstree@rootbox=\box\pst@boxg
+\@pstfalse
+\pstree@next
+\if@pst
+\ifdim\wd\pstree@rootbox=\z@\else
+\@pstrickserr{Extraneous space in root node}\@ehpa
+\wd\pstree@rootbox=\z@
+\fi
+\else
+\@pstrickserr{Missing or bad root node
+(level \the\pstreelevel, node \the\psnodecnt)}\@ehpa
+\def\pstree@next{%
+\def\pst@tempa{0}%
+\def\pst@tempb{0}%
+\def\pst@tempc{0}%
+\def\pst@tempd{0}}%
+\wd\pstree@rootbox=\z@
+\fi
+\pstree@savevalues
+\begingroup
+\pstree@initsuccvalues
+\pstree@setlevelpar
+\pstree@do}
+\def\pstree@setlevelpar{%
+\advance\pstreelevel1
+\let\psk@thislevelsep\relax
+\let\psk@thistreesep\relax
+\let\psk@thistreefit\relax
+\let\psk@thistreenodesize\relax
+\csname pstreehook\romannumeral\pstreelevel\endcsname
+\use@par
+\ifx\psk@thistreesep\relax
+\let\psk@thistreesep\psk@treesep
+\fi
+\ifx\psk@thistreenodesize\relax
+\let\psk@thistreenodesize\psk@treenodesize
+\fi
+\ifx\psk@thistreefit\relax
+\let\psk@thistreefit\psk@treefit
+\fi
+\ifx\psk@thislevelsep\relax
+\let\psk@thislevelsep\psk@levelsep
+\let\psk@thislevelsepmode\psk@levelsepmode
+\fi
+\ifnum\psk@treemode=\pstree@predmode\else
+\global\advance\pstreecnt1
+\edef\pstree@thetree{\the\pstreecnt}%
+\let\pstree@predmode\psk@treemode
+\fi
+\ifx\psk@thislevelsepmode\relax
+\pst@dimg=\psk@thislevelsep\relax
+\pst@cntg=0\@nameuse{%
+pstree@levelsepadjust-\pstree@thetree-\the\pstreelevel}%
+\advance\pst@dimg\pst@cntg sp
+\edef\psk@thislevelsep{\number\pst@dimg sp}%
+\fi
+\ifnum\psk@treemode>1
+\def\pst@tposflip{1 sub neg }%
+\else
+\def\pst@tposflip{}%
+\fi
+\ifx\pstree@bboxadjust\@empty\else
+\xdef\pstree@treebboxadjust{%
+\pstree@bboxadjust
+\ifpsshowbbox\noexpand\pstree@showbbox\fi}%
+\gdef\pstree@bboxadjust{}%
+\fi
+\let\pst@thispsbox\@skiplevelfalse}
+\def\pstree@predmode{-1}
+\def\pstree@savevalues{%
+\edef\pstree@restorevalues{%
+\noexpand\gdef\noexpand\pstree@theleftprofile{\pstree@theleftprofile}%
+\noexpand\gdef\noexpand\pstree@therightprofile{\pstree@therightprofile}%
+\noexpand\gdef\noexpand\pstree@theupprofile{\pstree@theupprofile}%
+\noexpand\gdef\noexpand\pstree@thedownprofile{\pstree@thedownprofile}%
+\noexpand\gdef\noexpand\pstree@tspace{\pstree@tspace}%
+\noexpand\gdef\noexpand\pssucc{\pssucc}%
+\global\psnodecnt=\the\psnodecnt\relax
+\global\pstree@cnt=\the\pstree@cnt\relax}%
+\let\pstree@savebboxadjust\pstree@treebboxadjust}
+\def\pstree@initsuccvalues{%
+\def\pstree@therightprofile{\pstree@stop,}%
+\let\pstree@theleftprofile\pstree@therightprofile
+\let\pstree@theupprofile\pstree@therightprofile
+\let\pstree@thedownprofile\pstree@therightprofile
+\psnodecnt=\z@
+\pstree@cnt\z@
+\gdef\pstree@tspace{\z@}%
+\let\pspred\pssucc}
+\def\pssucc{T}
+\pstree@initsuccvalues
+\def\pstree@down{%
+\pstree@succrow
+\pstree@makebox{\pstree@vertical{\lower}}}
+\def\pstree@up{%
+\pstree@succrow
+\pstree@makebox{\pstree@vertical{\raise}}}
+\def\pstree@levelsepadjust#1#2{%
+\pst@cntg=0\@nameuse{pstree@levelsepadjust-#1}%
+\ifnum#2>\pst@cntg
+\expandafter\xdef\csname pstree@levelsepadjust-#1\endcsname
+{#2}%
+\fi}
+\def\pstree@initlevelsepadjust{%
+\@ifundefined{@latexerr}{%
+\immediate\openin1 \jobname.pst
+\ifeof1 \else
+\input \jobname.pst
+\fi
+\immediate\closein1
+\csname newwrite\endcsname\pstree@auxout
+\immediate\openout\pstree@auxout \jobname.pst }%
+{\let\pstree@auxout\@auxout}%
+\global\let\pstree@initlevelsepadjust\relax}
+\newcount\pstree@stop
+\pstree@stop=-987654321
+\def\pstree@vertical#1{%
+\pst@cntg=\ifpstreeflip-\fi\wd\pst@hbox
+\divide\pst@cntg 2
+\pstree@add\pstree@theleftprofile
+\pstree@add\pstree@therightprofile
+\pst@dimg=\psk@thislevelsep\relax
+\ifx\psk@thislevelsepmode\relax
+\pstree@vertlevelsepadjust{#1}%
+\fi
+\global\setbox\pstree@box=\hbox{%
+\vrule height \pst@tempc sp depth \pst@tempd sp width \z@
+\unhbox\pstree@rootbox
+#1\pst@dimg\hbox to\z@{\hss\unhbox\pst@hbox\hss}}%
+\if@skiplevel
+\skiplevel@vertical
+\else
+\endgroup
+\fi
+\edef\pstree@leftprofile{\pst@tempa,\pstree@theleftprofile}%
+\edef\pstree@rightprofile{\pst@tempb,\pstree@therightprofile}%
+\pst@dimc=\ht\pstree@box
+\pst@dimd=\dp\pstree@box
+\ifpsshowbbox
+\pstree@max\pstree@leftprofile\pst@cntg
+\pst@dima=\pst@cntg sp
+\pstree@max\pstree@rightprofile\pst@cntg
+\pst@dimb=\pst@cntg sp
+\pstree@showbbox
+\fi
+\dp\pstree@box=\z@
+\ht\pstree@box=\z@
+\pstree@restorevalues
+\pssubtree@vertical
+\global\let\pstree@treebboxadjust\pstree@savebboxadjust
+\endgroup
+\ifnum\pstreelevel>\z@\expandafter\ignorespaces\fi}
+\def\pstree@vertlevelsepadjust#1{%
+\ifx\if@filesw\iffalse\else
+\ifx#1\lower
+\pst@dimh=\pst@tempd sp
+\advance\pst@dimh\ht\pst@hbox
+\else
+\pst@dimh=\pst@tempc sp
+\advance\pst@dimh\dp\pst@hbox
+\fi
+\immediate\write\@auxout{%
+\string\pstree@levelsepadjust
+{\pstree@thetree-\the\pstreelevel}{\number\pst@dimh}}%
+\fi}
+\def\pstree@succcolumn{%
+\def\pssubtree@vertical{\pssubtree@vertical@h}%
+\def\pssubtree@horizontal{\pssubtree@horizontal@h}%
+\def\pstree@node{\pstree@node@h}}%
+\def\pssubtree@horizontal@h{%
+\xdef\pstree@theleftprofile{\number\pst@dima,\pstree@theleftprofile}%
+\xdef\pstree@therightprofile{\number\pst@dimb,\pstree@therightprofile}%
+\ifnum\psnodecnt=\z@
+\global\let\pstree@theupprofile\pstree@upprofile
+\global\let\pstree@thedownprofile\pstree@downprofile
+\box\pstree@box
+\else
+\ifpstreeflip
+\pssubtree@horizontal@@hflip
+\else
+\pssubtree@horizontal@@h
+\fi
+\fi
+\global\advance\psnodecnt 1\relax}
+\def\pssubtree@horizontal@@h{%
+\psk@thistreefit\pstree@thedownprofile\pstree@upprofile
+\global\advance\pstree@cnt\pst@cnth
+\lower\the\pstree@cnt sp\box\pstree@box
+\pstree@zip\pstree@thedownprofile\pstree@downprofile\pstree@thedownprofile
+\pst@cnth=\pstree@cnt
+\pstree@zip\pstree@upprofile\pstree@theupprofile\pstree@theupprofile}
+\def\pssubtree@horizontal@@hflip{%
+\psk@thistreefit\pstree@theupprofile\pstree@downprofile
+\global\advance\pstree@cnt\pst@cnth
+\raise\the\pstree@cnt sp\box\pstree@box
+\pstree@zip\pstree@theupprofile\pstree@upprofile\pstree@theupprofile
+\pst@cnth=\pstree@cnt
+\pstree@zip\pstree@downprofile\pstree@thedownprofile\pstree@thedownprofile}
+\def\pstree@node@h{%
+\edef\pstree@upprofile{\psk@thistreenodesize\pst@dimc,\pstree@stop,}%
+\edef\pstree@downprofile{\psk@thistreenodesize\pst@dimd,\pstree@stop,}%
+\pssubtree@horizontal@h}%
+\def\pssubtree@vertical@h{%
+\pstree@max\pstree@leftprofile\pst@cntg
+\pst@dima=\pst@cntg sp
+\pstree@max\pstree@rightprofile\pst@cntg
+\pst@dimb=\pst@cntg sp
+\pstree@treebboxadjust
+\edef\pstree@upprofile{\number\pst@dimc,\pstree@stop,}%
+\edef\pstree@downprofile{\number\pst@dimd,\pstree@stop,}%
+\pssubtree@horizontal@h}%
+\newif\if@psrighttree
+\def\pstree@right{%
+\@psrighttreetrue
+\pstree@succcolumn
+\pstree@makebox\pstree@horizontal}
+\def\pstree@left{%
+\@psrighttreefalse
+\pstree@succcolumn
+\pstree@makebox\pstree@horizontal}
+\def\pstree@horizontal{%
+\ifdim\wd\pst@hbox=\z@\else
+\@pstrickserr{Extraneous space in tree successors}\@ehpa
+\fi
+\pst@cntg=\ifpstreeflip\ht\else\dp\fi\pst@hbox
+\divide\pst@cntg 2
+\pstree@add\pstree@theupprofile
+\pstree@add\pstree@thedownprofile
+\ifx\psk@thislevelsepmode\relax
+\pstree@horizlevelsepadjust
+\fi
+\pst@dimg\psk@thislevelsep\relax
+\global\setbox\pstree@box=\hbox{%
+\unhbox\pstree@rootbox
+\kern\if@psrighttree\else-\fi\pst@dimg
+\ifpstreeflip\lower\else\raise\fi\pst@cntg sp\box\pst@hbox}%
+\if@psrighttree
+\pst@dimh=\pst@dimg
+\pstree@max\pstree@therightprofile\pst@cntg
+\global\advance\pst@dimh\pst@cntg sp
+\global\pst@dimg=\pst@tempa sp
+\else
+\pstree@max\pstree@theleftprofile\pst@cntg
+\global\advance\pst@dimg\pst@cntg sp
+\global\pst@dimh=\pst@tempb sp
+\fi
+\if@skiplevel
+\skiplevel@horizontal
+\else
+\endgroup
+\fi
+\pst@dima=\pst@dimg
+\pst@dimb=\pst@dimh
+\edef\pstree@upprofile{\pst@tempc,\pstree@theupprofile}%
+\edef\pstree@downprofile{\pst@tempd,\pstree@thedownprofile}%
+\dp\pstree@box=\z@
+\ht\pstree@box=\z@
+\wd\pstree@box=\z@
+\ifpsshowbbox
+\pstree@max\pstree@upprofile\pst@cntg
+\pst@dimc=\pst@cntg sp
+\pstree@max\pstree@downprofile\pst@cntg
+\pst@dimd=\pst@cntg sp
+\pstree@showbbox
+\fi
+\pstree@restorevalues
+\pssubtree@horizontal
+\endgroup
+\ifnum\pstreelevel>\z@\expandafter\ignorespaces\fi}
+\def\pstree@horizlevelsepadjust#1{%
+\ifx\if@filesw\iffalse\else
+\if@psrighttree
+\pst@dimh=\pst@tempb sp
+\pstree@max\pstree@theleftprofile\pst@cntg
+\advance\pst@dimh\pst@cntg sp
+\else
+\pst@dimh=\pst@tempa sp
+\pstree@max\pstree@therightprofile\pst@cntg
+\advance\pst@dimh\pst@cntg sp
+\fi
+\immediate\write\@auxout{%
+\string\pstree@levelsepadjust
+{\pstree@thetree-\the\pstreelevel}{\number\pst@dimh}}%
+\fi}
+\def\psset@treemode#1{%
+\pst@cntg=
+\ifx#1U\@empty2\else\ifx#1R\@empty1\else\ifx#1L\@empty3\else0\fi\fi\fi
+\relax
+\edef\psk@treemode{\the\pst@cntg}%
+\ifcase\pst@cntg
+\let\pstree@do\pstree@down
+\or
+\let\pstree@do\pstree@right
+\or
+\let\pstree@do\pstree@up
+\or
+\let\pstree@do\pstree@left
+\fi}
+\def\psk@treemode{0}
+\let\pstree@do\pstree@down
+\def\psset@treesep#1{%
+\pssetlength\pst@dimg{#1}%
+\edef\psk@treesep{\number\pst@dimg}}%
+\psset@treesep{.75cm}
+\def\psset@thistreesep#1{%
+\pssetlength\pst@dimg{#1}%
+\edef\psk@thistreesep{\number\pst@dimg}}%
+\def\psset@treenodesize#1{%
+\pssetlength\pst@dimg{#1}%
+\ifdim\pst@dimg<\z@
+\let\psk@treenodesize\number
+\else
+\edef\psk@treenodesize{\number\pst@dimg\noexpand\@gobble}%
+\fi}
+\psset@treenodesize{-1pt}
+\def\psset@thistreenodesize#1{%
+\pssetlength\pst@dimg{#1}%
+\ifdim\pst@dimg<\z@
+\let\psk@thistreenodesize\number
+\else
+\edef\psk@thistreenodesize{\number\pst@dimg\noexpand\@gobble}%
+\fi}
+\def\psset@levelsep#1{%
+\pst@expandafter{\pst@ifstar\psset@@levelsep}{#1}\@nil}
+\def\psset@@levelsep#1\@nil{%
+\pst@@getlength{#1}\psk@levelsep
+\if@star
+\pstree@initlevelsepadjust
+\let\psk@levelsepmode\relax
+\else
+\def\psk@levelsepmode{}%
+\fi}
+\psset@levelsep{2cm}
+\def\psset@thislevelsep#1{%
+\pst@expandafter{\pst@ifstar\psset@@thislevelsep}{#1}\@nil}
+\def\psset@@thislevelsep#1\@nil{%
+\pst@@getlength{#1}\psk@thislevelsep
+\if@star
+\pstree@initlevelsepadjust
+\let\psk@thislevelsepmode\relax
+\else
+\def\psk@thislevelsepmode{}%
+\fi}
+\newif\ifpstreeflip
+\def\psset@treeflip#1{\@nameuse{pstreeflip#1}}
+\psset@treeflip{false}
+\def\pstree@node@o{%
+\leavevmode
+\hbox{%
+\vrule height \pst@dimc depth \pst@dimd width \z@
+\kern\pst@dima
+\box\pstree@box
+\kern\pst@dimb}}
+\def\pssubtree@vertical@o{%
+\pstree@max\pstree@leftprofile\pst@cntg
+\pst@dima=\pst@cntg sp
+\pstree@max\pstree@rightprofile\pst@cntg
+\pst@dimb=\pst@cntg sp
+\pstree@treebboxadjust
+\pstree@node}
+\def\pssubtree@horizontal@o{%
+\pstree@max\pstree@upprofile\pst@cntg
+\pst@dimc=\pst@cntg sp
+\pstree@max\pstree@downprofile\pst@cntg
+\pst@dimd=\pst@cntg sp
+\pstree@treebboxadjust
+\pstree@node}
+\def\pstree@outer{%
+\def\pstree@node{\pstree@node@o}%
+\def\pssubtree@vertical{\pssubtree@vertical@o}%
+\def\pssubtree@horizontal{\pssubtree@horizontal@o}%
+\pstreelevel=\z@
+\def\pstree@predmode{-1}%
+\def\pst@tposflip{}%
+\let\pst@thisbox\relax
+\let\pst@shortput\pstree@savedshortput}
+\let\pstree@savedshortput\ignorespaces
+\pstree@outer
+\newif\ifpsshowbbox
+\def\psset@showbbox#1{\@nameuse{psshowbbox#1}}%
+\psset@showbbox{false}
+\def\pstree@showbbox{%
+\setbox\pstree@box=\hbox{%
+\psframe[linewidth=0,linecolor=black,linestyle=solid,fillstyle=none]%
+(-\pst@dima,-\pst@dimd)(\pst@dimb,\pst@dimc)%
+\box\pstree@box}}%
+\def\psset@edge#1{%
+\def\psedge{#1}%
+\ifx\psedge\@none
+\def\psedge##1##2{}%
+\fi}
+\psset@edge{\ncline}
+\def\pspred{T}
+\def\pstree@makenodebox{%
+\pst@@killglue
+\let\pst@thispsbox\pstree@outer
+\pst@makebox}
+\def\begin@treenode{%
+\pst@@killglue
+\begingroup
+\use@par
+\global\let\pstree@edge\psedge
+\xdef\pssucc{\pspred-\the\psnodecnt}}
+\def\MakeShortTnput#1{%
+\def\end@treenode{\@ifnextchar#1{\tnput@}{\end@@treenode}}}
+\MakeShortTnput{~}
+\def\end@@treenode{%
+\pstree@bboxadjust
+\gdef\pstree@bboxadjust{}%
+\ifpsshowbbox\pstree@showbbox\fi
+\pstree@node
+\endgroup
+\ifnum\pstreelevel>\z@
+\pstree@edge{\pspred}{\pssucc}%
+\expandafter\pst@shortput
+\else
+\expandafter\ignorespaces
+\fi}
+\def\pstree@bboxadjust{}
+\def\pstree@setbboxadjust#1#2{%
+\pssetlength\pst@dimg{#1}%
+\xdef\pstree@bboxadjust{%
+\pstree@bboxadjust
+#2\number\pst@dimg sp\relax}}
+\def\psset@bbl#1{\pstree@setbboxadjust{#1}{\pst@dima=}}
+\def\psset@bbr#1{\pstree@setbboxadjust{#1}{\pst@dimb=}}
+\def\psset@bbh#1{\pstree@setbboxadjust{#1}{\pst@dimc=}}
+\def\psset@bbd#1{\pstree@setbboxadjust{#1}{\pst@dimd=}}
+\def\psset@xbbl#1{\pstree@setbboxadjust{#1}{\advance\pst@dima}}
+\def\psset@xbbr#1{\pstree@setbboxadjust{#1}{\advance\pst@dimb}}
+\def\psset@xbbh#1{\pstree@setbboxadjust{#1}{\advance\pst@dimc}}
+\def\psset@xbbd#1{\pstree@setbboxadjust{#1}{\advance\pst@dimd}}
+\let\pstree@treebboxadjust\relax
+\def\Tn{\def\pst@par{}\pst@object{Tn}}
+\def\Tn@i{%
+\pst@@killglue
+\global\let\pssucc\pspred
+\begingroup
+\pst@dima=\z@
+\pst@dimb=\z@
+\pst@dimc=\z@
+\pst@dimd=\z@
+\setbox\pstree@box=\hbox{}%%
+\pstree@node
+\endgroup
+\ignorespaces}
+\def\Tp{\def\pst@par{}\pst@object{Tp}}
+\def\Tp@i{%
+\begin@treenode
+\pst@dima=\z@
+\pst@dimb=\z@
+\pst@dimc=\z@
+\pst@dimd=\z@
+\setbox\pstree@box=\hbox{%
+\pst@newnode{\pssucc}{10}{0 0 }{\tx@InitPnode}}%
+\end@treenode}
+\def\Tc{\def\pst@par{}\pst@object{Tc}}
+\def\Tc@i#1{%
+\begin@treenode
+\pssetlength\pst@dima{#1}%
+\pst@dimb=\pst@dima
+\pst@dimc=\pst@dima
+\pst@dimd=\pst@dima
+\nodealignfalse
+\setbox\pstree@box=\hbox{\cnode@ii(\z@,\z@){#1}{\pssucc}}%
+\end@treenode}
+\def\TC{\def\pst@par{}\pst@object{TC}}
+\def\TC@i{\Tc@i{\psk@radius}}
+\def\Toval{\def\pst@par{}\pst@object{Toval}}
+\def\Toval@i{\pstree@makenodebox{\Toval@ii\ovalnode@ii}}
+\def\Toval@ii#1{%
+\begin@treenode
+\nodealigntrue
+\setbox\pstree@box=\hbox{#1\pssucc}%
+\pst@dima=\wd\pstree@box
+\divide\pst@dima 2
+\pst@dimb=\pst@dima
+\pst@dimc=\ht\pstree@box
+\pst@dimd=\dp\pstree@box
+\setbox\pstree@box=\hbox to\z@{\hss\unhbox\pstree@box\hss}%
+\dp\pstree@box=\z@
+\ht\pstree@box=\z@
+\end@treenode}
+\def\Tcircle{\def\pst@par{}\pst@object{Tcircle}}
+\def\Tcircle@i{\pstree@makenodebox{\Toval@ii\circlenode@ii}}
+\def\Tf{\def\pst@par{}\pst@object{Tf}}
+\def\Tf@i{\Toval@ii{\fnode@ii()}}
+\def\Tdia{\def\pst@par{}\pst@object{Tdia}}
+\def\Tdia@i{\pstree@makenodebox{\Toval@ii\dianode@ii}}
+\def\Ttri{\def\pst@par{}\pst@object{Ttri}}
+\def\Ttri@i{\pstree@makenodebox{\Ttri@ii}}
+\def\Ttri@ii{%
+\begin@treenode
+\nodealigntrue
+\setbox\pstree@box=\hbox{\trinode@ii\pssucc}%
+\pst@dima=\pst@dimg % Set by \pst@triboxsep
+\pst@dimb=\wd\pstree@box
+\advance\pst@dimb-\pst@dima
+\pst@dimc=\ht\pstree@box
+\pst@dimd=\dp\pstree@box
+\setbox\pstree@box=\hbox to\z@{\hss\unhbox\pstree@box\hss}%
+\dp\pstree@box=\z@
+\ht\pstree@box=\z@
+\end@treenode}
+\def\Tr{\def\pst@par{}\pst@object{Tr}}
+\def\Tr@i{\pstree@makenodebox{\Tr@ii{\begingroup\rnode@ii}}}
+\def\Tr@ii#1{%
+\begin@treenode
+\def\pstree@nodehook{%
+\xdef\pstree@next{\pst@dima=\number\pst@dima sp\relax}}%
+\nodealigntrue
+\setbox\pstree@box\hbox{#1\pssucc}%
+\pstree@next
+\pst@dimb=\wd\pstree@box
+\advance\pst@dimb-\pst@dima
+\pst@dimc=\ht\pstree@box
+\pst@dimd=\dp\pstree@box
+\setbox\pstree@box\hbox to\z@{\kern-\pst@dima\unhbox\pstree@box\hss}%
+\ht\pstree@box=\z@
+\dp\pstree@box=\z@
+\end@treenode}
+\def\TR{\def\pst@par{}\pst@object{TR}}
+\def\TR@i{\pstree@makenodebox{\Tr@ii{\Rnode@ii}}}
+\def\Tdot{\def\pst@par{}\pst@object{Tdot}}
+\def\Tdot@i{%
+\begin@treenode
+\def\pstree@nodehook{\xdef\pstree@next{%
+\pst@dima=\number\pst@dima sp\relax
+\pst@dimc=\number\pst@dimb sp\relax}}%
+\nodealignfalse
+\setbox\pstree@box=\hbox{\dotnode@ii(\z@,\z@)\pssucc}%
+\pstree@next
+\pst@dimb=\pst@dima
+\pst@dimd=\pst@dimc
+\end@treenode}
+\def\psset@fansize#1{\pst@@getlength{#1}\psk@fansize}
+\psset@fansize{1cm}
+\def\Tfan{\def\pst@par{}\pst@object{Tfan}}
+\def\Tfan@i{%
+\addto@par{edge=none}%
+\begin@treenode
+\solid@star
+\pst@dimb=\psk@fansize
+\pst@dimd=\pslinewidth
+\advance\pst@dimb-\pst@dimd
+\divide\pst@dimb 2
+\divide\pst@dimd 2
+\ifodd\psk@treemode\relax
+\pst@dima=\pst@dimd
+\pst@dimc=\pst@dimb
+\else
+\pst@dima=\pst@dimb
+\pst@dimc=\pst@dimd
+\fi
+\setbox\pstree@box=\hbox{%
+\pst@newnode{\pssucc}{16}{}{%
+/Y 0 def
+/X 0 def
+/l \pst@number\pst@dima def
+/r l def
+/u \pst@number\pst@dimc def
+/d u def
+/NodePos { \tx@GetRnodePos } def}%
+\def\pst@linetype{1}%
+\nc@object{Closed}{\pspred}{\pssucc}{.5}{%
+tx@Dict begin \psline@iii pop end
+/w \pst@number\pst@dimb CLW 2 div sub def
+/m \ifodd\psk@treemode false \else true \fi def
+\tx@Tfan}}%
+\pst@dimb=\pst@dima
+\pst@dimd=\pst@dimc
+\end@treenode}
+\def\psset@tnsep#1{%
+\def\pst@tempg{#1}%
+\ifx\pst@tempg\@empty
+\def\psk@tnsep{\number\pslabelsep sp}%
+\else
+\pst@@getlength{#1}\psk@tnsep
+\fi}
+\psset@tnsep{}
+\def\psset@tnyref#1{\def\psk@tnyref{#1}}%
+\psset@tnyref{}
+\def\psset@tnheight#1{\edef\psk@tnheight{#1}}
+\psset@tnheight{\ht\strutbox}
+\def\psset@tndepth#1{\edef\psk@tndepth{#1}}
+\psset@tndepth{\dp\strutbox}
+\def\psset@tnpos#1{%
+\def\pst@tempg{#1}%
+\ifx\pst@tempg\@empty
+\def\psk@tnpos{%
+\ifcase\psk@treemode b\or r\or a\or l\fi}%
+\else
+\@ifundefined{pstree@tnput@#1}%
+{\@pstrickserr{Bad tnpos: `#1'}\@ehpa}%
+{\edef\psk@tnpos{#1}}%
+\fi}
+\psset@tnpos{}
+\def\tnput@#1{\def\pst@par{}\pst@object{tnput}}
+\def\tnput@i{\pstree@makenodebox{\tnput@ii}}
+\def\tnput@ii{%
+\begingroup
+\use@par
+\xdef\next{%
+\if@star\noexpand\pst@starbox\fi
+\noexpand\def\noexpand\psk@thistndepth{\psk@tndepth}%
+\noexpand\def\noexpand\psk@thistnheight{\psk@tnheight}%
+\noexpand\def\noexpand\psk@thistnyref{\psk@tnyref}%
+\noexpand\def\noexpand\psk@thistnsep{\psk@tnsep}%
+\expandafter\noexpand\csname pstree@tnput@\psk@tnpos\endcsname}%
+\endgroup
+\next
+\end@treenode}
+\@namedef{pstree@tnput@b}{%
+\pstree@tnput@@v\pst@dimd\ht\dp\lower\psk@thistnheight}
+\@namedef{pstree@tnput@a}{%
+\pstree@tnput@@v\pst@dimc\dp\ht\raise\psk@thistndepth}
+\def\pstree@tnput@@v#1#2#3#4#5{%
+\pst@dimh=\wd\pst@hbox
+\pst@dimg=\psk@href\pst@dimh
+\advance\pst@dimg\pst@dimh
+\divide\pst@dimg 2
+\advance\pst@dimh-\pst@dimg
+\ifdim\pst@dimg>\pst@dima
+\pst@dima=\pst@dimg
+\fi
+\ifdim\pst@dimh>\pst@dimb
+\pst@dimb=\pst@dimh
+\fi
+\pst@dimh=\psk@thistnsep\relax
+\ifdim\pst@dimh<\z@
+\pst@dimh=-\pst@dimh
+\else
+\advance\pst@dimh#1%
+\fi
+\pssetlength\dimen@{#5}%
+\ifdim\dimen@>#2\pst@hbox
+\advance\pst@dimh\dimen@\relax
+\else
+\advance\pst@dimh#2\pst@hbox
+\fi
+\setbox\pstree@box=\hbox{%
+\box\pstree@box
+#4\pst@dimh\hbox to\z@{\kern-\pst@dimg\unhbox\pst@hbox\hss}}%
+#1=#3\pstree@box
+\dp\pstree@box=\z@
+\ht\pstree@box=\z@}
+\@namedef{pstree@tnput@l}{%
+\pstree@tnput@@h\pst@dima{%
+\hss
+\lower\pst@dimg\box\pst@hbox
+\kern\pst@dimh
+\box\pstree@box}}
+\@namedef{pstree@tnput@r}{%
+\pstree@tnput@@h\pst@dimb{%
+\box\pstree@box
+\kern\pst@dimh
+\lower\pst@dimg\box\pst@hbox
+\hss}}%
+\def\pstree@tnput@@h#1#2{%
+\ifx\psk@thistnyref\@empty
+\pssetlength\pst@dimg\psk@vref
+\else
+\pst@dimg=\ht\pst@hbox
+\advance\pst@dimg\dp\pst@hbox
+\pst@dimg=\psk@thistnyref\pst@dimg
+\advance\pst@dimg-\dp\pst@hbox
+\fi
+\pst@dimh=\psk@thistnsep\relax
+\ifdim\pst@dimh<\z@
+\pst@dimh=-\pst@dimh
+\else
+\advance\pst@dimh#1%
+\fi
+#1=\pst@dimh
+\advance#1\wd\pst@hbox
+\setbox\pstree@box=\hbox to\z@{#2}%
+\ifdim\ht\pstree@box>\pst@dimc
+\pst@dimc=\ht\pstree@box
+\fi
+\ifdim\dp\pstree@box>\pst@dimd
+\pst@dimd=\dp\pstree@box
+\fi
+\dp\pstree@box=\z@
+\ht\pstree@box=\z@}
+\newif\if@skiplevel
+\def\skiplevel{\def\pst@par{}\pst@object{skiplevel}}
+\def\skiplevel@i{\def\pstree@makebox{\pst@@makebox}\skiplevel@ii}
+\def\skiplevel@ii{%
+\pst@@killglue
+\begingroup
+\let\pssucc\pspred
+\def\pst@tempa{0}%
+\def\pst@tempb{0}%
+\def\pst@tempc{0}%
+\def\pst@tempd{0}%
+\setbox\pstree@rootbox=\hbox{}%
+\pstree@savevalues
+\begingroup
+\pstree@initsuccvalues
+\pstree@setlevelpar
+\@skipleveltrue
+\pstree@do}
+\def\pstree@gettop#1{\expandafter\pstree@@gettop#1\@nil}
+\def\pstree@@gettop#1,#2\@nil{#1}
+\def\skiplevel@horizontal{%
+\pst@dimc=\pstree@gettop\pstree@theupprofile sp
+\pst@dimd=\pstree@gettop\pstree@thedownprofile sp
+\pstree@treebboxadjust
+\gdef\pstree@treebboxadjust{}%
+\xdef\pstree@next{%
+\noexpand\def\noexpand\pst@tempc{\number\pst@dimc}%
+\noexpand\def\noexpand\pst@tempd{\number\pst@dimd}}%
+\endgroup
+\pstree@next}
+\def\skiplevel@vertical{%
+\pst@dima=\pstree@gettop\pstree@theleftprofile sp
+\pst@dimb=\pstree@gettop\pstree@therightprofile sp
+\pstree@treebboxadjust
+\gdef\pstree@treebboxadjust{}%
+\xdef\pstree@next{%
+\noexpand\def\noexpand\pst@tempa{\number\pst@dima}%
+\noexpand\def\noexpand\pst@tempb{\number\pst@dimb}}%
+\endgroup
+\pstree@next}
+\def\skiplevels{\def\pst@par{}\pst@object{skiplevels}}
+\def\skiplevels@i#1{%
+\pst@@killglue
+\begingroup
+\pst@cnta=#1\relax
+\edef\skiplevels@num{\the\pst@cnta}%
+\def\pstree@makebox{\pst@makelongbox}%
+\def\endskiplevels{}%
+\loop
+\ifnum\pst@cnta>\z@
+\advance\pst@cnta-1
+\expandafter\def\expandafter\endskiplevels\expandafter{%
+\endskiplevels\pst@endlongbox}
+\skiplevel@ii
+\repeat
+\expandafter\def\expandafter\endskiplevels\expandafter{%
+\endskiplevels\endgroup\ignorespaces}
+\ignorespaces}
+\catcode`\@=\TheAtCode\relax
+\endinput
+%%
+%% END: pstree.tex

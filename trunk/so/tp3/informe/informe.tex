@@ -1,0 +1,125 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage[spanish] {babel}
+\title{Taller 1}
+\usepackage{caratula}
+\usepackage[pdftex]{graphicx}
+\usepackage{amssymb}
+
+\setlength{\leftmargin}{2cm}
+\setlength{\rightmargin}{2cm}
+\setlength{\oddsidemargin}{-1cm}
+\setlength{\evensidemargin}{-1cm}
+\setlength{\topmargin}{-1cm}
+\setlength{\textwidth}{18cm}
+\setlength{\textheight}{25cm}
+
+
+\usepackage{fancyhdr}
+\usepackage{listings}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead [L]{\scriptsize Trabajo Pr\'actico N$^{\circ}$3}
+\fancyhead [R]{\scriptsize Mancuso, Mataloni}%1{20pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\materia{Sistemas Operativos}
+\submateria{Segundo Cuatrimestre de 2010}
+\titulo{Trabajo Pr\'actico N$^{\circ}$3}
+\subtitulo{Algoritmos en sistemas distribuidos}
+\grupo{Grupo}
+\integrante{Mataloni Alejandro}{706/07}{amataloni@gmail.com}
+\integrante{Mancuso Emiliano}{597/07}{emiliano.mancuso@gmail.com}
+\maketitle
+
+\newpage
+
+\section{Ejercicio 1}
+
+En este trabajo implementaremos un algoritmo para resolver el problema de exclusi\'on mutua en sistemas distribuidos. 
+El prototipo de ejercicio consta de un cliente desarrollado por la c/'atedra y un servidor el cual tenemos que implementar basandonos en el algoritmo de Ricart-Agrawala.
+\newline
+
+Para realizar esta tarea, nos ocuparemos de manejar los mensajes enviados cliente-servidor, as\'i como tambi\'en con los servidor-servidor.
+Cada cliente tiene asignado un servidor y solo puede enviar y recibir mensajes del mismo. Sin embargo un servidor se comunica con su \'unico cliente pero tambi\'en con el resto de los servidores.
+
+El servidor b\'asicamente se encuentra recibiendo mensajes de cualquier tipo. Cuenta con una serie de variables \'utiles a para definir su comportamiento:
+
+\begin{itemize}
+\item int seqnrorecibida;
+\item int ourSeqNumber;
+\item int highestSeqNum;
+\item int outstandingReplycount;
+\item bool requestingCriticalSection;
+\item bool replyDeferred[cantserv];
+\item bool deferIt;
+\end{itemize}
+
+\vspace*{1em}
+Hay 2 grandes tipos de mensajes:
+
+\begin{itemize}
+\item cliente-servidor
+\item servidor-servidor
+\end{itemize}
+
+\subsection{Mensajes cliente-servidor}
+Mensaje tipo \textbf{PEDIDO}: 
+\begin{itemize}
+\item El cliente le pide al servidor, acceso a la secci\'on cr\'itica.
+\item El servidor le responde al cliente cuando puede acceder a su secci\'on cr\'itica. Tambi\'en envia un mensaje de tipo \textbf{SERVPED} al resto de los servidores.
+\end{itemize}
+
+Mensaje tipo \textbf{LIBERO}: 
+\begin{itemize}
+\item El cliente le avisa al servidor, que sale de la secci\'on cr\'itica.
+\item El servidor asociado, responde a los pedidos de los servidores pendientes enviando un mensaje de tipo \textbf{SERVRES}.
+\end{itemize}
+
+Mensaje tipo \textbf{TERMINO}: 
+\begin{itemize}
+\item El cliente le avisa al servidor, que termina su ejecuci\'on.
+\end{itemize}
+
+\newpage
+
+\subsection{Mensajes servidor-servidor}
+Mensaje tipo \textbf{SERVPED}: 
+\begin{itemize}
+\item Al enviar, se pide permiso para acceder a la secci\'on cr\'itica.
+\item Al recibir, se le responde inmediatamente con un mensaje de tipo \textbf{SERVRES}, o en caso de tener prioridad sobre el otro servidor, se pospone la respuesta.
+\end{itemize}
+
+Mensaje tipo \textbf{SERVRES}:
+\begin{itemize}
+\item Al enviar, el servidor responde al pedido de la secci\'on cr\'itica.
+\item Al recibir, si se tienen las respuestas de todos los servidores, se le da el permiso al cliente asociado para entrar a la secci\'on cr\'itica a trav\'es de un mensaje de tipo \textvf{PEDIDO}.
+\end{itemize}
+\vspace*{4em}
+
+\section{Pruebas realizadas}
+
+M\'as all\'a de hacer muchos \textit{printf} para ver que nuestro sistema estaba haciendo lo que deber\'ia, nosotros quis\'imos asegurarnos de que funcionaba correctamente.
+Hicimos lo siguiente, creamos una prueba propia en donde 2 clientes se disputar\'ian la secci\'on cr\'itica.
+Un cliente empieza pidiendo acceder a la secci\'on cr\'itica y no liberarla por un largo rato, en el medio el otro cliente hace el pedido. Los archivos que escribimos fueron los siguientes:
+
+\vspace*{2em}
+\lstset{language=[ANSI]C++}
+\begin{lstlisting}
+ Cliente 1 		Cliente 2
+ pedir			nada
+ nada			pedir
+ nada			escribir Yo tengo el poder!
+ nada			liberar
+ nada
+ nada
+ nada
+ liberar	
+\end{lstlisting}
+\vspace*{2em}
+
+
+Aparte de esto tambi\'en modificamos un poco el c\'odigo del cliente. Lo que hicimos fue que cuando se lee una instrucci\'on de \textit{nada} el cliente se mande a dormir un tiempo. Esto es para que el cliente que primero accede a la secci\'on cr\'itica luego se quede haciendo \textit{sleep} en las siguientes operaciones as\'i el otro cliente pide la secci\'on cr\'itica y se queda esperando hasta que el primero no termine de hacer todos los \textit{nada} que tiene.
+
+\end{document}

@@ -1,0 +1,4739 @@
+%% BEGIN pstricks.doc
+\def\fileversion{0.93a}
+\def\filedate{93/03/12}
+%
+% File `pstricks.doc': PostScript macros for Generic TeX.
+%%
+%% See the PSTricks read-me file and the User's Guide for documentation.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%%
+%% Copying of part or all of any file in the pstricks.tex package
+%% is allowed under the following conditions only:
+%% (1) You may freely distribute unchanged copies of the files. Please
+%%     include the documentation when you do so.
+%% (2) You may modify a renamed copy of any file, but only for personal
+%%     use or use within an organization.
+%% (3) You may copy fragments from the files, for personal use or for use
+%%     in a macro package for distribution, as long as credit is given
+%%     where credit is due.
+%%
+%% You are NOT ALLOWED to take money for the distribution or use of
+%% these files or modified versions or fragments thereof, except for
+%% a nominal charge for copying etc.
+%%
+% **************************************************************************
+% This is `pstricks.doc', which contains the documented code for the PSTricks
+% package. See the PSTricks read-me file for information on how to
+% use this file.
+% **************************************************************************
+%
+% \EndDocPreamble
+%
+% \CheckSum{5048}
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+%
+% \section{Disclaimers, Guidelines and Other Comments}
+%
+% \paragraph*{Disclaimer}
+% These macros are extensive and were written hurriedly. Only modest attempts
+% have been made to clean up and optimize the code. The internals may change
+% substantially until version 1.0 comes up.
+%
+% \paragraph*{PostScript Guidelines}
+% The following guidelines were followed for macros using PostScript
+% "\special"'s:
+% \begin{enumerate}
+% \item Almost no "gsave" and "grestore" commands are used (reducing the
+% likelihood of conflicts with dvi-to-ps drivers or an unmatched "gsave" or
+% "grestore" ending up on a page).
+% \item Most end-user macros (those without "@") have error-checking so that
+% bad arguments or other misuse will not generate PostScript errors.
+% \end{enumerate}
+%
+% \iffalse
+% \paragraph*{Prefixes}
+% (This list is not complete.) Here are the conventions on prefixes, such as
+% the "pst" is "\pst@Verb":
+% \begin{center}
+% \begin{tabular}{ll}
+% {\em Prefix} & {\em Use}\\
+% "pst" & This and that.\\
+% "psk" & Graphics parameters ("k"={\em key}).\\
+% "psset" & Macros that set graphics parameters.\\
+% "psls" & Line styles.\\
+% "psfs" & Fill styles.\\
+% "psas" & Arrow styles.\\
+% "pscs" & Custom styles.\\
+% \end{tabular}
+% \end{center}
+% \fi
+%
+% \paragraph*{Macros}
+% A ``macro'' means any command sequence that is documented in this with a
+% heading entry. Macros with "@" are internal, and others are part of the user
+% interface. Commands that are not in the heading preceding their definition
+% are internal commands of a macro, and are not meant to be used directly by
+% other macros.
+%
+% \paragraph*{Local and global variables}
+% There are various classes of scratch registers and commands:
+% \begin{description}
+% \item[Global] These can be changed using "\global", etc.
+% \begin{LVerbatim}
+%   \pst@tempg
+%   \pst@temph
+%   \pst@dimg
+%   \pst@dimh
+%   \pst@cntg
+%   \pst@cnth
+%   \pst@boxg
+% \end{LVerbatim}
+%
+% \item[Local-I] These cannot be changed with "\global", but otherwise there
+% are no restrictions.
+% \begin{LVerbatim}
+%   \next
+%   \@tempa
+% \end{LVerbatim}
+%
+% \item[Local-I]
+% Changes to these must be local to the macro in which they occur (be
+% grouping).
+% \begin{LVerbatim}
+%   \pst@tempa
+%   \pst@tempb
+%   \pst@tempc
+%   \pst@tempd
+% \end{LVerbatim}
+%
+% \item[Local-II] Changes to these must be local to the macro in which they
+% occur, and it must be possible to use these as arguments of macros.
+% \begin{LVerbatim}
+%   \pst@dima
+%   \pst@dimb
+%   \pst@dimc
+%   \pst@dimd
+%   \if@pst
+% \end{LVerbatim}
+% There is one exception. When using these in coordinates that are processed
+% directly as Cartesian coordinates rather than with "\pst@getcoor", they must
+% be used in this order:
+% \begin{LVerbatim}
+%    (\pst@dima,\pst@dimb)(\pst@dimc,\pst@dimd)
+% \end{LVerbatim}
+%
+% \item[Shared] These are used to share information between macros. Their
+% value may be set by one macro and then used by another. Use with care. Do
+% not set with "\global".
+% \begin{quote}
+%  \begin{tabular}{ll}
+%    \em command & \em usage\\
+%    "\pst@hbox" & Box created and manipulated in HR-box macros.\\
+%    "\pst@coor" & PostScript code for a coordinate.\\
+%    "\pst@angle" & PostScript code for an angle.\\
+%    "\pst@rot"  & PostScript code for a rotation angle.\\
+%    "\if@star" & This is a flag to keep track of optional "*".
+%  \end{tabular}
+% \end{quote}
+%
+% \end{description}
+%
+% \paragraph*{Plain \TeX\ commands}
+% The commands
+% \begin{LVerbatim}
+%   \newbox
+%   \newcount
+%   \newdimen
+%   \newif
+%   \loop ... \repeat ... \fi
+%   \z@
+%   \sixt@@n
+%\end{LVerbatim}
+% are defined in "plain.tex" are part of most macro packages. PSTricks assumes
+% that they are defined. Other than these, PSTricks only makes use of \TeX\
+% primitives.
+%
+% \paragraph*{Dividing the file}
+%
+% {\bf\em Breaking up the file}\hskip 1em "pstricks.tex" can be broken up into
+% the following components:
+% \begin{description}
+% \item[Basics] (Including color and simple rotation.) Sections \ref{Prelim},
+% \ref{Config}, \ref{Header}, \ref{Errors}, \ref{Colors}, \ref{Colortab},
+% \ref{Rotation:simple} and \ref{Config:revisited}.
+% \item[Graphics] Sections \ref{Parameters}, \ref{Objects}, \ref{Linestyles},
+% \ref{Arrowheads}, \ref{Lines}, \ref{Grids}, \ref{Fillstyles}, \ref{Frames},
+% \ref{Frameboxes} and \ref{Circles}. Requires also {\bf Basics}.
+% \item[Rotation] (Including picture environment.) Sections \ref{Arithmetic},
+% \ref{Rotation:prelim}, \ref{Rotation:main} and \ref{Pictures}. Requires also
+% {\bf Basics}.
+% \end{description}
+%
+
+% \section{Preliminaries\label{Prelim}}
+%
+% Check whether file has been loaded already.
+%    \begin{macrocode}
+\csname PSTricksLoaded\endcsname
+\let\PSTricksLoaded\endinput
+%    \end{macrocode}
+%
+% Take care of the catcode of "@":
+%    \begin{macrocode}
+\edef\PstAtCode{\the\catcode`\@}
+\catcode`\@=11\relax
+%    \end{macrocode}
+%
+% Here are some hacks borrowed from \LaTeX{}, which are defined if \LaTeX{} is
+% not being used.
+%
+%    \begin{macrocode}
+\expandafter\ifx\csname @latexerr\endcsname\relax
+  \long\def\@ifundefined#1#2#3{\expandafter\ifx\csname
+    #1\endcsname\relax#2\else#3\fi}
+  \def\@namedef#1{\expandafter\def\csname #1\endcsname}
+  \def\@nameuse#1{\csname #1\endcsname}
+  \def\@eha{%
+    Your command was ignored.^^J
+    Type \space I <command> <return> \space to replace
+    it with another command,^^J
+    or \space <return> \space to continue without it.}
+  \def\@spaces{\space\space\space\space}
+  \def\typeout#1{\immediate\write\@unused{#1}}
+  \alloc@7\write\chardef\sixt@@n\@unused
+  \def\@empty{}
+  \def\@gobble#1{}
+  \def\@nnil{\@nil}
+  \def\@ifnextchar#1#2#3{%
+    \let\@tempe#1\def\@tempa{#2}\def\@tempb{#3}\futurelet\@tempc\@ifnch}
+  \def\@ifnch{%
+    \ifx\@tempc\@sptoken
+      \let\@tempd\@xifnch
+    \else
+      \ifx\@tempc\@tempe \let\@tempd\@tempa \else \let\@tempd\@tempb \fi
+    \fi
+    \@tempd}
+  \begingroup
+    \def\:{\global\let\@sptoken= } \:
+    \def\:{\@xifnch} \expandafter\gdef\: {\futurelet\@tempc\@ifnch}
+  \endgroup
+\fi
+%    \end{macrocode}
+%
+% Announce that the file is being loaded:
+%    \begin{macrocode}
+\typeout{`PSTricks' v\fileversion\space\space <\filedate> (tvz)}
+%    \end{macrocode}
+%
+%
+% \section{Error messages}
+%
+% \begin{macro}{\@pstrickserr}
+% "\@pstrickserr" is analogous to "\@latexerr".
+%    \begin{macrocode}
+\def\@pstrickserr#1#2{%
+  \begingroup
+    \newlinechar`\^^J
+    \edef\pst@tempc{#2}%
+    \expandafter\errhelp\expandafter{\pst@tempc}%
+    \typeout{%
+      PSTricks error. \space See User's Guide for further information.^^J
+      \@spaces\@spaces\@spaces\@spaces
+      Type \space H <return> \space for immediate help.}%
+    \errmessage{#1}%
+  \endgroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@ehpa,\@ehpb,\@ehpc}
+% Here are some extra "\errhelp" message:
+%    \begin{macrocode}
+\def\@ehpa{%
+  Your command was ignored. Default value substituted.^^J
+  Type \space <return> \space to procede.}
+\def\@ehpb{%
+  Your command was ignored. Will recover best I can.^^J
+  Type \space <return> \space to procede.}
+\def\@ehpc{%
+  You better fix this before proceding.^^J
+  See the PSTricks User's Guide or ask your system administrator for help.^^J
+  Type \space X <return> \space to quit.}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@misplaced}
+%    \begin{macrocode}
+\def\pst@misplaced#1{\@pstrickserr{Misplaced \string#1 command}\@ehpb}
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Scratch registers}
+%
+%    \begin{macrocode}
+\newdimen\pst@dima
+\newdimen\pst@dimb
+\newdimen\pst@dimc
+\newdimen\pst@dimd
+\newdimen\pst@dimg
+\newdimen\pst@dimh
+\newbox\pst@hbox
+\newbox\pst@boxg
+\newcount\pst@cnta
+\newcount\pst@cntb
+\newcount\pst@cntc
+\newcount\pst@cntd
+\newcount\pst@cntg
+\newcount\pst@cnth
+\newif\if@pst
+%    \end{macrocode}
+%
+%
+% \section{Useful hacks}
+%
+% \begin{macro}{\pst@ifstar,\if@star}
+%    \begin{macrocode}
+\newif\if@star
+\def\pst@ifstar#1{%
+  \@ifnextchar*{\@startrue\def\next*{#1}\next}{\@starfalse#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@expandafter}
+%    \begin{macrocode}
+\def\pst@expandafter#1#2{%
+  \def\next{#1}%
+  \edef\@tempa{#2}%
+  \ifx\@tempa\@empty
+    \@pstrickserr{Unexpected empty argument!}\@ehpb
+    \def\@tempa{\@empty}%
+  \fi
+  \expandafter\next\@tempa}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Arithmetic}
+%
+% \begin{macro}{\pst@dimtonum,\pst@@dimtonum}
+% This macro strips the value of "#1", a dimension register, of the "pt", and
+% assigns the result to "#2", a command sequence. This is used for arithmetic
+% and for converting \TeX\ dimensions to PostScript.
+%    \begin{macrocode}
+\def\pst@dimtonum#1#2{\edef#2{\pst@@dimtonum#1}}
+\def\pst@@dimtonum#1{\expandafter\pst@@@dimtonum\the#1}
+{\catcode`\p=12 \catcode`\t=12 \global\@namedef{pst@@@dimtonum}#1pt{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@pyth}
+% This is a piecewise-linear approximation to $("#1"^2+"#2"^2)^(1/2)$. The
+% answer is assigned to "#3". All arguments should be dimension registers.
+%    \begin{macrocode}
+\def\pst@pyth#1#2#3{%
+  \ifdim#1>#2\pst@@pyth#1#2#3\else\pst@@pyth#2#1#3\fi}
+\def\pst@@pyth#1#2#3{%
+  \ifdim4#1>9#2%
+    #3=#1\advance#3 .2122#2%
+  \else
+    #3=.8384#1\advance#3 .5758#2%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@divide}
+% This computes "#3"="#1"/"#2" reasonably quickly. "#1" and "#2" should be
+% dimensions, and "#3" should be a command sequence.
+%    \begin{macrocode}
+\def\pst@divide#1#2#3{%
+  \begingroup
+    \pst@dimg=#1\relax\pst@dimh=#2\relax
+    \pst@cnta=\pst@dimg
+    \pst@cntb=1073741824
+    \pst@cntc=65536
+    \def\pst@tempa{\fi\ifnum}%
+    \loop\ifnum\pst@cnta<\pst@cntb
+      \pst@tempa\pst@cntc>\@ne
+      \multiply\pst@cnta2\divide\pst@cntc2
+    \repeat
+    \divide\pst@dimh\pst@cntc
+    \divide\pst@cnta\pst@dimh
+    \global\pst@dimg\number\pst@cnta sp
+  \endgroup
+  \pst@dimtonum\pst@dimg#3}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Configuration file\label{Config}}
+%
+% \begin{macro}{\pst@configerr}
+%    \begin{macrocode}
+\def\pst@configerr#1{%
+  \@pstrickserr{\string#1 not defined in pstricks.con}\@ehpc}
+%    \end{macrocode}
+% \end{macro}
+%
+% %    \begin{macrocode}
+\def\pstVerb#1{\pst@configerr\pstVerb}
+\def\pstverb#1{\pst@configerr\pstverb}
+\def\pstverbscale{\pst@configerr\pstverbscale}
+\def\pstrotate{\pst@configerr\pstrotate}
+\def\pstheader#1{\pst@configerr\pstheader}
+\def\pstdriver{\pst@configerr\pstdriver}
+\@ifundefined{pstcustomize}%
+  {\def\pstcustomize{\endinput\let\pstcustomize\relax}}{}
+\input pstricks.con
+%    \end{macrocode}
+%
+% \begin{macro}{\PSTricksOff}
+%    \begin{macrocode}
+\newif\ifPSTricks
+\PSTrickstrue
+\def\PSTricksOff{%
+  \def\pstheader##1{}%
+  \def\pstverb##1{}%
+  \def\pstVerb##1{}%
+  \PSTricksfalse}
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{PostScript header file\label{Header}}
+%
+% \begin{macro}{\pst@def,\pst@ATH,\pst@useheader}
+% There are three ways to use PSTricks:
+% \begin{enumerate}
+%   \item Use "pstricks.doc" directly. No header file is used.
+% \item Use "\pst-make.tex" to generate a stripped input file for use without
+% a header.
+% \item Use "\pst-make.tex" to generate a header and a stripped input file for
+% use with the header.
+% \end{enumerate}
+% PSTricks has been optimized for use with a header file (and the difference
+% is speed and memory is very significant), but the flexible system described
+% above makes it easier to maintain the code and allows one to use PSTricks
+% with a DVI-to-PS driver that does not support header files.
+%
+% The following commands should be used in this ".doc" file for PostScript
+% macros and other goodies related to the header file. Their behavior for each
+% of the three cases list above is given below. These commands should always
+% come {\em at the beginning of the line}, and should not inside conditionals.
+%
+% \begin{itemize}
+%
+% \item "\pst@def{foo}<bar>"
+%   \begin{enumerate}
+%     \item "\tx@foo" is defined to be "bar".
+%     \item Writes
+% \begin{LVerbatim}
+%   \def\tx@foo{bar}
+% \end{LVerbatim}
+%     to "pstricks.tex".
+%     \item Writes
+% \begin{LVerbatim}
+%    /foo { bar } def
+% \end{LVerbatim}
+%     to "pstricks.pro" and
+% \begin{LVerbatim}
+%   \def\tx@foo{foo}
+% \end{LVerbatim}
+%     to "pstricks.tex".
+%   \end{enumerate}
+%
+% \item "\pst@ATH<foo>"
+%   \begin{enumerate}
+%     \item Gobbles "foo".
+%     \item Ignores line.
+%     \item Writes "foo" to "pstricks.pro".
+%   \end{enumerate}
+%   Note: "\pst@ATH" must come at the beginning of the line.
+%
+% \item "\ifx\pst@useheader\iftrue foo \else bar \fi"
+%   \begin{enumerate}
+%     \item Ignores "foo" and includes "bar".
+%     \item Ignores "foo" and processes "bar".
+%     \item Processes "foo" and ignores "bar".
+%   \end{enumerate}
+% Note: "\ifx\pst@useheader\iftrue", "\else" and "\fi" must each be on their
+% own line.
+%
+% \end{itemize}
+%
+% "pst@make.tex" can be used to process other files at well, in the right
+% order.
+%
+%   \begin{macrocode}
+\@ifundefined{pst@def}{\def\pst@def#1<#2>{\@namedef{tx@#1}{#2 }}}{}
+\@ifundefined{pst@ATH}{\def\pst@ATH<#1>{}}{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@dict}
+% The PostScript dictionary "tx@Dict" is set up in the header file, if one is
+% used. Otherwise, it is set up with each procedure that uses the dictionary,
+% if it is not currently defined.
+%    \begin{macrocode}
+\pst@ATH<\% Version \fileversion, \filedate.>
+\pst@ATH<\% For use with \pstdriver.>
+\pst@ATH</tx@Dict 200 dict def tx@Dict begin>
+\pst@ATH</ADict 25 dict def>
+\pst@ATH</CM { matrix currentmatrix } bind def>
+\pst@ATH</SLW /setlinewidth load def>
+\pst@ATH</CLW /currentlinewidth load def>
+\pst@ATH</CP /currentpoint load def>
+\pst@ATH</ED { exch def } bind def>
+\pst@ATH</L /lineto load def>
+\pst@ATH</T /translate load def>
+\ifx\pst@useheader\iftrue
+  \pstheader{pstricks.pro}
+  \def\pst@dict{tx@Dict begin }
+  \def\pst@theheaders{pstricks.pro}
+\else
+  \def\pst@dict{%
+    /tx@Dict where
+    { pop tx@Dict begin}
+    { userdict begin
+        /tx@Dict 200 dict def
+      end
+      tx@Dict begin
+        /ADict 25 dict def
+        /CM { matrix currentmatrix } bind def
+        /SLW /setlinewidth load def
+        /CLW /currentlinewidth load def
+        /CP /currentpoint load def
+        /ED { exch def } bind def
+        /L /lineto load def }
+    ifelse }
+  \def\pst@theheaders{}%
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@Verb}
+%    \begin{macrocode}
+\def\pst@Verb#1{\pstVerb{\pst@dict #1 end}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{PostScript hacks}
+%
+%
+% \begin{macro}{\tx@Atan,\tx@Div}
+% These are variants of "atan", and "div", that recover when result is not
+% defined.
+%    \begin{macrocode}
+\pst@def{Atan}</atan load stopped { pop pop 0 } if>
+\pst@def{Div}<dup 0 eq { pop } { div } ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@NET}
+%    \begin{macrocode}
+\pst@def{NET}<neg exch neg exch T>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@Pyth}
+% $A$ $B$ "Pyth" $(A^2 + B^2)^{1/2}$
+%    \begin{macrocode}
+\pst@def{Pyth}<dup mul exch dup mul add sqrt>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@PtoC}
+% Polar to Cartesian:
+% \begin{LVerbatim}
+%   <r> <a> PtoC <x> <y>
+% \end{LVerbatim}
+%    \begin{macrocode}
+\pst@def{PtoC}<2 copy cos mul 3 1 roll sin mul>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@PathLength}
+% "PathLength" is taken from the Blue Book. It leaves on the stack the length
+% of the current path.
+%    \begin{macrocode}
+\pst@def{PathLength@}<%
+  /z z y y1 sub x x1 sub \tx@Pyth add def
+  /y1 y def /x1 x def>
+\pst@def{PathLength}<%
+  flattenpath /z 0 def
+  { /y1 ED /x1 ED /y2 y1 def /x2 x1 def } % moveto
+  { /y ED /x ED \tx@PathLength@ } % lineto
+  {} % curveto; ignore because of flattenpath.
+  { /y y2 def /x x2 def \tx@PathLength@ } % closepath
+  pathforall z>
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Converting \TeX\ things to PostScript}
+%
+% \begin{macro}{\pst@number,\tx@STP,\tx@STV}
+% \begin{itemize}
+% \item PSTricks' PostScript unit is 1pt, rather than 1bp, because this is
+% more efficient.
+% \item "\pst@number{<dimen register>}" converts <dimen> to PostScript, in
+% points (pt).
+% \item "\tx@STP" scales the DVI-to-PS driver's "\pstverb" environment to
+% points (pt).
+% \item "\tx@STV" scales the DVI-to-PS drivers's ungrouped PostScript
+% "\special" environment ("\pstVerb") to points (pt).
+% \end{itemize}
+%    \begin{macrocode}
+\pst@dimg=\pstunit\relax
+\ifdim\pst@dimg=1bp
+  \def\pst@stp{.996264 dup scale}
+\else
+  \edef\pst@stp{1 \pst@@dimtonum\pst@dimg\space div dup scale}
+\fi
+\pst@def{STP}<\pst@stp>
+\pst@def{STV}<\pstverbscale\space\tx@STP>
+\def\pst@number#1{\pst@@dimtonum#1\space}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@checknum}
+% The first argument of "\pst@checknum" should be a number, and the second
+% argument is a command. There are three possible outcomes:
+% \begin{enumerate}
+% \item The number is suitable for PostScript consumption, the command is set
+% to the number, and "\pst@num" is set to "1" if the number is positive and to
+% "2" if the number is negative.
+% \item "\pst@checknum" detects that the number is not suitable for
+% PostScript; "\pst@num" is set to "0", an error is given, and the command is
+% defined to be {\tt 0 }.
+% \item The number is not suitable for PostScript consumption, but
+% "\pst@checknum" does not detect this. "\pst@num" is set to "1" or "2", and
+% the command is set to some number that {\em is} suitable for PostScript.
+% \end{enumerate}
+%
+% A trailing space is always added.
+%
+% "\pst@checknum" should generate no extraneous errors nor output, even if the
+% first argument is a bad number.
+%
+% This macro is probably pretty close to optimal for what it does, as many
+% variations have been tried.
+%
+%    \begin{macrocode}
+\def\pst@checknum#1#2{%
+  \edef\next{#1}%
+  \ifx\next\@empty
+    \let\pst@num\z@
+  \else
+    \expandafter\pst@@checknum\next..\@nil
+  \fi
+  \ifnum\pst@num=\z@
+    \@pstrickserr{Bad number: `#1'. 0 substituted.}\@ehpa
+    \def#2{0 }%
+  \else
+    \edef#2{\ifnum\pst@num=2 -\fi\the\pst@cntg.%
+      \expandafter\@gobble\the\pst@cnth\space}%
+  \fi}
+\def\pst@@checknum{%
+  \@ifnextchar-%
+    {\def\pst@num{2}\expandafter\pst@@@checknum\@gobble}%
+    {\def\pst@num{1}\pst@@@checknum}}
+\def\pst@@@checknum#1.#2.#3\@nil{%
+  \afterassignment\pst@@@@checknum\pst@cntg=0#1\relax\@nil
+  \afterassignment\pst@@@@checknum\pst@cnth=1#2\relax\@nil}
+\def\pst@@@@checknum#1\relax\@nil{%
+  \ifx\@nil#1\@nil\else\let\pst@num\z@\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getnumii,\pst@getnumiii,\pst@getnumiv}
+% These are for processing comma-separated lists of numbers. They assign the
+% numbers to "\pst@tempg", "\pst@temph", etc. Use like
+% \begin{LVerbatim}
+%   \pst@expandafter\pst@getnumiii{foo} {} {} {} {}\@ni
+% \end{LVerbatim}
+% If there are too few numbers, an error results. If there are too many, the
+% extra numbers are ignored.
+%    \begin{macrocode}
+\def\pst@getnumii#1 #2 #3\@nil{%
+  \pst@checknum{#1}\pst@tempg
+  \pst@checknum{#2}\pst@temph}
+\def\pst@getnumiii#1 #2 #3 #4\@nil{%
+  \pst@checknum{#1}\pst@tempg
+  \pst@checknum{#2}\pst@temph
+  \pst@checknum{#3}\pst@tempi}
+\def\pst@getnumiv#1 #2 #3 #4 #5\@nil{%
+  \pst@checknum{#1}\pst@tempg
+  \pst@checknum{#2}\pst@temph
+  \pst@checknum{#3}\pst@tempi
+  \pst@checknum{#4}\pst@tempj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getdimnum}
+% Like "\pst@getnumii", but first item is a dimension and second is a number.
+%    \begin{macrocode}
+\def\pst@getdimnum#1 #2 #3\@nil{%
+  \pssetlength\pst@dimg{#1}%
+  \pst@checknum{#2}\pst@tempg}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getscale}
+% "\pst@getscale" can have one or two numbers in its first argument.
+%    \begin{macrocode}
+\def\pst@getscale#1#2{%
+  \pst@expandafter\pst@getnumii{#1 #1} {} {} {}\@nil
+  \edef#2{\pst@tempg\space \pst@temph\space scale }%
+  \ifdim\pst@tempg\p@=\z@
+    \@pstrickserr{Bad scaling argument `#1'}\@ehpa
+    \def#2{}%
+  \else
+    \ifdim\pst@temph\p@=\z@
+      \@pstrickserr{Bad scaling argument}\@ehpa
+      \def#2{}%
+    \else
+      \ifdim\pst@tempg\p@=\p@ \ifdim\pst@temph\p@=\p@ \def#2{}\fi\fi
+    \fi
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getint}
+%    \begin{macrocode}
+\def\pst@getint#1#2{%
+  \pst@cntg=#1\relax
+  \edef#2{\the\pst@cntg\space}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pslbrace,\psrbrace}
+% When balanced braces are used, they work without problems in "\special"'s.
+% "\pslbrace" and "\psrbrace" let you use unbalanced braces.
+%    \begin{macrocode}
+\begingroup
+  \catcode`\{=12
+  \catcode`\}=12
+  \catcode`\[=1
+  \catcode`\]=2
+  \gdef\pslbrace[{ ]
+  \gdef\psrbrace[} ]
+\endgroup
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Colors\label{Colors}}
+%
+% \begin{macro}{\@newcolor}
+% "\@newcolor{<color>}{<spec>}", where <color> is a name and <spec> is the
+% associated PostScript color specification , sets
+% \begin{itemize}
+%   \item "\<color>" to "\pst@color{<spec>}", and
+%   \item "\color@<color>" to <spec>.
+% \end{itemize}
+% Then "\<color>" can be used by the user to color text, etc., and
+% "\color@<color>" is used by PSTricks graphics objects to find the
+% specification for <color>.
+%    \begin{macrocode}
+\def\@newcolor#1#2{%
+  \expandafter\edef\csname #1\endcsname{\noexpand\pst@color{#2}}%
+  \expandafter\edef\csname color@#1\endcsname{#2}%
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@color,\pst@endcolor}
+% The argument of "\pst@color" should be a PostScript command for setting the
+% color; e.g., "0 setgray". It saves the command in "\pst@currentcolor", and
+% then switches to "\pst@currentcolor" at the end of the current group. The
+% color changes do not extend across pages, although this capability could be
+% written into the output routines (so that "\pst@currentcolor" is set at the
+% beginning of the page, and headers and footers begin with "\black", etc.).
+% Moving boxes cause problems, but there is no way around this until \TeX{}
+% supports color internally.
+%    \begin{macrocode}
+\def\pst@color#1{%
+  \def\pst@currentcolor{#1}\pstVerb{#1}\aftergroup\pst@endcolor}
+\def\pst@endcolor{\pstVerb{\pst@currentcolor}}
+\def\pst@currentcolor{0 setgray}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\altcolormode,\pst@grestore}
+% The color macros defined above can conflict with other color macros.
+% "\altcolormode" sets up a different scheme that uses "gsave" and "grestore"
+% to reset colors. This may reduce the likelihood of such conflict. It also
+% makes moving boxes less of a problem, as long as the color command is itself
+% grouped within the box. However, if the scope of a color command extends
+% across pages in a \TeX{} input file, unmatched "gsave"'s and "grestore"'s
+% will be left on pages, wreaking havok on the output. "\pst@grestore" is
+% defined to do various things that makes using "grestore" more robust.
+%    \begin{macrocode}
+\def\altcolormode{%
+  \def\pst@color##1{%
+    \pstVerb{gsave ##1}\aftergroup\pst@endcolor}%
+  \def\pst@endcolor{\pstVerb{\pst@grestore}}}
+\def\pst@grestore{%
+  currentpoint
+  matrix currentmatrix
+  currentfont
+  grestore
+  setfont
+  setmatrix
+  moveto}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@usecolor}
+% This looks up the color specification.
+%    \begin{macrocode}
+\def\pst@usecolor#1{\csname color@#1\endcsname\space}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newgray}
+% "\newgray" uses PostScript's "setgray" operator.
+%    \begin{macrocode}
+\def\newgray#1#2{%
+  \pst@checknum{#2}\pst@tempg
+  \@newcolor{#1}{\pst@tempg setgray}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newrgbcolor}
+% This works like "\newgray", but the color specification should consist of 3
+% numbers rather than just 1, and the "setrgbcolor" operator is used.
+%    \begin{macrocode}
+\def\newrgbcolor#1#2{%
+  \pst@expandafter\pst@getnumiii{#2} {} {} {} {}\@nil
+  \@newcolor{#1}{\pst@tempg \pst@temph \pst@tempi setrgbcolor}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newhsbcolor}
+% This is just like "\newrgbcolor", but the "sethsbcolor" operator is used.
+%    \begin{macrocode}
+\def\newhsbcolor#1#2{%
+  \pst@expandafter\pst@getnumiii{#2} {} {} {} {}\@nil
+  \@newcolor{#1}{\pst@tempg \pst@temph \pst@tempi sethsbcolor}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newcmykcolor}
+% This is like "\newrgbcolor", the color specification consists of 4 numbers
+% and the "setcmykcolor" operator is used.
+%    \begin{macrocode}
+\def\newcmykcolor#1#2{%
+  \pst@expandafter\pst@getnumiv{#2} {} {} {} {} {}\@nil
+  \@newcolor{#1}{\pst@tempg \pst@temph \pst@tempi \pst@tempj setcmykcolor}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\black,\darkgray,\gray,\lightgray,\white}
+% Here are some default gray definitions:
+%    \begin{macrocode}
+\newgray{black}{0}
+\newgray{darkgray}{.25}
+\newgray{gray}{.5}
+\newgray{lightgray}{.75}
+\newgray{white}{1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\red,\green,\blue,\yellow,\cyan,\magenta}
+% And some default rgb color definitions.
+%    \begin{macrocode}
+\newrgbcolor{red}{1 0 0}
+\newrgbcolor{green}{0 1 0}
+\newrgbcolor{blue}{0 0 1}
+\newrgbcolor{yellow}{1 1 0}
+\newrgbcolor{cyan}{0 1 1}
+\newrgbcolor{magenta}{1 0 1}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Setting graphics parameters\label{Parameters}}
+%
+% \begin{macro}{\psset}
+% For each <parameter>"="<value> pair in its argument, "\psset" invokes
+% \begin{LVerbatim}
+%   \psset@<parameter>{<value>}
+% \end{LVerbatim}
+% The value is processed and typically stored in "\ps<parameters>" if the
+% value is user-accessible and "\psk@<parameter>" if not. "\psset" ignores
+% spaces that follow the comma that separates key-value pairs.
+%
+% When initializing <parameter> in this file, preferable use
+% \begin{LVerbatim}
+%   \psset@<parameter>{<value>}
+% \end{LVerbatim}
+% so that default values can be easily extracted for the {\em User's Guide}.
+%   \begin{macrocode}
+\def\psset#1{\@psset#1,\@nil\ignorespaces}
+\def\@psset#1,{%
+  \@@psset#1==\@nil
+  \@ifnextchar\@nil{\@gobble}{\@psset}}
+\def\@@psset#1=#2=#3\@nil{%
+  \@ifundefined{psset@#1}%
+    {\@pstrickserr{Graphics parameter `#1' not defined.}\@ehpa}%
+    {\@nameuse{psset@#1}{#2}}}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newpsstyle}
+%    \begin{macrocode}
+\def\psset@style#1{%
+  \@ifundefined{pscs@#1}%
+    {\@pstrickserr{Custom style `#1' undefined}\@ehpa}%
+    {\@nameuse{pscs@#1}}}
+\def\newpsstyle#1#2{\@namedef{pscs@#1}{\psset{#2}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@none}
+% Use to check when a parameter value is "none".
+%    \begin{macrocode}
+\def\@none{none}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getcolor}
+% This is used by various graphics parameters that are colors.
+%    \begin{macrocode}
+\def\pst@getcolor#1#2{%
+  \@ifundefined{color@#1}%
+    {\@pstrickserr{Color `#1' not defined}\@eha}%
+    {\edef#2{#1}}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Dimensions}
+%
+% \begin{macro}{\psunit,\psxunit,\psyunit}
+%    \begin{macrocode}
+\newdimen\psunit \psunit 1cm
+\newdimen\psxunit \psxunit 1cm
+\newdimen\psyunit \psyunit 1cm
+\let\psrunit\psunit
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pssetlength,\psaddtolength,\pssetxlength,\pssetylength}
+%    \begin{macrocode}
+\def\pstunit@off{\let\@psunit\ignorespaces\ignorespaces}
+\def\pssetlength#1#2{%
+  \let\@psunit\psunit
+  \afterassignment\pstunit@off
+  #1 #2\@psunit}
+\def\psaddtolength#1#2{%
+  \let\@psunit\psunit
+  \afterassignment\pstunit@off
+  \advance#1 #2\@psunit}
+\def\pssetxlength#1#2{%
+  \let\@psunit\psxunit
+  \afterassignment\pstunit@off
+  #1 #2\@psunit}
+\def\pssetylength#1#2{%
+  \let\@psunit\psyunit
+  \afterassignment\pstunit@off
+  #1 #2\@psunit}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@unit,\psset@xunit,\psset@yunit}
+%    \begin{macrocode}
+\def\psset@unit#1{%
+  \pssetlength\psunit{#1}%
+  \psxunit=\psunit
+  \psyunit=\psunit}
+\def\psset@runit#1{\pssetlength\psrunit{#1}}
+\def\psset@xunit#1{\pssetxlength\psxunit{#1}}
+\def\psset@yunit#1{\pssetylength\psyunit{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getlength,pst@@getlength}
+% "#1" is a \TeX\ dimensions. "\pst@getlength" sets "#2" to the PostScript
+% code for "#1", and "\pst@@getlength" set "#2" to the \TeX\ code for "#1".
+%    \begin{macrocode}
+\def\pst@getlength#1#2{%
+  \pssetlength\pst@dimg{#1}%
+  \edef#2{\pst@number\pst@dimg}}
+\def\pst@@getlength#1#2{%
+  \pssetlength\pst@dimg{#1}%
+  \edef#2{\number\pst@dimg sp}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Normal Coordinates and angles}
+%
+% \begin{macro}{\pst@getcoor,\pst@coor}
+% "\pst@@getcoor" should be defined to read a coordinate and convert it to
+% PostScript, assigning the result to "\pst@coor" (including the trailing
+% space).
+%
+% "\pst@getcoor" invokes "\pst@@getcoor" and then sets its second argument to
+% "\pst@coor".
+%    \begin{macrocode}
+\def\pst@getcoor#1#2{\pst@@getcoor{#1}\let#2\pst@coor}
+\def\pst@coor{0 0 }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getcoors,\pst@coors}
+% "\pst@getcoors" reads coordinates until there are none left, adding them
+% {\em in reverse order} to "\pst@coors".
+%    \begin{macrocode}
+\def\pst@getcoors#1#2{%
+  \def\pst@aftercoors{\addto@pscode{#1 \pst@coors }#2}%
+  \def\pst@coors{}%
+  \pst@@getcoors}
+\def\pst@@getcoors(#1){%
+  \pst@@getcoor{#1}%
+  \edef\pst@coors{\pst@coor\pst@coors}%
+  \@ifnextchar({\pst@@getcoors}{\pst@aftercoors}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getangle,\pst@angle}
+% \n\pst@@getangle\ should be defined to read an angle and convert it to
+% PostScript, assigning the result to \n\pst@angle\ (including the trailing
+% space).
+%
+% \n\pst@getangle\ invokes \n\pst@@getangle\ and then sets its second argument
+% to \n\pst@angle.
+%    \begin{macrocode}
+\def\pst@getangle#1#2{\pst@@getangle{#1}\let#2\pst@angle}
+\def\pst@angle{0 }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{getcoor@c,\NormalCoor}
+% By default, coordinates are read as Cartesian coordinates by
+% "\cartesian@coor".
+%
+% Angles are read as numbers, scaled by \n\pst@angleunit.
+%
+% "\NormalCoor" sets these two defaults, and also defines the translation for
+% the put commands to be done by \TeX\ using Cartesian coordinates.
+%    \begin{macrocode}
+\def\cartesian@coor#1,#2,#3\@nil{%
+  \pssetxlength\pst@dimg{#1}%
+  \pssetylength\pst@dimh{#2}%
+  \edef\pst@coor{\pst@number\pst@dimg \pst@number\pst@dimh}}
+\def\NormalCoor{%
+  \def\pst@@getcoor##1{\pst@expandafter\cartesian@coor{##1},\relax,\@nil}%
+  \def\pst@@getangle##1{%
+    \pst@checknum{##1}\pst@angle
+    \edef\pst@angle{\pst@angle \pst@angleunit}}%
+  \def\psput@##1{\pst@@getcoor{##1}\leavevmode\psput@cartesian}}
+\NormalCoor
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@angleunit,\degrees,\radians}
+% "\degrees" sets "\pst@angleunit" to the PostScript code for scaling the
+% angle, including the trailing space.
+%    \begin{macrocode}
+\def\degrees{\@ifnextchar[{\@degrees}{\def\pst@angleunit{}}}
+\def\@degrees[#1]{%
+  \pst@checknum{#1}\pst@tempg
+  \edef\pst@angleunit{360 \pst@tempg div mul }%
+  \ignorespaces}
+\def\radians{\def\pst@angleunit{57.2956 mul }}
+\def\pst@angleunit{}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Special coordinates and angles}
+%
+% This is a tedious but useful.
+%
+% \begin{macro}{\SpecialCoor}
+%    \begin{macrocode}
+\def\SpecialCoor{%
+  \def\pst@@getcoor##1{\pst@expandafter\special@coor{##1}||\@nil}%
+  \def\pst@@getangle##1{\pst@expandafter\special@angle{##1}\@empty)\@nil}%
+  \def\psput@##1{\pst@@getcoor{##1}\leavevmode\psput@special}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\specialcoor}
+%    \begin{macrocode}
+\def\special@coor#1|#2|#3\@nil{%
+  \ifx#3|\relax
+    \mixed@coor{#1}{#2}%
+  \else
+    \special@@coor#1;;\@nil
+  \fi}
+\def\special@@coor#1{%
+  \ifcat#1a\relax
+    \def\next{\node@coor#1}%
+  \else
+    \ifx#1[\relax
+      \def\next{\Node@coor[}%
+    \else
+      \ifx#1!\relax
+        \def\next{\raw@coor}%
+      \else
+        \def\next{\special@@@coor#1}%
+      \fi
+    \fi
+  \fi
+  \next}
+\def\special@@@coor#1;#2;#3\@nil{%
+  \ifx#3;\relax
+    \polar@coor{#1}{#2}%
+  \else
+    \cartesian@coor#1,\relax,\@nil
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\mixed@coor}
+% This allows mixing of coordinate types with \n\SpecialCoor.
+%    \begin{macrocode}
+\def\mixed@coor#1#2{%
+    \begingroup
+      \specialcoor@ii#1;;\@nil
+      \let\pst@tempa\pst@coor
+      \specialcoor@ii#2;;\@nil
+      \xdef\pst@tempg{\pst@tempa pop \pst@coor exch pop }%
+    \endgroup
+    \let\pst@coor\pst@tempg}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\polar@coor}
+% For polar coordinates
+%    \begin{macrocode}
+\def\polar@coor#1#2{%
+  \pssetlength\pst@dimg{#1}%
+  \pst@@getangle{#2}%
+  \edef\pst@coor{\pst@number\pst@dimg \pst@angle \tx@PtoC}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\raw@coor}
+% For raw PostScript.
+%    \begin{macrocode}
+\def\raw@coor#1;#2\@nil{%
+  \edef\pst@coor{%
+    #1 \pst@number\psyunit mul exch \pst@number\psxunit mul exch }}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\node@coor,\Node@coor}
+% These are defined in "pst-node.tex".
+%    \begin{macrocode}
+\def\node@coor#1\@nil{%
+  \@pstrickserr{You must load `pst-node.tex' to use node coordinates.}\@ehps
+  \def\pst@coor{0 0 }}
+\def\Node@coor{\node@coor}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\special@angle}
+%    \begin{macrocode}
+\def\special@angle#1#2)#3\@nil{%
+  \ifx#1!\relax
+    \edef\pst@angle{#2 \pst@angleunit}%
+  \else
+    \ifx#1(\relax
+      \pst@@getcoor{#2}%
+      \edef\pst@angle{\pst@coor exch \tx@Atan}%
+    \else
+      \pst@checknum{#1#2}\pst@angle
+      \edef\pst@angle{\pst@angle \pst@angleunit}%
+    \fi
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Cartesian,\Polar}
+% These are obsolete.
+%    \begin{macrocode}
+\def\Cartesian{%
+  \def\cartesian@coor##1,##2,##3\@nil{%
+    \pssetxlength\pst@dimg{##1}%
+    \pssetylength\pst@dimh{##2}%
+    \edef\pst@coor{\pst@number\pst@dimg \pst@number\pst@dimh}}%
+  \@ifnextchar({\Cartesian@}{}}
+\def\Cartesian@(#1,#2){%
+  \pssetxlength\psxunit{#1}%
+  \pssetylength\psyunit{#2}%
+  \ignorespaces}
+\def\Polar{%
+  \def\psput@cartesian{\psput@special}%
+  \def\cartesian@coor##1,##2,##3\@nil{\polar@coor{##1}{##2}}}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Basic graphics parameters}
+%
+%
+% \begin{macro}{\psset@origin,\psk@origin}
+%    \begin{macrocode}
+\def\psset@origin#1{%
+  \pst@@getcoor{#1}%
+  \edef\psk@origin{\pst@coor \tx@NET }}
+\def\psk@origin{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@swapaxes,\ifpsswapaxes}
+%    \begin{macrocode}
+\newif\ifswapaxes
+\def\psset@swapaxes#1{%
+  \@nameuse{@pst#1}%
+  \if@pst
+    \def\psk@swapaxes{-90 rotate -1 1 scale }%
+  \else
+    \def\psk@swapaxes{}%
+  \fi}
+\psset@swapaxes{false}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@showpoints,\ifshowpoints}
+%    \begin{macrocode}
+\newif\ifshowpoints
+\def\psset@showpoints#1{\@nameuse{showpoints#1}}
+\psset@showpoints{false}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@border,\psk@border}
+%    \begin{macrocode}
+\let\pst@setrepeatarrowsflag\relax
+\def\psset@border#1{%
+  \pst@getlength{#1}\psk@border
+  \pst@setrepeatarrowsflag}
+\psset@border{0pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@bordercolor,\psbordercolor}
+%    \begin{macrocode}
+\def\psset@bordercolor#1{\pst@getcolor{#1}\psbordercolor}
+\psset@bordercolor{white}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@doubleline,\ifpsdoubleline}
+%    \begin{macrocode}
+\newif\ifpsdoubleline
+\def\psset@doubleline#1{%
+  \@nameuse{psdoubleline#1}%
+  \pst@setrepeatarrowsflag}
+\psset@doubleline{false}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@doublesep,\psdoublesep}
+%    \begin{macrocode}
+\def\psset@doublesep#1{\def\psdoublesep{#1}}
+\psset@doublesep{1.25\pslinewidth}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@doublecolor,\psdoublecolor}
+%    \begin{macrocode}
+\def\psset@doublecolor#1{\pst@getcolor{#1}\psdoublecolor}
+\psset@doublecolor{white}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@shadow,\ifpsshadow}
+%    \begin{macrocode}
+\newif\ifpsshadow
+\def\psset@shadow#1{%
+  \@nameuse{psshadow#1}%
+  \pst@setrepeatarrowsflag}
+\psset@shadow{false}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@shadowsize,\psk@shadowsize}
+%    \begin{macrocode}
+\def\psset@shadowsize#1{\pst@getlength{#1}\psk@shadowsize}
+\psset@shadowsize{3pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@shadowangle,\psk@shadowangle}
+%    \begin{macrocode}
+\def\psset@shadowangle#1{\pst@getangle{#1}\psk@shadowangle}
+\psset@shadowangle{-45}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@shadowcolor,\psshadowcolor}
+%    \begin{macrocode}
+\def\psset@shadowcolor#1{\pst@getcolor{#1}\psshadowcolor}
+\psset@shadowcolor{darkgray}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@setrepeatarrowsflag}
+%    \begin{macrocode}
+\def\pst@repeatarrowsflag{\z@}
+\def\pst@setrepeatarrowsflag{%
+  \edef\pst@repeatarrowsflag{%
+    \ifdim\psk@border\p@>\z@ 1\else\ifpsdoubleline 1\else
+    \ifpsshadow 1\else \z@\fi\fi\fi}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \section{Line styles\label{Linestyles}}
+%
+% For each "linestyle" <style>, the command "\psls@<style>" should be the
+% PostScript code that strokes the path. The style can assume that the
+% PostScript environment has linewidth equal to \n\pslinewidth\ and color
+% equal to \n\pslinecolor.
+%
+% \begin{macro}{\pst@linetype}
+% Macros that draw lines should define "\pst@linetype" (not a count register)
+% to be:
+% \begin{description}
+% \item[1,2,$\ldots$] A closed path whose length should be divided by
+% "\pst@linetype" before fitting a pattern.
+% \item[0] A line that has nothing at the tips.
+% \item[-1] A line with an arrow or something at the end.
+% \item[-2] A line with an arrow or something at the beginning.
+% \item[-3] A line with an arrow or something at each end.
+% \end{description}
+% This information is used by the line styles that draw dashed and dotted
+% lines in order to figure out how to adjust the patterns.
+% \end{macro}
+%
+% \begin{macro}{\psls@none}
+%    \begin{macrocode}
+\def\psls@none{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@linewidth,\pslinewidth}
+%    \begin{macrocode}
+\newdimen\pslinewidth
+\def\psset@linewidth#1{\pssetlength\pslinewidth{#1}}
+\psset@linewidth{.8pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@linecolor,\pslinecolor}
+%    \begin{macrocode}
+\def\psset@linecolor#1{\pst@getcolor{#1}\pslinecolor}
+\psset@linecolor{black}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psls@solid}
+%    \begin{macrocode}
+\def\psls@solid{0 setlinecap stroke }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@dash,\psk@dash}
+% "\psk@dash" is set to the PostScript code for the dash pattern (include the
+% trailing space).
+%    \begin{macrocode}
+\def\psset@dash#1{%
+  \pst@expandafter\psset@@dash{#1} * * *\@nil
+  \edef\psk@dash{\pst@number\pst@dimg \pst@number\pst@dimh}}
+\def\psset@@dash#1 #2 #3\@nil{%
+  \pssetlength\pst@dimg{#1}%
+  \pssetlength\pst@dimh{#2}}
+\psset@dash{5pt 3pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psls@dashed}
+%    \begin{macrocode}
+\def\psls@dashed{\psk@dash \pst@linetype\space \tx@DashLine}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@DashLine}
+% Syntax:
+% \begin{Ex}
+%   <dim1 dim2 linetype> "DashLine"
+% \end{Ex}
+% "DashLine" adjusts, and then sets, the dash pattern "[<dim1 dim2>]" so that
+% it fits evenly onto a path.
+%    \begin{macrocode}
+\pst@def{DashLine}<%
+  % "a" is set to the length of first and last black segment, as fraction of
+  % usual black segment.
+  dup 0 gt
+  { /a .5 def \tx@PathLength exch div }
+  { pop /a 1 def \tx@PathLength }
+  ifelse
+  /b ED             % Pattern should fit evenly in b
+  /x ED             % Length of white segment.
+  /y ED             % Length of black segment.
+  /z y x add def    % Total length of dash pattern.
+  % If pattern  is repeated n times, total length is (nz + 2(a-.5)y).
+  % Set length to b, solve for n, round, and leave on stack:
+  %   n = round((b - 2(a-.5)y)/z)
+  b a .5 sub 2 mul y mul sub z \tx@Div round
+  % Adjust x and y by factor k so that
+  %   (n(kz) + 2(a-.5)(ky)) = b.
+  % Solve for k and leave two copies on stack:
+  %   k = b/(nz + 2(a-.5)y)
+  z mul a .5 sub 2 mul y mul add b exch \tx@Div dup
+  % Scale x and y, set dash, and stroke:
+  y mul /y ED x mul /x ED
+  % Make sure both x and y aren't zero:
+  x 0 eq y 0 eq and { /x 1 def /y 1 def } if
+  [ y x ] 1 a sub y mul setdash stroke>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{dotsep}
+%    \begin{macrocode}
+\def\psset@dotsep#1{\pst@getlength{#1}\psk@dotsep}
+\psset@dotsep{3pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psls@dotted}
+%    \begin{macrocode}
+\def\psls@dotted{\psk@dotsep \pst@linetype\space \tx@DotLine}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@DotLine}
+% Syntax:
+% \begin{Ex}
+%   <dim linetype> "DotLine"
+% \end{Ex}
+% "DotLine" adjusts, and then sets, the dash pattern to produce a dotted line
+% with distance <dim> between dots so that it fits evenly onto a path. Dots
+% are produced by setting dash pattern with length of white segment equal to
+% distance from center of dot to center of dot, length of black segment equal
+% to 0, and "linecap" equal to 1.
+%    \begin{macrocode}
+\pst@def{DotLine}<%
+  /b \tx@PathLength def  % Path length.
+  /a ED                  % \pst@linetype.
+  /z ED                  % dotsep.
+  /y CLW def             % linewidth (dot diameter).
+  /z y z add def         % Total length of dash pattern.
+  % Set b to adjusted path length that pattern should be multiple of:
+  a 0 gt
+    % If closed, as many dots as spaces.
+    { /b b a div def }
+    { a 0 eq
+        % If open with no arrows, one more dot than space.
+        { /b b y sub def }
+        % If open one arrow, as many dots as spaces (do nothing)
+        % If open two arrows, one more space than dot.
+        { a -3 eq { /b b y add def } if }
+      ifelse }
+  ifelse
+  % Let n be number of times pattern is repeated:
+  %  n = round(b/z)
+  % Adjust length of pattern so that it fits evenly in b:
+  %  z = b/n = b/(round(b/z))
+  % z is length of white segment. Length of black segment is 0.
+  [ 0 b b z \tx@Div round \tx@Div dup 0 le { pop 1 } if ]
+  a 0 gt                % setting dash pattern.
+    % Set offset to 0 if path is closed]
+    { 0 }
+    % Set offset to -(y/2) if open curve begins with arrow, (y/2) otherwise:
+    { y 2 div a -2 gt { neg } if }
+  ifelse
+  % Setting linecap to 1 produces the dots.
+  setdash 1 setlinecap stroke>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@linestyle}
+%    \begin{macrocode}
+\def\psset@linestyle#1{%
+  \@ifundefined{psls@#1}%
+    {\@pstrickserr{Line style `#1' not defined}\@eha}%
+    {\edef\pslinestyle{#1}}}
+\psset@linestyle{solid}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Fill styles\label{Fillstyles}}
+%
+% For each "fillstyle" <style>, the command "\psfs@<style>" should be the
+% PostScript code that fills the region. The style should not assume anything
+% about the PostScript environment's "linewidth" or color.
+%
+% \begin{macro}{\psfs@none}
+%    \begin{macrocode}
+\def\psfs@none{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@fillcolor,\psfillcolor}
+%    \begin{macrocode}
+\def\psset@fillcolor#1{\pst@getcolor{#1}\psfillcolor}
+\psset@fillcolor{white}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psfs@solid}
+%    \begin{macrocode}
+\def\psfs@solid{\pst@usecolor\psfillcolor fill }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{hatchwidth}
+%    \begin{macrocode}
+\def\psset@hatchwidth#1{\pst@getlength{#1}\psk@hatchwidth}
+\psset@hatchwidth{.8pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{hatchsep}
+%    \begin{macrocode}
+\def\psset@hatchsep#1{\pst@getlength{#1}\psk@hatchsep}
+\psset@hatchsep{4pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{hatchcolor}
+%    \begin{macrocode}
+\def\psset@hatchcolor#1{\pst@getcolor{#1}\pshatchcolor}
+\psset@hatchcolor{black}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{hatchangle}
+%    \begin{macrocode}
+\def\psset@hatchangle#1{\pst@getangle{#1}\psk@hatchangle}
+\psset@hatchangle{45}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psfs@hlines}
+%    \begin{macrocode}
+\def\psfs@hlines{%
+  \psk@hatchangle rotate
+  \psk@hatchwidth SLW
+  \pst@usecolor\pshatchcolor
+  \psk@hatchsep \tx@LineFill}
+\@namedef{psfs@hlines*}{gsave \psfs@solid grestore \psfs@hlines}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@LineFill}
+%    \begin{macrocode}
+\pst@def{LineFill}<%
+  abs CLW add /a ED              % hatchsep
+  gsave
+    clip
+    pathbbox                   %leave llx,lly,urx,ury on stack
+    a \tx@Div ceiling /y2 ED   % Number of top line to be drawn.
+    /x2 ED
+    a \tx@Div floor /y1 ED     % Number of bottom line to be drawn
+    /x1 ED
+    /n y2 y1 sub 1 add cvi def % Number of lines.
+    /y1 a y1 mul def           % y-coordinate of bottom line.
+    newpath 2 setlinecap
+    n
+    { currentstrokeadjust ==
+      x1 y1 moveto
+      x2 y1 L
+      stroke
+      /y1 y1 a add def }
+    repeat
+  grestore>
+\pst@def{LineFill}<%
+  abs CLW add /a ED              % hatchsep
+  gsave
+    clip
+    pathbbox                   %leave llx,lly,urx,ury on stack
+    a \tx@Div ceiling /y2 ED   % Number of top line to be drawn.
+    /x2 ED
+    a \tx@Div floor /y1 ED     % Number of bottom line to be drawn
+    /x1 ED
+    /n y2 y1 sub 1 add cvi def % Number of lines.
+    /y1 a y1 mul def           % y-coordinate of bottom line.
+    newpath 2 setlinecap
+    systemdict /currentstrokeadjust known  % Level 2
+    { currentstrokeadjust }
+    { false }
+    ifelse
+    { /t { } def }
+    { /t {
+        transform
+        0.25 sub round 0.25 add exch
+        0.25 sub round 0.25 add exch
+        itransform
+      } bind def }
+    ifelse
+    n {
+      x1 y1 t moveto
+      x2 y1 t L
+      stroke
+      /y1 y1 a add def
+    } repeat
+  grestore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psfs@vlines}
+%    \begin{macrocode}
+\def\psfs@vlines{%
+  90 rotate
+  \psfs@hlines}
+\@namedef{psfs@vlines*}{gsave \psfs@solid grestore \psfs@vlines}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psfs@crosshatch}
+%    \begin{macrocode}
+\def\psfs@crosshatch{gsave \psfs@hlines grestore \psfs@vlines}
+\@namedef{psfs@crosshatch*}{%
+  gsave \psfs@solid grestore
+  gsave \psfs@hlines grestore
+  \psfs@vlines}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{fillstyle}
+%    \begin{macrocode}
+\def\psset@fillstyle#1{%
+  \@ifundefined{psfs@#1}%
+    {\@pstrickserr{Undefined fill style: `#1'}\@eha}%
+    {\edef\psfillstyle{#1}}}
+\psset@fillstyle{none}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Arrowheads and t-bars\label{Arrowheads}}
+%
+% It would be nice to use a font, with hinting.
+%
+% \begin{macro}{\psset@arrows,\psk@arrowA,\psk@arrowB}
+% "\if@pst" is used as a flag for errors.
+%    \begin{macrocode}
+\def\psset@arrows#1{%
+  \begingroup
+    \pst@activearrows
+    \xdef\pst@tempg{#1}%
+  \endgroup
+  \expandafter\psset@@arrows\pst@tempg\@empty-\@empty\@nil
+  \if@pst\else
+    \@pstrickserr{Bad arrows specification: #1}\@ehpa
+  \fi}
+\def\psset@@arrows#1-#2\@empty#3\@nil{%
+  \@psttrue
+  \def\next##1,#1-##2,##3\@nil{\def\pst@tempg{##2}}%
+  \expandafter\next\pst@arrowtable,#1-#1,\@nil
+  \@ifundefined{psas@\pst@tempg}%
+    {\@pstfalse\def\psk@arrowA{}}%
+    {\let\psk@arrowA\pst@tempg}%
+  \@ifundefined{psas@#2}%
+    {\@pstfalse\def\psk@arrowB{}}%
+    {\def\psk@arrowB{#2}}}
+\def\psk@arrowA{}
+\def\psk@arrowB{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@arrowtable}
+% This is a translator for "arrowA". Add to it with "\edef", as in
+% \begin{LVerbatim}
+%   \edef\pst@arrowtable{\pst@arrowtable,*o-o*}
+% \end{LVerbatim}
+%    \begin{macrocode}
+\def\pst@arrowtable{,<->,<<->>,>-<,>>-<<,(-),[-]}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@activearrows}
+% This redefines certain characters in case they are active, before expanding
+% the "arrows" argument. Add to it with "\expandafter", as in
+% \begin{LVerbatim}
+%   \begingroup
+%     \catcode`\:=13
+%     \expandafter\gdef\expandafter\pst@activearrows
+%       \expandafter{\def:{\string:}}
+%   \endgroup
+% \end{LVerbatim}
+%    \begin{macrocode}
+\begingroup
+  \catcode`\<=13
+  \catcode`\>=13
+  \catcode`\|=13
+  \gdef\pst@activearrows{\def<{\string<}\def>{\string>}\def|{\string|}}
+\endgroup
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{BeginArrow,EndArrow}
+% For each arrow <arrow>, "\psas@<arrow>" should be PostScript code so that
+% \begin{LVerbatim}
+%   <y2 x2 y1 x1> BeginArrow \psk@arrowscale \psas@<arrow> EndArrow
+% \end{LVerbatim}
+% \begin{itemize}
+%  \item Draws an arrow with the tip at <x1 y1>, and
+% \item Leaves on the stack <y2 x2 x1' y1'>, where <x1' y1'> is the position
+% that a connecting line should start from.
+% \end{itemize}
+%
+% "BeginArrow" sets up an environment so that "\psas@<arrow>" only has to draw
+% an arrow pointing down and with the tip at "0 0" and , and leave the current
+% point where a connecting line should start from. "EndArrow" then restores
+% the original environment and translates the current point into the original
+% coordinate system.
+%
+% A special dictionary "ADict" is used with arrows so that scratch variables
+% will not conflict. The matrix is saved as "@mtrx" to indicate that the arrow
+% procedures should not change this. The same is true for "@x1", "@y1", "@x2",
+% "@y2" and "@angle", which are used by a patch of "BeginArrow" and "EndArrow"
+% that is required for some versions of Sun's NewsPrint (see "read-me.pst").
+%    \begin{macrocode}
+\pst@def{BeginArrow}<%
+  ADict begin
+  /@mtrx CM def
+  gsave
+    2 copy T
+    2 index sub neg exch 3 index sub exch \tx@Atan
+    rotate
+    newpath>
+\pst@def{EndArrow}<@mtrx setmatrix CP grestore end>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{arrowscale}
+%    \begin{macrocode}
+\def\psset@arrowscale#1{\pst@getscale{#1}\psk@arrowscale}
+\psset@arrowscale{1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@arrowsize,\psk@arrowsize}
+%    \begin{macrocode}
+\def\psset@arrowsize#1{%
+  \pst@expandafter\pst@getdimnum{#1} {} {} {}\@nil
+  \edef\psk@arrowsize{\pst@number\pst@dimg \pst@tempg}}
+\psset@arrowsize{2pt 3}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@arrowlength,\psk@arrowlength}
+%    \begin{macrocode}
+\def\psset@arrowlength#1{\pst@checknum{#1}\psk@arrowlength}
+\psset@arrowlength{1.4}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@arrowinset,\psk@arrowinset}
+%    \begin{macrocode}
+\def\psset@arrowinset#1{\pst@checknum{#1}\psk@arrowinset}%
+\psset@arrowinset{.4}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@Arrow}
+% Syntax:
+% \begin{LVerbatim}
+%   <boolean> \psk@arrowinset \psk@arrowlength \psk@arrowsize Arrow
+% \end{LVerbatim}
+% <boolean> is "true" for reverse arrows and "false" for normal arrows.
+%    \begin{macrocode}
+\pst@def{Arrow}<%
+  CLW mul add dup               % width
+  2 div /w ED                   % Half width
+  mul dup /h ED                 % Height
+  mul /a ED                     % Inset
+  { 0 h T 1 -1 scale } if   % For reverse arrows
+  w neg h moveto
+  0 0 L
+  w h L
+  w neg a neg rlineto
+  gsave fill grestore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@>}
+%    \begin{macrocode}
+\@namedef{psas@>}{%
+  false \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@>>}
+%    \begin{macrocode}
+\@namedef{psas@>>}{%
+  false \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow
+  0 h T
+  gsave
+    newpath
+    false \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow
+    CP
+  grestore
+  CP newpath moveto
+  2 copy
+  L
+  stroke
+  moveto}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begingroup
+% \catcode`\<=12
+% \begin{macro}{\psas@<}
+%    \begin{macrocode}
+\@namedef{psas@<}{%
+  true \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@<<}
+%    \begin{macrocode}
+\@namedef{psas@<<}{%
+  true \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow
+  CP newpath moveto 0 a neg L stroke 0 h neg T
+  false \psk@arrowinset \psk@arrowlength \psk@arrowsize \tx@Arrow}
+%    \end{macrocode}
+% \end{macro}
+% \endgroup
+%
+% \begin{macro}{\psset@tbarsize,\psk@tbarsize}
+%    \begin{macrocode}
+\def\psset@tbarsize#1{%
+  \pst@expandafter\pst@getdimnum{#1} {} {} {}\@nil
+  \edef\psk@tbarsize{\pst@number\pst@dimg \pst@tempg}}
+\psset@tbarsize{2pt 5}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Tbar}
+% Syntax
+% \begin{LVerbatim}
+%   \psk@tbarsize Tbar
+% \end{LVerbatim}
+%    \begin{macrocode}
+\pst@def{Tbar}<%
+  CLW mul add /z ED              % width
+  z -2 div CLW 2 div moveto
+  z 0 rlineto
+  stroke
+  0 CLW moveto>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@|}
+%    \begin{macrocode}
+\@namedef{psas@|}{\psk@tbarsize \tx@Tbar}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@|*}
+%    \begin{macrocode}
+\@namedef{psas@|*}{0 CLW -2 div T \psk@tbarsize \tx@Tbar}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@bracketlength,\psk@bracketlength}
+%    \begin{macrocode}
+\def\psset@bracketlength#1{\pst@checknum{#1}\psk@bracketlength}
+\psset@bracketlength{.15}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@Bracket,\tx@@Bracket}
+% Syntax
+% \begin{LVerbatim}
+%   \psk@bracketlength \psk@tbarsize Bracket
+% \end{LVerbatim}
+%    \begin{macrocode}
+\pst@def{Bracket}<%
+  CLW mul add dup
+  CLW sub 2 div /x ED   % adjusted half width
+  mul CLW add /y ED     % y-position of height
+  /z CLW 2 div def
+  x neg y moveto
+  x neg CLW 2 div L
+  x CLW 2 div L
+  x y L
+  stroke
+  0 CLW moveto>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@]}
+%    \begin{macrocode}
+\@namedef{psas@]}{\psk@bracketlength \psk@tbarsize \tx@Bracket}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@rbracketlength,\psk@rbracketlength}
+%    \begin{macrocode}
+\def\psset@rbracketlength#1{\pst@checknum{#1}\psk@rbracketlength}
+\psset@rbracketlength{.15}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{RoundBracket}
+% Syntax
+% \begin{LVerbatim}
+%   \psk@bracketlength \psk@tbarsize RoundBracket
+% \end{LVerbatim}
+%    \begin{macrocode}
+\pst@def{RoundBracket}<%
+  CLW mul add dup
+  2 div /x ED           % half width
+  mul /y ED             % height
+  /mtrx CM def
+  0 CLW 2 div T
+  x y mul 0 ne { x y scale } if
+  1 1 moveto
+   .85 .5   .35  0   0 0 curveto
+  -.35  0  -.85 .5  -1 1 curveto
+  mtrx setmatrix
+  stroke
+  0 CLW moveto>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@(}
+%    \begin{macrocode}
+\@namedef{psas@)}{\psk@rbracketlength \psk@tbarsize \tx@RoundBracket}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@c,\psas@cc,\psas@C}
+% This is not going to be used frequently, and so we don't bother defining a
+% PostScript procedure in the header.
+%    \begin{macrocode}
+\def\psas@c{1 \psas@@c}
+\def\psas@cc{0 CLW 2 div T 1 \psas@@c}
+\def\psas@C{2 \psas@@c}
+\def\psas@@c{%
+  setlinecap
+  0 0 moveto
+  0 CLW 2 div L
+  stroke
+  0 0 moveto}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@}
+%    \begin{macrocode}
+\def\psas@{}
+\psset@arrows{-}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Graphics objects: processing arguments}
+%
+% \begin{macro}{\pst@par,\addto@par,\use@par}
+% Graphics objects accumulate <parameter>=<value> pairs in the command
+% sequence "\pst@par". They use "\addto@par" to add to "\pst@par", and
+% "\use@par" to make the parameter changes effective.
+%    \begin{macrocode}
+\def\pst@par{}
+\def\addto@par#1{%
+  \ifx\pst@par\@empty
+    \def\pst@par{#1}%
+  \else
+    \expandafter\def\expandafter\pst@par\expandafter{\pst@par,#1}%
+  \fi}
+\def\use@par{%
+  \ifx\pst@par\@empty\else
+    \expandafter\@psset\pst@par,\@nil
+    \def\pst@par{}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@object}
+% Any macro, such as "\psline", that uses graphics parameters should begin as
+% follows:
+% \begin{LVerbatim}
+%   \def\psline{\def\pst@par{}\pst@object{psline}}
+%   \def\psline@i{ ... }
+% \end{LVerbatim}
+% "\pst@object" checkes for the optional "[<par>=<value>,...]" argument, adds
+% key-value pairs to "\pst@par" if found, skips spaces, and then invokes
+% "\psline@i".
+%    \begin{macrocode}
+\def\pst@object#1{%
+  \pst@ifstar{\@ifnextchar[{\pst@@object{#1}}{\@nameuse{#1@i}}}}
+\def\pst@@object#1[#2]{%
+  \addto@par{#2}\@ifnextchar+{\@nameuse{#1@i}}{\@nameuse{#1@i}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\newpsobject}
+% For example,
+% \begin{LVerbatim}
+%   \newpsobject{dottedline}{psline}{linestyle=dotted}
+% \end{LVerbatim}
+% has the following effect:
+% \begin{LVerbatim}
+%   \def\dottedline{%
+%     \def\pst@par{linestyle=dotted}\pst@object{psline}}
+% \end{LVerbatim}
+% and thus "\dottedline" is just like "\psline", except that the default falue
+% of "linestyle" is changed to "dotted".
+%    \begin{macrocode}
+\def\newpsobject#1#2#3{%
+  \@ifundefined{#2@i}%
+    {\@pstrickserr{Graphics object `#2' not defined}\@eha}%
+    {\@namedef{#1}{\def\pst@par{#3}\pst@object{#2}}}\ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getarrows}
+% "\pst@getarrows{foo}" checks for an optional argument containing arrows, and
+% then invokes "foo". The arrows argument must be followed by "(".
+%    \begin{macrocode}
+\def\pst@getarrows#1{\@ifnextchar({#1}{\pst@@getarrows{#1}}}
+\def\pst@@getarrows#1#2{\addto@par{arrows=#2}#1}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Graphics objects: Basics \TeX\ macros\label{Objects}}
+%
+% Each graphics object should use one of the following:
+% \begin{center}
+% \begin{tabular}{ll}
+% "\begin@OpenObj ... \end@OpenObj" & Open curves with arrows.\\
+% "\begin@AltOpenObj ... \end@AltOpenObj" & Open curves w/o arrows.\\
+% "\begin@ClosedObj ... \end@ClosedObj" & Closed curves.\\
+% "\begin@SpecialObj ... \end@SpecialObj" & Other.
+% \end{tabular}
+% \end{center}
+% This makes it possible for "\pscustom" to work by redefining these.
+%
+% \begin{macro}{\begin@ClosedObj,\end@ClosedObj}
+%    \begin{macrocode}
+\def\begin@ClosedObj{%
+  \leavevmode
+  \pst@killglue
+  \begingroup
+    \use@par
+    \solid@star
+    \ifpsdoubleline \pst@setdoublesep \fi
+    \init@pscode}
+\def\end@ClosedObj{%
+    \ifpsshadow \pst@closedshadow \fi
+    \ifdim\psk@border\p@>\z@ \pst@addborder \fi
+    \pst@fill
+    \pst@stroke
+    \ifpsdoubleline \pst@doublestroke \fi
+    \ifshowpoints
+      \addto@pscode{Points aload length 2 div cvi /N ED \psdots@iii}%
+    \fi
+    \use@pscode
+  \endgroup
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\begin@OpenObj,\begin@AltOpenObj,\end@OpenObj}
+%    \begin{macrocode}
+\def\begin@OpenObj{%
+  \begin@ClosedObj
+    \let\pst@linetype\pst@arrowtype
+    \pst@addarrowdef}
+\def\begin@AltOpenObj{%
+  \begin@ClosedObj
+    \def\pst@repeatarrowsflag{\z@}%
+    \def\pst@linetype{0}}
+\def\end@OpenObj{%
+    \ifpsshadow \pst@openshadow \fi
+    \ifdim\psk@border\p@>\z@ \pst@addborder \fi
+    \pst@fill
+    \pst@stroke
+    \ifpsdoubleline \pst@doublestroke \fi
+    \ifnum\pst@repeatarrowsflag>\z@ \pst@repeatarrows \fi
+    \ifshowpoints \pst@OpenShowPoints \fi
+    \use@pscode
+  \endgroup
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\begin@SpecialObj,\end@SpecialObj}
+%    \begin{macrocode}
+\def\begin@SpecialObj{%
+  \leavevmode
+  \pst@killglue
+  \begingroup
+    \use@par
+    \init@pscode}
+\def\end@SpecialObj{%
+    \use@pscode
+  \endgroup
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\init@pscode,\addto@pscode,\use@pscode}
+% Graphics objects are built up by adding PostScript code to "\pst@code" with
+% "\addto@pscode". "\use@pscode" then adds leading and trailing PostScript
+% code, and (normally) inserts it in a "\special" (it also most empty
+% "\pst@code"). Hacks like "\psclip", "\multips" and "\pstextpath" work by
+% redefining "\use@pscode". These hacks use "\use@pscode" themselves when
+% appropriate, making limited nesting of these hacks is possible. "\PSTtoEPS"
+% works be redefining "\addto@pscode" so that it writes to a file. All this
+% was carefully designed so that these hacks would work. Watch out!
+%    \begin{macrocode}
+\def\pst@code{}%
+\def\init@pscode{%
+  \addto@pscode{%
+    \pst@number\pslinewidth SLW
+    \pst@usecolor\pslinecolor}}
+\def\addto@pscode#1{\xdef\pst@code{\pst@code#1\space}}
+\def\use@pscode{%
+  \pstverb{%
+    \pst@dict
+      \tx@STP
+      newpath
+      \psk@origin
+      \psk@swapaxes
+      \pst@code
+     end}%
+   \gdef\pst@code{}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@killglue}
+%    \begin{macrocode}
+\def\KillGlue{%
+  \def\pst@killglue{\unskip\ifdim\lastskip>\z@\expandafter\pst@killglue\fi}}
+\def\DontKillGlue{\let\pst@killglue\relax}
+\DontKillGlue
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\solid@star}
+% The optional "*" is typically used to make a solid option. This means that
+% "linestyle" is set to "none", "linewidth" is set to "0", and "fillcolor" is
+% set to "linecolor".
+%    \begin{macrocode}
+\def\solid@star{%
+  \if@star
+    \pslinewidth=\z@
+    \psdoublelinefalse
+    \def\pslinestyle{none}%
+    \def\psfillstyle{solid}%
+    \let\psfillcolor\pslinecolor
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@setdoublesep}
+%    \begin{macrocode}
+\def\pst@setdoublesep{%
+  \pst@getlength\psdoublesep\psdoublesep
+  \pslinewidth=2\pslinewidth
+  \advance\pslinewidth\psdoublesep\p@
+  \let\pst@setdoublesep\relax}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@Shadow}
+% Syntax:
+% \begin{Ex}
+%    <x y> Shadow
+% \end{Ex}
+% translates current path by <x y>.
+%    \begin{macrocode}
+\pst@def{Shadow}<%
+  [
+    { /moveto load }
+    { /lineto load }
+    { /curveto load }
+    { /closepath load }
+    pathforall
+  ]
+  cvx
+  newpath
+  3 1 roll
+  T
+  exec>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@closedshadow}
+%    \begin{macrocode}
+\def\pst@closedshadow{%
+  \addto@pscode{%
+    gsave
+    \psk@shadowsize \psk@shadowangle \tx@PtoC
+    \tx@Shadow
+    \pst@usecolor\psshadowcolor
+    gsave fill grestore
+    stroke
+    grestore
+    gsave
+    \pst@usecolor\psfillcolor
+    gsave fill grestore
+    stroke
+    grestore}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@openshadow}
+%    \begin{macrocode}
+\def\pst@openshadow{%
+  \addto@pscode{%
+    gsave
+      \psk@shadowsize \psk@shadowangle \tx@PtoC
+      \tx@Shadow
+      \pst@usecolor\psshadowcolor
+      \ifx\psfillstyle\@none\else
+        gsave fill grestore
+      \fi
+      stroke}%
+  \pst@repeatarrows
+  \addto@pscode{grestore}
+  \ifx\psfillstyle\@none\else
+    \addto@pscode{%
+      gsave
+      \pst@usecolor\psfillcolor
+      gsave fill grestore
+      stroke
+      grestore}
+   \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@addborder}
+%    \begin{macrocode}
+\def\pst@addborder{%
+  \addto@pscode{%
+    gsave
+      \psk@border 2 mul
+      CLW add SLW
+      \pst@usecolor\psbordercolor
+      stroke
+    grestore}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@stroke}
+%    \begin{macrocode}
+\def\pst@stroke{%
+  \ifx\pslinestyle\@none\else
+    \addto@pscode{%
+      gsave
+        \pst@number\pslinewidth SLW
+        \pst@usecolor\pslinecolor
+        \@nameuse{psls@\pslinestyle}
+      grestore}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@fill}
+%    \begin{macrocode}
+\def\pst@fill{%
+  \ifx\psfillstyle\@none\else
+    \addto@pscode{gsave \@nameuse{psfs@\psfillstyle} grestore}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@doublestroke}
+%    \begin{macrocode}
+\def\pst@doublestroke{%
+  \addto@pscode{%
+    gsave
+      \psdoublesep SLW
+      \pst@usecolor\psdoublecolor
+      stroke
+    grestore}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@arrowtype}
+%    \begin{macrocode}
+\def\pst@arrowtype{%
+  \ifx\psk@arrowB\@empty 0 \else -2 \fi
+  \ifx\psk@arrowA\@empty 0 \else -1 \fi
+  add}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@addarrowdef,\pst@arrowdef,\pst@arrowtype}
+% "ArrowA" takes two coordinates from the stack, draws the arrow with the tip
+% at the top coordinate, leaves the second coordinate on the stack and leaves
+% the current point where a line should join.
+%
+% "ArrowB" takes two coordinates from the stack, draws the arrow with the tip
+% at the top coordinate, and leaves both coordinates on the stack, without
+% changing the graphics state.
+%
+% This particular definition of "ArrowA" is important for "\pscustom".
+%
+% "ArrowA" and "ArrowB" might also save the arrow coordinates, because
+% sometimes it is necessary to redraw the arrows (see
+% "\pst@setrepeatarrowsflag").
+%    \begin{macrocode}
+\def\pst@addarrowdef{%
+  \addto@pscode{%
+    /ArrowA {
+      \ifx\psk@arrowA\@empty
+        \pst@oplineto
+      \else
+        \pst@arrowdef{A}
+        moveto
+      \fi
+    } def
+    /ArrowB {
+      \ifx\psk@arrowB\@empty \else \pst@arrowdef{B} \fi
+    } def}}
+\def\pst@arrowdef#1{%
+  \ifnum\pst@repeatarrowsflag>\z@
+    /Arrow#1c [ 6 2 roll ] cvx def Arrow#1c
+  \fi
+  \tx@BeginArrow
+  \psk@arrowscale
+  \@nameuse{psas@\@nameuse{psk@arrow#1}}
+  \tx@EndArrow}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@repeatarrows}
+%    \begin{macrocode}
+\def\pst@repeatarrows{%
+  \addto@pscode{%
+    gsave
+    \ifx\psk@arrowA\@empty\else
+      ArrowAc ArrowA pop pop
+    \fi
+    \ifx\psk@arrowB\@empty\else
+      ArrowBc ArrowB pop pop pop pop
+    \fi
+    grestore}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@OpenShowPoints}
+%    \begin{macrocode}
+\def\pst@OpenShowPoints{%
+  \addto@pscode{%
+    gsave
+      \psk@dotsize
+      \@nameuse{psds@\psk@dotstyle}
+      /TheDot {
+        gsave T \psk@dotangle \psk@dotscale Dot grestore
+      } def
+      newpath
+      Points aload length 2 div 2 sub cvi /N ED
+      N 0 ge
+      { \ifx\psk@arrowA\@empty
+          TheDot
+        \else
+          pop pop
+        \fi
+        N { TheDot } repeat
+        \ifx\psk@arrowB\@empty
+          TheDot
+        \else
+          pop pop
+        \fi }
+      { N 2 mul { pop } repeat }
+      ifelse
+    grestore}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Custom graphics}
+%
+% Graphics objects using "\begin@SpecialObj" cannot be used with "\pscustom".
+% It is up to the other graphics objects to be compatible with "\pscustom".
+% This means:
+% \begin{itemize}
+% \item To use the current point as an additional coordinate, when it exists,
+% the graphics object should insert "\pst@cp".
+% \item For graphics objects that use "\begin@OpenObj", the "ArrowA" is
+% defined by "\pscustom" to connect the top coordinate with the current point
+% by a line, if there is a current point. Other graphics objects should use
+% "\pst@oplineto" as a substitute for "moveto" if they wish to connect a
+% coordinate to the current point if it exists.
+% \end{itemize}
+%
+% Closed graphics objects are not under an obligation to anything particularly
+% sensible the current point exists.
+%
+% \begin{macro}{\pscustom}
+% The main graphics object modifies "\begin@OpenObj" and "\end@OpenObj" so
+% that the open curves extend the current path.
+%    \begin{macrocode}
+\def\pscustom{\def\pst@par{}\pst@object{pscustom}}
+\long\def\pscustom@i#1{%
+  \begin@SpecialObj
+    \solid@star
+    \let\pst@ifcustom\iftrue
+    \let\begin@ClosedObj\begin@CustomObj
+    \let\end@ClosedObj\endgroup
+    \def\begin@OpenObj{\begin@CustomObj\pst@addarrowdef}%
+    \let\end@OpenObj\endgroup
+    \let\begin@AltOpenObj\begin@CustomObj
+    \def\begin@SpecialObj{%
+      \begingroup
+      \pst@misplaced{special graphics object}%
+      \def\addto@pscode####1{}
+      \let\end@SpecialObj\endgroup}%
+    \def\@multips(##1)(##2)##3##4{\pst@misplaced\multips}%
+    \def\psclip##1{\pst@misplaced\psclip}%
+    \def\pst@repeatarrowsflag{\z@}%
+    \let\pst@setrepeatarrowsflag\relax
+    \showpointsfalse
+    \let\showpointstrue\relax
+    \def\pst@linetype{\pslinetype}%
+    \let\psset@liftpen\psset@@liftpen
+    \psset@liftpen{\z@}%
+    \def\pst@cp{/currentpoint load stopped pop }%
+    \def\pst@oplineto{/lineto load stopped { moveto } if }%
+    \def\pst@optcp##1##2{%
+      \ifnum##1=\z@\def##2{/currentpoint load stopped { 0 0 } if }\fi}%
+    \let\caddto@pscode\addto@pscode
+    \def\cuse@par##1{{\use@par##1}}%
+    \the\pst@customdefs
+    \setbox\pst@hbox=\hbox{#1}%
+    \pst@fill
+    \pst@stroke
+  \end@SpecialObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\begin@CustomObj,\end@CustomObj}
+%    \begin{macrocode}
+\def\begin@CustomObj{%
+  \begingroup
+    \use@par
+    \addto@pscode{%
+      \pst@number\pslinewidth SLW
+      \pst@usecolor\pslinecolor}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@liftpen,\pst@cp,\pst@oplineto,\pst@optcp}
+%    \begin{macrocode}
+\def\pst@oplineto{moveto }
+\def\pst@cp{}
+\def\pst@optcp#1#2{}
+\def\psset@liftpen#1{}
+\def\psset@@liftpen#1{%
+  \ifcase#1\relax
+    \def\psk@liftpen{\z@}%
+    \def\pst@cp{/currentpoint load stopped pop }%
+    \def\pst@oplineto{/lineto load stopped { moveto } if }%
+  \or
+    \def\psk@liftpen{1}%
+    \def\pst@cp{}%
+    \def\pst@oplineto{/lineto load stopped { moveto } if }%
+  \or
+    \def\psk@liftpen{2}%
+    \def\pst@cp{}%
+    \def\pst@oplineto{moveto }%
+  \fi}
+\psset@liftpen{0}
+\def\psk@liftpen{-1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@linetype,\pslinetype}
+%    \begin{macrocode}
+\def\psset@linetype#1{%
+  \pst@getint{#1}\pslinetype
+  \ifnum\pst@dimg<-3
+    \@pstrickserr{linetype must be greater than -3}\@ehpa
+    \def\pslinetype{0}%
+  \fi}
+\psset@linetype{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\caddto@pscode}
+% Commands that should only occur in "\pscustom" should use this. Obsolete?
+%    \begin{macrocode}
+\def\caddto@pscode#1{%
+  \@pstrickserr{Command can only be used in \string\pscustom}\@ehpa}
+\let\cuse@par\caddto@pscode
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@MSave,\tx@MRestore}
+% It doesn't seem worth adding these to the header file.
+%    \begin{macrocode}
+\def\tx@MSave{%
+  /msavemtrx
+  [ tx@Dict /msavemtrx known { msavemtrx aload pop } if CM ]
+  def }
+\def\tx@MRestore{%
+  tx@Dict /msavemtrx known { length 0 gt } { false } ifelse
+  { /msavematrx [ msavematrx aload pop setmatrix ] def }
+  if }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psmove,\psclosepath,\psgroup}
+%    \begin{macrocode}
+\newtoks\pst@customdefs
+\pst@customdefs{%
+  \def\newpath{\addto@pscode{newpath}}%
+  \def\moveto(#1){\pst@@getcoor{#1}\addto@pscode{\pst@coor moveto}}%
+  \def\closepath{\addto@pscode{closepath}}%
+  \def\gsave{\begingroup\addto@pscode{gsave}}%
+  \def\grestore{\endgroup\addto@pscode{grestore}}%
+  \def\translate(#1){\pst@@getcoor{#1}\addto@pscode{\pst@coor moveto}}%
+  \def\rotate#1{\pst@@getangle{#1}\addto@pscode{\pst@angle rotate}}%
+  \def\scale#1{\pst@getscale{#1}\pst@tempg\addto@pscode{\pst@tempg}}%
+  \def\msave{\addto@pscode{\tx@MSave}}%
+  \def\mrestore{\addto@pscode{\tx@MRestore}}%
+  \def\swapaxes{\addto@pscode{-90 rotate -1 1 scale}}%
+  \def\stroke{\def\pst@par{}\pst@object{stroke}}%
+  \def\fill{\def\pst@par{}\pst@object{fill}}%
+  \def\openshadow{\def\pst@par{}\pst@object{openshadow}}%
+  \def\closedshadow{\def\pst@par{}\pst@object{closedshadow}}%
+  \def\movepath(#1){\pst@@getcoor{#1}\addto@pscode{\pst@coor tx@Shadow}}%
+  \def\lineto{\pst@onecoor{lineto}}%
+  \def\rlineto{\pst@onecoor{rlineto}}%
+  \def\curveto{\pst@threecoor{curveto}}%
+  \def\rcurveto{\pst@threecoor{rcurveto}}%
+  \def\code#1{\addto@pscode{#1}}%
+  \def\coor(#1){\pst@@getcoor{#1}\addto@pscode\pst@coor\@ifnextchar({\coor}{}}%
+  \def\rcoor{\pst@getcoors{}{}}%
+  \def\dim#1{\pssetlength\pst@dimg{#1}\addto@pscode{\pst@number\pst@dimg}}%
+  \def\setcolor#1{%
+    \@ifundefined{color@#1}{}{\addto@pscode{\use@color{#1}}}}%
+  \def\arrows#1{{\psset@arrows{#1}\pst@addarrowdef}}%
+  \let\file\pst@rawfile
+} % END \pst@customdefs
+\def\closedshadow@i{\cuse@par\pst@closedshadow}
+\def\openshadow@i{\cuse@par\pst@openshadow}
+\def\stroke@i{\cuse@par\pst@stroke}%
+\def\fill@i{\cuse@par\pst@fill}%
+\def\pst@onecoor#1(#2){%
+  \pst@@getcoor{#2}%
+  \addto@pscode{\pst@coor #1}}
+\def\pst@threecoor#1(#2)#3(#4)#5(#6){%
+  \begingroup
+    \pst@getcoor{#2}\pst@tempa
+    \pst@getcoor{#4}\pst@tempb
+    \pst@getcoor{#6}\pst@tembc
+    \addto@pscode{\pst@tempa \pst@tempb \pst@tempc #1}%
+  \endgroup}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\psrawfile,\pst@rawfile}
+%    \begin{macrocode}
+\def\pst@rawfile#1{%
+  \begingroup
+    \def\do##1{\catcode`##1=12\relax}"
+    \dospecials
+    \catcode`\%=14
+    \pst@@rawfile{#1}%
+  \endgroup}
+\def\pst@@rawfile#1{%
+  \immediate\openin1 #1
+  \ifeof1
+    \@pstrickserr{File `#1' not found}\@ehpa
+  \else
+    \immediate\read1 to \pst@tempg
+    \loop
+      \ifeof1 \@pstfalse\else\@psttrue\fi
+    \if@pst
+      \addto@pscode\pst@tempg
+      \immediate\read1 to \pst@tempg
+    \repeat
+  \fi
+  \immediate\closein1\relax}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \section{Graphics objects: Basic PostScript macros}
+%
+% \begin{macro}{SD}
+%    \begin{macrocode}
+\pst@def{SD}<%
+  0 360 arc fill>
+\pst@def{SQ}<%
+  /r ED
+  r r moveto
+  r r neg L
+  r neg r neg L
+  r neg r L
+  fill>
+\pst@def{ST}<%
+  /y ED /x ED
+  x y moveto
+  x neg y L
+  0 x L
+  fill>
+\pst@def{SP}<%
+  /r ED
+  gsave
+    0 r moveto
+    4 { 72 rotate 0 r L } repeat
+    fill
+  grestore>
+\@namedef{psds@*}{/Dot { 0 0 DS \tx@SD } def}
+\@namedef{psds@o}{%
+  /r2 DS CLW sub def
+  /Dot { 0 0 DS \tx@SD \pst@usecolor\psfillcolor 0 0 r2 \tx@SD } def}
+\@namedef{psds@square*}{%
+  /r1 DS .886 mul def
+  /Dot { r1 \tx@SQ } def}
+\@namedef{psds@square}{%
+  /r1 DS .886 mul def /r2 r1 CLW sub def
+  /Dot { r1 \tx@SQ \pst@usecolor\psfillcolor r2 \tx@SQ } def}
+\@namedef{psds@triangle*}{%
+  /y1 DS .778 mul neg def /x1 y1 1.732 mul neg def
+  /Dot { x1 y1 \tx@ST } def}
+\@namedef{psds@triangle}{%
+  /y1 DS .778 mul neg def /x1 y1 1.732 mul neg def
+  /y2 y1 CLW add def /x2 y2 1.732 mul neg def
+  /Dot { x1 y1 \tx@ST \pst@usecolor\psfillcolor x2 y2 \tx@ST } def}
+\@namedef{psds@pentagon*}{%
+  /r1 DS 1.149 mul def
+  /Dot { r1 \tx@SP } def}
+\@namedef{psds@pentagon}{%
+  DS .93 mul dup 1.236 mul /r1 ED CLW sub 1.236 mul /r2 ED
+  /Dot { r1 \tx@SP \pst@usecolor\psfillcolor
+    r2 \tx@SP } def}
+\@namedef{psds@+}{%
+  /DS DS 1.253 mul def
+  /Dot { DS 0 moveto DS neg 0 L stroke
+    0 DS moveto 0 DS neg L stroke } def}
+\@namedef{psds@|}{%
+  \psk@tbarsize CLW mul add 2 div /DS ED
+  /Dot { 0 DS moveto 0 DS neg L stroke } def}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{dotstyle}
+%    \begin{macrocode}
+\def\psset@dotstyle#1{%
+  \@ifundefined{psds@#1}%
+    {\@pstrickserr{Dot style `#1' not defined}\@eha}%
+    {\edef\psk@dotstyle{#1}}}
+\psset@dotstyle{*}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{NArray}
+% Syntax:
+% \begin{Ex}
+%   <array of points> NArray <points>
+% \end{Ex}
+% Sets "n" to the number of pairs in the array, and makes sure there is an
+% even number of elements.
+%    \begin{macrocode}
+\pst@def{NArray}<%
+  aload length 2 div dup
+  dup cvi eq not { exch pop } if
+  /n exch cvi def>
+\pst@def{NArray}<%
+  /f ED
+  counttomark 2 div
+  dup cvi /n ED
+  n eq not { exch pop } if
+  f
+    { ] aload /Points ED }
+    { n 2 mul 1 add -1 roll pop }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Line}
+% Syntax:
+% \begin{Ex}
+%   <array of points> Line -
+% \end{Ex}
+% "ArrowA" and "ArrowB" should be defined to draw arrows, and "Lineto" should
+% be the procedure used to draw the path; either "lineto" or "Arcto".
+%    \begin{macrocode}
+\pst@def{Line}<%
+  \tx@NArray
+  n 0 eq not
+  { n 1 eq { 0 0 /n 2 def } if
+    ArrowA
+    /n n 2 sub def
+    n { Lineto } repeat
+    CP 4 2 roll ArrowB L
+    pop pop }
+  if>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Arcto}
+% Syntax:
+% \begin{Ex}
+%   <x2 y2 x1 y1> Arcto <x2 y2>
+% \end{Ex}
+% "r" should be set to the arc radius. Adds to the path with "arcto", with the
+% corner at <x1 y1> and going towards <x2 y2>. Works even when the points are
+% equal. For use with "Line" and "Polygon".
+%    \begin{macrocode}
+\pst@def{Arcto}<%
+  /a [ 6 -2 roll ] cvx def
+  a r /arcto load stopped { 5 } { 4 } ifelse { pop } repeat a>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Polygon}
+% Syntax:
+% \begin{Ex}
+%   <array of points> Line -
+% \end{Ex}
+% "Lineto" should be the procedure used to draw the path; either "lineto" or
+% "Arcto".
+%    \begin{macrocode}
+\pst@def{CheckClosed}<%
+  dup n 2 mul 1 sub index eq 2 index n 2 mul 1 add index eq and
+  { pop pop /n n 1 sub def }
+  if>
+\pst@def{Polygon}<%
+  \tx@NArray
+  n 2 eq { 0 0 /n 3 def } if
+  n 3 lt
+  { n { pop pop } repeat }
+  { n 3 gt { \tx@CheckClosed } if
+    n 2 mul -2 roll /y0 ED /x0 ED
+    /y1 ED /x1 ED x1 y1
+    /x1 x0 x1 add 2 div def
+    /y1 y0 y1 add 2 div def
+    x1 y1 moveto
+    /n n 2 sub def
+    n { Lineto } repeat
+    x1 y1 x0 y0 6 4 roll
+    Lineto Lineto pop pop closepath }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Interpolated curves}
+%
+% This documentation is largely junk.
+%
+% There one was an alternate algorithm that had the nice property that when
+% the coordinates were scaled, the interpolated curve would scale in the same
+% way. It was also simpler. However, this one gives nicer looking results in
+% most cases.
+%
+% Two parameters should be defined:
+% \begin{description}
+%   \item[a] Lower values make the curve tighter. (Default: 1)
+% \item[b] Higher values make the curve tighter where the angle ABC is less
+% than 45 degrees, and loosen the curve elsewhere. (Default: .1)
+% \end{description}
+% "ArrowA" and "ArrowB" should be defined as well.
+%
+% Each two points are connected by a single Bezier curve, using curveto. For
+% each point P, let P- and P+ be the control points before and after the
+% point. I.e., If A, B and C are consecutive points, then A and B are
+% connected by the Bezier curve with control points A, A+, B- and B, and B and
+% C are connected with control points B, B+, C- and C.
+%
+% The interpolation is local, meaning that control points B- and B+ depend
+% only on points A, B and C.
+%
+% \begin{macro}{\tx@CCA,\tx@CC}
+% The first three lines before "CCA" set "x1"$=Ax+$, "y1"$=Ay+$,
+% "l0"$=d(A,B)$, "dx0"$=Bx-Ax$, and "dy0"$=By-Ay$. After "CCA", "x"$=Bx$,
+% "y"$=By$, "dx1"$=Cx-Bx$, "dy2"$=Cy-By$, and "l1"$=d(B,C)$.
+%    \begin{macrocode}
+\pst@def{CCA}<%
+  /y ED /x ED 2 copy
+  y sub /dy1 ED x sub /dx1 ED
+  /l1 dx1 dy1 \tx@Pyth def>
+\pst@def{CCA}<%
+  /y ED /x ED 2 copy
+  y sub /dy1 ED x sub /dx1 ED
+  /l1 dx1 dy1 \tx@Pyth def>
+\pst@def{CC}<%
+  /l0 l1 def
+  /x1 x dx sub def /y1 y dy sub def
+  /dx0 dx1 def /dy0 dy1 def
+  \tx@CCA
+%    \end{macrocode}
+% The task is now to calculate $B-$ and $B+$. We first calculate the slope
+% "dx" and "dy" at $B$. This tangent at $B$ should be perpendicular to the
+% bisection of the angle $ABC$. Recalling that "dx0" and "dy0" ``point'' from
+% $A$ to $B$, this tangency thus passes through $B+(dx,dy)$, where $(dx,dy)$
+% is the average of $dx0,dy0$ and $dx1,dy1$, once these have been normalized
+% to have the same length. If we normalize by dividing each by their length,
+% and then multiplying both by both lengths, we get
+% \begin{center}\tt\begin{tabular}{rcl}
+%   dx & $=$ & l1 $\times$ dx0 $+$ l0 $\times$ dx1 \\[3pt]
+%   dy & $=$ & l1 $\times$ dy0 $+$ l0 $\times$ dy1
+% \end{tabular}\end{center}
+%    \begin{macrocode}
+  /dx dx0 l1 c exp mul dx1 l0 c exp mul add def
+  /dy dy0 l1 c exp mul dy1 l0 c exp mul add def
+%    \end{macrocode}
+% "dx" and "dy" give us the direction of the control points $B-$ and $B+$ from
+% $B$. Now we adjust the distance of these control points. The first component
+% is sine of the angle ABC, so that smaller angles give closer control points.
+% This is raised to the "b", so that "b" controls the extent of this
+% dependency (and can even reverse the relation).
+% Then this amount is multiplied times "a", which those adjusts the overall
+% tightness, independently of the angle. Let's call this amount $M$. This
+% amount is then divided by the length of the vector $(dx,dy)$, thereby
+% normalizing this vector to unit length, and then, multiplied times the
+% distance between $A$ and $B$ (for calculating $B-$). Thus, $B-$ is distance
+% $M d(A,B)$ from $B$. $(x2,y2)$ are set to $B-$, thus calculated, and $B+$ is
+% temporily stored in $(dx,dy)$.
+%    \begin{macrocode}
+  /m dx0 dy0 \tx@Atan dx1 dy1 \tx@Atan sub
+     2 div cos abs b exp a mul
+     dx dy \tx@Pyth \tx@Div 2 div def
+  /x2 x l0 dx mul m mul sub def
+  /y2 y l0 dy mul m mul sub def
+  /dx l1 dx mul m mul neg def
+  /dy l1 dy mul m mul neg def>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@IC,\tx@BOC,\tx@NC,\tx@EOC,\tx@BAC,\tx@NAC,\tx@EAC}
+% These are the compenents of the loops that go through the lists of points
+% that are to be interpolated. These are abbreviations, as follows:
+% \begin{center}
+% \begin{tabular}{ll}
+% "IC" & Initialize Curve\\
+% "BOC" & Begin Open Curve\\
+% "NC" & Next Curve\\
+% "EOC" & End Open Curve\\
+% "BAC" & Begin Alternative Curve\\
+% "NAC" & Next Alternative Curve\\
+% "EAC" & End Alternative Curve
+% \end{tabular}
+% \end{center}
+%    \begin{macrocode}
+\pst@def{IC}<%
+  /c c 1 add def
+  c 0 lt { /c 0 def } { c 3 gt { /c 3 def } if } ifelse
+  /a a 2 mul 3 div 45 cos b exp div def
+  \tx@CCA /dx 0 def /dy 0 def>
+\pst@def{BOC}<%
+  \tx@IC \tx@CC x2 y2 x1 y1 ArrowA
+  CP 4 2 roll x y curveto>
+\pst@def{NC}<\tx@CC x1 y1 x2 y2 x y curveto>
+\pst@def{EOC}<%
+  x dx sub y dy sub 4 2 roll ArrowB 2 copy curveto>
+\pst@def{BAC}<%
+  \tx@IC \tx@CC x y moveto \tx@CC
+  x1 y1 CP ArrowA>
+\pst@def{NAC}<x2 y2 x y curveto \tx@CC x1 y1>
+\pst@def{EAC}<x2 y2 x y ArrowB curveto pop pop>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{OpenCurve}
+% Syntax:
+% \begin{Ex}
+%   <array of points> OpenCurve
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{OpenCurve}<%
+  \tx@NArray
+  n 3 lt
+  { n { pop pop } repeat }
+  { \tx@BOC
+    /n n 3 sub def
+    n { \tx@NC } repeat
+    \tx@EOC }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{AltCurve}
+% Syntax:
+% \begin{Ex}
+%   <array of points> AltCurve
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{AltCurve}<%
+  { false \tx@NArray
+    n 2 mul 2 roll
+    [ n 2 mul 3 sub 1 roll ]
+    aload /Points ED
+    n 2 mul -2 roll }
+  { false \tx@NArray }
+  ifelse
+  n 4 lt
+  { n { pop pop } repeat }
+  { \tx@BAC
+    /n n 4 sub def
+    n { \tx@NAC } repeat
+    \tx@EAC }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{ClosedCurve}
+% Syntax:
+% \begin{Ex}
+%   <array of points> ClosedCurve
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{ClosedCurve}<%
+  \tx@NArray
+  n 3 lt
+  { n { pop pop } repeat }
+  { n 3 gt { \tx@CheckClosed } if
+    6 copy n 2 mul 6 add 6 roll
+    \tx@IC \tx@CC x y moveto
+    n { \tx@NC } repeat
+   closepath pop pop }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{curvature}
+%    \begin{macrocode}
+\def\psset@curvature#1{%
+  \edef\pst@tempg{#1 }%
+  \expandafter\psset@@curvature\pst@tempg * * * \@nil}
+\def\psset@@curvature#1 #2 #3 #4\@nil{%
+  \pst@checknum{#1}\pst@tempg
+  \pst@checknum{#2}\pst@temph
+  \pst@checknum{#3}\pst@tempi
+  \edef\psk@curvature{\pst@tempg \pst@temph \pst@tempi}}
+\psset@curvature{1 .1 0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pscurve}
+%    \begin{macrocode}
+\def\pscurve{\def\pst@par{}\pst@object{pscurve}}
+\def\pscurve@i{%
+  \pst@getarrows{%
+    \begin@OpenObj
+      \pst@getcoors[\pscurve@ii}}
+\def\pscurve@ii{%
+  \addto@pscode{%
+    \pst@cp
+    \psk@curvature\space /c ED /b ED /a ED
+    \ifshowpoints true \else false \fi
+    \tx@OpenCurve}%
+  \end@OpenObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psecurve}
+%    \begin{macrocode}
+\def\psecurve{\def\pst@par{}\pst@object{psecurve}}
+\def\psecurve@i{%
+  \pst@getarrows{%
+    \begin@OpenObj
+    \pst@getcoors[\psecurve@ii}}
+\def\psecurve@ii{%
+  \addto@pscode{%
+    \psk@curvature\space /c ED /b ED /a ED
+    \ifshowpoints true \else false \fi
+    \tx@AltCurve}%
+  \end@OpenObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psccurve}
+%    \begin{macrocode}
+\def\psccurve{\def\pst@par{}\pst@object{psccurve}}
+\def\psccurve@i{%
+  \begin@ClosedObj
+    \pst@getcoors[\psccurve@ii}
+\def\psccurve@ii{%
+  \addto@pscode{%
+    \psk@curvature\space /c ED /b ED /a ED
+    \ifshowpoints true \else false \fi
+    \tx@ClosedCurve}%
+  \def\pst@linetype{1}%
+  \end@ClosedObj}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Dots}
+%
+% It would be nice to use a font, with hinting.
+%
+% \begin{macro}{dotsize}
+%    \begin{macrocode}
+\def\psset@dotsize#1{%
+  \edef\pst@tempg{#1 }%
+  \expandafter\psset@@dotsize\pst@tempg -1 -1 -1\@nil}
+\def\psset@@dotsize#1 #2 #3\@nil{%
+  \pst@checknum{#2}\pst@tempg
+  \pssetlength\pst@dimg{#1}%
+  \edef\psk@dotsize{%
+    /DS \pst@number\pst@dimg \pst@tempg CLW mul add 2 div def }}
+\psset@dotsize{.5pt 2.5}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psset@dotscale}
+%    \begin{macrocode}
+\def\psset@dotscale#1{\pst@getscale{#1}\psk@dotscale}
+\psset@dotscale{1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@Getangle}
+%    \begin{macrocode}
+\def\pst@Getangle#1#2{%
+  \pst@getangle{#1}\pst@tempg
+  \def\pst@temph{0. }%
+  \ifx\pst@tempg\pst@temph
+    \def#2{}%
+  \else
+    \edef#2{\pst@tempg\space rotate }%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{dotangle}
+%    \begin{macrocode}
+\def\psset@dotangle#1{\pst@Getangle{#1}\psk@dotangle}
+\psset@dotangle{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psdots}
+%    \begin{macrocode}
+\def\psdots{\def\pst@par{}\pst@object{psdots}}
+\def\psdots@i{%
+  \begin@SpecialObj
+    \pst@getcoors[\psdots@ii}
+\def\psdots@ii{%
+   \addto@pscode{false \tx@NArray \psdots@iii}%
+ \end@SpecialObj}
+\def\psdots@iii{%
+  \psk@dotsize
+  \@nameuse{psds@\psk@dotstyle}
+  newpath
+  n { gsave T \psk@dotangle \psk@dotscale Dot grestore } repeat}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{EndDot}
+% Syntax
+% \begin{LVerbatim}
+%   {<fill>} {<displace>} EndDot
+% \end{LVerbatim}
+% "DS" should be defined to be the dot size.
+%    \begin{macrocode}
+\pst@def{EndDot}<%
+  { /z DS def } { /z 0 def } ifelse
+  /b ED
+  0 z DS \tx@SD
+  b { 0 z DS CLW sub \tx@SD } if
+  0 DS z add CLW 4 div sub moveto>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@oo}
+%    \begin{macrocode}
+\def\psas@oo{{\pst@usecolor\psfillcolor true} true \psk@dotsize \tx@EndDot}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@o}
+%    \begin{macrocode}
+\def\psas@o{{\pst@usecolor\psfillcolor true} false \psk@dotsize \tx@EndDot}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@**}
+%    \begin{macrocode}
+\@namedef{psas@**}{{false} true \psk@dotsize \tx@EndDot}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psas@*}
+%    \begin{macrocode}
+\@namedef{psas@*}{{false} false \psk@dotsize \tx@EndDot}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Lines and polygons\label{Lines}}
+%
+% \begin{macro}{linearc}
+%    \begin{macrocode}
+\newdimen\pslinearc
+\def\psset@linearc#1{\pssetlength\pslinearc{#1}}
+\psset@linearc{0pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psline}
+%    \begin{macrocode}
+\def\psline{\def\pst@par{}\pst@object{psline}}
+\def\psline@i{%
+  \pst@getarrows{%
+    \begin@OpenObj
+      \pst@getcoors[\psline@ii}}
+\def\psline@ii{%
+    \addto@pscode{\pst@cp \psline@iii \tx@Line}%
+  \end@OpenObj}
+\def\psline@iii{%
+  \ifdim\pslinearc>\z@
+    /r \pst@number\pslinearc def
+    /Lineto { \tx@Arcto } def
+  \else
+    /Lineto /lineto load def
+  \fi
+  \ifshowpoints true \else false \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\qline}
+%    \begin{macrocode}
+\def\qline(#1)(#2){%
+  \def\pst@par{}%
+  \begin@SpecialObj
+    \def\pst@linetype{0}%
+    \pst@getcoor{#1}\pst@tempa
+    \pst@@getcoor{#2}%
+    \addto@pscode{%
+      \pst@tempa moveto \pst@coor L
+      \@nameuse{psls@\pslinestyle}}%
+  \end@SpecialObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pspolygon}
+%    \begin{macrocode}
+\def\pspolygon{\def\pst@par{}\pst@object{pspolygon}}
+\def\pspolygon@i{%
+  \begin@ClosedObj
+    \def\pst@cp{}%
+    \pst@getcoors[\pspolygon@ii}
+\def\pspolygon@ii{%
+    \addto@pscode{\psline@iii \tx@Polygon}%
+    \def\pst@linetype{1}%
+  \end@ClosedObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{framearc}
+%    \begin{macrocode}
+\def\psset@framearc#1{\pst@checknum{#1}\psk@framearc}
+\psset@framearc{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{cornersize}
+%    \begin{macrocode}
+\def\psset@cornersize#1{%
+  \pst@expandafter\psset@@cornersize{#1}\@nil}
+\def\psset@@cornersize#1#2\@nil{%
+  \if #1a\relax
+    \def\psk@cornersize{\pst@number\pslinearc false }%
+  \else
+    \def\psk@cornersize{\psk@framearc true }%
+  \fi}
+\psset@cornersize{relative}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Frame}
+% Syntax
+% \begin{Ex}
+%   <framearc/linearc bool x1 y1 x2 y2 dimen> "Frame"
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{Rect}<%
+  x1 y1 y2 add 2 div moveto
+  x1 y2 lineto
+  x2 y2 lineto
+  x2 y1 lineto
+  x1 y1 lineto
+  closepath>
+\pst@def{OvalFrame}<%
+  x1 x2 eq y1 y2 eq or
+  { pop pop x1 y1 moveto x2 y2 L }
+  { y1 y2 sub abs x1 x2 sub abs
+    2 copy gt { exch pop } { pop } ifelse
+    2 div
+    exch   % STACK: cornersize halfwidth boolean
+    { dup 3 1 roll mul exch }
+    if
+    2 copy lt { pop } { exch pop } ifelse
+    /b ED
+    x1 y1 y2 add 2 div moveto
+    x1 y2 x2 y2 b arcto
+    x2 y2 x2 y1 b arcto
+    x2 y1 x1 y1 b arcto
+    x1 y1 x1 y2 b arcto
+    16 { pop } repeat
+    closepath }
+  ifelse>
+\pst@def{Frame}<%
+  CLW mul /a ED
+  3 -1 roll 2 copy gt { exch } if
+  a sub /y2 ED a add /y1 ED
+  2 copy gt { exch } if
+  a sub /x2 ED a add /x1 ED
+  1 index 0 eq { pop pop \tx@Rect } { \tx@OvalFrame } ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{dimen}
+%    \begin{macrocode}
+\def\psset@dimen#1{%
+  \pst@expandafter\psset@@dimen{#1}\@nil}
+\def\psset@@dimen#1#2\@nil{%
+  \if #1o\relax
+    \def\psk@dimen{.5 }%
+  \else
+    \if #1m\relax
+      \def\psk@dimen{0 }%
+    \else
+      \if #1i\relax
+        \def\psk@dimen{-.5 }%
+      \fi
+    \fi
+  \fi}
+\psset@dimen{outer}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psframe}
+%    \begin{macrocode}
+\def\psframe{\def\pst@par{}\pst@object{psframe}}
+\def\psframe@i(#1){%
+  \@ifnextchar({\psframe@ii(#1)}{\psframe@ii(0,0)(#1)}}
+\def\psframe@ii(#1)(#2){%
+  \begin@ClosedObj
+    \pst@getcoor{#1}\pst@tempa
+    \pst@@getcoor{#2}%
+    \addto@pscode{\psk@cornersize \pst@tempa \pst@coor \psk@dimen \tx@Frame}%
+    \def\pst@linetype{2}%
+    \showpointsfalse
+  \end@ClosedObj}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Curves}
+%
+% \begin{macro}{\psbezier}
+%    \begin{macrocode}
+\def\psbezier{\def\pst@par{}\pst@object{psbezier}}
+\def\psbezier@i{\pst@getarrows\psbezier@ii}
+\def\psbezier@ii#1(#2)#3(#4)#5(#6){%
+  \@ifnextchar({\psbezier@iii{1}(#2)(#4)(#6)}%
+    {\psbezier@iii{\z@}(0,0)(#2)(#4)(#6)}}
+\def\psbezier@iii#1(#2)(#3)(#4)(#5){%
+  \begin@OpenObj
+  \pst@getcoor{#2}\pst@tempa
+  \pst@getcoor{#3}\pst@tempb
+  \pst@getcoor{#4}\pst@tempc
+  \pst@getcoor{#5}\pst@tempd
+  \pst@optcp{#1}\pst@tempa
+  \ifshowpoints\psbezier@iv\fi
+  \addto@pscode{
+    \pst@tempb \pst@tempa ArrowA
+    \pst@tempc \pst@tempd ArrowB
+    curveto}%
+  \end@OpenObj}
+\def\psbezier@iv{%
+  \addto@pscode{%
+    gsave
+      \pst@tempa \pst@tempb \pst@tempc \pst@tempd
+       newpath moveto L L L
+       CLW 2 div SLW
+       [ \psk@dash\space ] 0 setdash stroke
+    grestore
+    /Points [\pst@tempa\pst@tempb\pst@tempc\pst@tempd] def}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\parabola}
+%    \begin{macrocode}
+\pst@def{Parab}<%
+  /y0 exch def
+  /x0 exch def
+  /y1 exch def
+  /x1 exch def
+  /dx x0 x1 sub 3 div def
+  /dy y0 y1 sub 3 div def
+  x0 dx sub y0 dy add x1 y1 ArrowA
+  x0 dx add y0 dy add x0 2 mul x1 sub y1 ArrowB
+  curveto
+  /Points [ x1 y1 x0 y0 x0 2 mul x1 sub y1 ] def>
+\def\parabola{\def\pst@par{}\pst@object{parabola}}
+\def\parabola@i{\pst@getarrows\parabola@ii}
+\def\parabola@ii#1(#2)#3(#4){%
+  \begin@OpenObj
+    \pst@getcoor{#2}\pst@tempa
+    \pst@@getcoor{#4}%
+    \addto@pscode{\pst@tempa \pst@coor \tx@Parab}%
+  \end@OpenObj}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Grids\label{Grids}}
+%
+% \begin{macro}{gridwidth}
+%    \begin{macrocode}
+\def\psset@gridwidth#1{\pst@getlength{#1}\psk@gridwidth}
+\psset@gridwidth{.8pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{griddots}
+%    \begin{macrocode}
+\def\psset@griddots#1{%
+  \pst@cntg=#1\relax
+  \edef\psk@griddots{\the\pst@cntg}}
+\psset@griddots{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{gridcolor}
+%    \begin{macrocode}
+\def\psset@gridcolor#1{\pst@getcolor{#1}\psgridcolor}
+\psset@gridcolor{black}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{subgridwidth}
+%    \begin{macrocode}
+\def\psset@subgridwidth#1{\pst@getlength{#1}\psk@subgridwidth}
+\psset@subgridwidth{.4pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{subgridcolor}
+%    \begin{macrocode}
+\def\psset@subgridcolor#1{\pst@getcolor{#1}\pssubgridcolor}
+\psset@subgridcolor{gray}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{subgriddots}
+%    \begin{macrocode}
+\def\psset@subgriddots#1{%
+  \pst@cntg=#1\relax\edef\psk@subgriddots{\the\pst@cntg}}
+\psset@subgriddots{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{subgriddiv}
+%    \begin{macrocode}
+\def\psset@subgriddiv#1{%
+  \pst@cntg=#1\relax\edef\psk@subgriddiv{\the\pst@cntg}}
+\psset@subgriddiv{5}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{gridlabels}
+%    \begin{macrocode}
+\def\psset@gridlabels#1{\pst@getlength{#1}\psk@gridlabels}
+\psset@gridlabels{10pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{gridlabelcolor}
+%    \begin{macrocode}
+\def\psset@gridlabelcolor#1{\pst@getcolor{#1}\psgridlabelcolor}
+\psset@gridlabelcolor{black}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Grid}
+% Syntax:
+% \begin{Ex}
+%   <x1 y1 x2 y2 x-origin y-origin x-divsize y-divsize>\\
+%   <numsubdiv griddots labelcolor labelsize> "Grid"
+% \end{Ex}
+% Coordinates should all be integers. Font needs to be defined before invoking
+% this procedure. This could probably be simplified.
+%    \begin{macrocode}
+\pst@def{Grid}<%
+  /a 4 string def            % Empty string
+  /b ED                      % Label size
+  /d ED                      % Label color procedure.
+  /n ED                      % Number of grid dots
+  cvi dup 1 lt { pop 1 } if /c ED   % Number subdivisions
+  c div dup 0 eq { pop 1 } if /cy ED
+  c div dup 0 eq { pop 1 } if /cx ED  % division spacing
+  cy div cvi /y ED     % origin y
+  cx div cvi /x ED     % origin x
+  cy div cvi /y2 ED    % y2
+  cx div cvi /x2 ED    % x2
+  cy div cvi /y1 ED    % y1
+  cx div cvi /x1 ED    % x1
+  /h y2 y1 sub 0 gt { 1 } { -1 } ifelse def  % Sign of y2-y1
+  /w x2 x1 sub 0 gt { 1 } { -1 } ifelse def  % Sign of x2-x1
+  b 0 gt
+  { /z1 b 4 div CLW 2 div add def
+    /Helvetica findfont b scalefont setfont
+    /b b .95 mul CLW 2 div add def }
+  if
+  gsave
+  n 0 gt
+  { 1 setlinecap [ 0 cy n div ] 0 setdash }
+  { 2 setlinecap }
+  ifelse
+  /c x1 def /i 500 w mul x1 add def        % Index
+  /e y cy mul def /f y1 cy mul def /g y2 cy mul def
+  x1 cx mul 0 T
+  { newpath
+    0 e moveto
+    b 0 gt
+    { gsave d c a cvs dup
+      stringwidth pop /z2 ED
+      w 0 gt {z1} {z1 z2 add neg} ifelse
+      h 0 gt {b neg} {z1} ifelse
+      rmoveto show grestore } if
+    0 f moveto 0 g L stroke
+    cx w mul 0 T
+    c x2 eq c i eq or {exit} if
+    /c c w add def
+  } loop
+  grestore
+  gsave
+  n 0 gt
+  { 1 setlinecap [ 0 cx n div ] 0 setdash }
+  { 2 setlinecap }
+  ifelse
+  /c y1 def /i 500 h mul y1 add def
+  /e x cx mul def /f x1 cx mul def /g x2 cx mul def
+  0 y1 cy mul T
+  { newpath
+    e 0 moveto
+    b 0 gt { gsave d
+      c a cvs dup
+      stringwidth pop /z2 ED
+      w 0 gt {z1 z2 add neg} {z1} ifelse
+      h 0 gt {z1} {b neg} ifelse
+      rmoveto show grestore } if
+    f 0 moveto g 0 L stroke
+    0 cy h mul T
+    c y2 eq c i eq or {exit} if
+    /c c h add def
+  } loop
+  grestore>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psgrid}
+%    \begin{macrocode}
+\def\psgrid{\def\pst@par{}\pst@object{psgrid}}
+\def\psgrid@i{\@ifnextchar(%
+  {\psgrid@ii}{\expandafter\psgrid@iv\pic@coor}}
+\def\psgrid@ii(#1){\@ifnextchar(%
+  {\psgrid@iii(#1)}{\psgrid@iv(0,0)(0,0)(#1)}}
+\def\psgrid@iii(#1)(#2){\@ifnextchar(%
+  {\psgrid@iv(#1)(#2)}{\psgrid@iv(#1)(#1)(#2)}}
+\def\psgrid@iv(#1)(#2)(#3){%
+  \begin@SpecialObj
+  \pst@getcoor{#1}\pst@tempa
+  \pst@getcoor{#2}\pst@tempb
+  \pst@@getcoor{#3}%
+  \ifnum\psk@subgriddiv>1
+    \addto@pscode{gsave
+    \psk@subgridwidth SLW \pst@usecolor\pssubgridcolor
+    \pst@tempb \pst@coor \pst@tempa
+    \pst@number\psxunit \pst@number\psyunit
+    \psk@subgriddiv\space \psk@subgriddots\space
+    {} 0 \tx@Grid grestore}%
+  \fi
+  \addto@pscode{gsave
+    \psk@gridwidth SLW \pst@usecolor\psgridcolor
+    \pst@tempb \pst@coor \pst@tempa
+    \pst@number\psxunit \pst@number\psyunit
+    1 \psk@griddots\space { \pst@usecolor\psgridlabelcolor }
+    \psk@gridlabels \tx@Grid grestore}%
+  \end@SpecialObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{LR-box commands}
+%
+% \begin{macro}{\ifpsmathbox,\everypsbox}
+%    \begin{macrocode}
+\newif\ifpsmathbox
+\psmathboxtrue
+\def\pst@mathflag{\z@}
+\newtoks\everypsbox
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@makenotverbbox}
+%    \begin{macrocode}
+\long\def\pst@makenotverbbox#1#2{%
+  \edef\pst@mathflag{%
+    \ifpsmathbox\ifmmode\ifinner 1\else 2\fi\else \z@\fi\else \z@\fi}%
+  \setbox\pst@hbox=\hbox{%
+    \ifcase\pst@mathflag\or$\m@th\textstyle\or$\m@th\displaystyle\fi
+    {\the\everypsbox#2}%
+    \ifnum\pst@mathflag>\z@$\fi}%
+  #1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@makeverbbox}
+% There is no way to do this such that with
+% \begin{LVerbatim}
+%   \psframebox{\aftergroup\foo}
+% \end{LVerbatim}
+% "\foo" does not end up outside the box. That is why this is not the default
+% mode.
+%    \begin{macrocode}
+\def\pst@makeverbbox#1{%
+  \def\pst@afterbox{#1}%
+  \edef\pst@mathflag{%
+    \ifpsmathbox\ifmmode\ifinner 1\else 2\fi\else \z@\fi\else \z@\fi}%
+  \afterassignment\pst@beginbox
+  \setbox\pst@hbox\hbox}
+\def\pst@beginbox{%
+  \ifcase\pst@mathflag\or$\m@th\or$\m@th\displaystyle\fi
+  \bgroup\aftergroup\pst@endbox
+  \the\everypsbox}
+\def\pst@endbox{%
+  \ifnum\pst@mathflag>\z@$\fi
+  \egroup
+  \pst@afterbox}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psverbboxtrue,\psverbboxfalse}
+%    \begin{macrocode}
+\def\pst@makebox{\pst@@makebox}
+\def\psverbboxtrue{\def\pst@@makebox{\pst@makeverbbox}}
+\def\psverbboxfalse{\def\pst@@makebox{\pst@makenotverbbox}}
+\psverbboxfalse
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@longbox,\pst@makelongbox}
+% There is no way to do this such that with
+% \begin{LVerbatim}
+%   \psframebox{\aftergroup\foo}
+% \end{LVerbatim}
+% "\foo" does not end up outside the box. That is why this is not the default
+% mode.
+%    \begin{macrocode}
+\def\pst@longbox{%
+  \def\pst@makebox{%
+    \gdef\pst@makebox{\pst@@makebox}%
+    \pst@makelongbox}}
+\def\pst@makelongbox#1{%
+  \def\pst@afterbox{#1}%
+  \edef\pst@mathflag{%
+    \ifpsmathbox\ifmmode\ifinner 1\else 2\fi\else \z@\fi\else \z@\fi}%
+  \setbox\pst@hbox\hbox\bgroup
+    \aftergroup\pst@afterbox
+    \ifcase\pst@mathflag\or$\m@th\or$\m@th\displaystyle\fi
+    \begingroup
+      \the\everypsbox}
+\def\pst@endlongbox{%
+     \endgroup
+     \ifnum\pst@mathflag>\z@$\fi
+   \egroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pslongbox}
+%    \begin{macrocode}
+\def\pslongbox#1#2{%
+  \@namedef{#1}{\pst@longbox#2}%
+  \@namedef{end#1}{\pst@endlongbox}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Frame boxes\label{Frameboxes}}
+%
+% \begin{macro}{framesep}
+%    \begin{macrocode}
+\newdimen\psframesep
+\def\psset@framesep#1{\pssetlength\psframesep{#1}}
+\psset@framesep{3pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{boxsep}
+%    \begin{macrocode}
+\newif\ifpsboxsep
+\def\psset@boxsep#1{\@nameuse{psboxsep#1}}
+\psset@boxsep{true}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@useboxpar}
+%    \begin{macrocode}
+\def\pst@useboxpar{%
+  \use@par
+  \if@star
+    \let\pslinecolor\psfillcolor
+    \solid@star
+    \let\solid@star\relax
+  \fi
+  \ifpsdoubleline \pst@setdoublesep \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psframebox}
+% "\psframebox" puts its argument in an "\hbox" and draws a frame around it
+% with thickness "\pst@linewidth", and with distance "\pst@framesep" between
+% each side of the frame (between the line making up each side) and each side
+% of the box. The result is a box with no depth and with width and height
+% equal to the width and height of the original box, plus
+% 2("\pslinewidth"+"\psframesep").
+%
+% "\pst@dima" is set to the distance between each side of the original box and
+% the outer side of the frame (i.e., the side of the resulting box).
+% "\pst@dimb" is set to the depth of the resulting box, "\pst@dimc" is set to
+% the height plus depth of this box, and "\pst@dimd" is set to the width.
+% "\psframe" does the drawing of the frame.
+%    \begin{macrocode}
+\def\psframebox{\def\pst@par{}\pst@object{psframebox}}
+\def\psframebox@i{\pst@makebox\psframebox@ii}
+\def\psframebox@ii{%
+  \begingroup
+    \pst@useboxpar
+    \pst@dima=\pslinewidth
+    \advance\pst@dima by \psframesep
+    \pst@dimc=\wd\pst@hbox\advance\pst@dimc by \pst@dima
+    \pst@dimb=\dp\pst@hbox\advance\pst@dimb by \pst@dima
+    \pst@dimd=\ht\pst@hbox\advance\pst@dimd by \pst@dima
+    \setbox\pst@hbox=\hbox{%
+      \ifpsboxsep\kern\pst@dima\fi
+      \begin@ClosedObj
+        \addto@pscode{%
+          \psk@cornersize
+          \pst@number\pst@dima neg
+          \pst@number\pst@dimb neg
+          \pst@number\pst@dimc
+          \pst@number\pst@dimd
+          .5
+          \tx@Frame}%
+        \def\pst@linetype{2}%
+        \showpointsfalse
+      \end@ClosedObj
+      \box\pst@hbox
+      \ifpsboxsep\kern\pst@dima\fi}%
+    \ifpsboxsep\dp\pst@hbox=\pst@dimb\ht\pst@hbox=\pst@dimd\fi
+    \leavevmode\box\pst@hbox
+  \endgroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psdblframebox}
+%    \begin{macrocode}
+\def\psdblframebox{\def\pst@par{}\pst@object{psdblframebox}}
+\def\psdblframebox@i{\addto@par{doubleline=true}\psframebox@i}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psclip,\endclip}
+% Clipping involves drawing graphics objects, not grouped by "gsave" and
+% "grestore", which may affect the graphics environment. Furthermore, to reset
+% the clipping path, we must either use "grestore" or "initclip", neither of
+% which is robust.
+%    \begin{macrocode}
+\def\psclip#1{%
+  \leavevmode
+  \begingroup
+    \begin@psclip
+    \begingroup
+      \def\use@pscode{%
+        \pstVerb{%
+          \pst@dict
+            /mtrxc CM def
+            CP CP T
+            \tx@STV
+            \psk@origin
+            \psk@swapaxes
+            newpath
+            \pst@code
+            clip
+            newpath
+            mtrxc setmatrix
+            moveto
+            0 setgray
+          end}%
+        \gdef\pst@code{}}%
+        \def\@multips(##1)(##2)##3##4{\pst@misplaced\multips}%
+        \def\nc@object##1##2##3##4{\pst@misplaced{node connection}}%
+        \hbox to\z@{#1}%
+    \endgroup
+  \def\endpsclip{%
+    \end@psclip
+    \endgroup}%
+  \ignorespaces}
+\def\endpsclip{\pst@misplaced\endpsclip}
+\let\begin@psclip\relax
+\def\end@psclip{\pstVerb{currentpoint initclip moveto}}
+\def\AltClipMode{%
+  \def\end@psclip{\pstVerb{\pst@grestore}}%
+  \def\begin@psclip{\pstVerb{gsave}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psclipbox}
+%    \begin{macrocode}
+\def\clipbox{\@ifnextchar[{\psclipbox@}{psclipbox@[\z@]}}
+\def\clipbox@[#1]{\pst@makebox\psclipbox@@{#1}}
+\def\clipbox@@#1{%
+  \pssetlength\pst@dimg{#1}%
+  \leavevmode\hbox{%
+    \begin@psclip
+    \pst@Verb{%
+      CM \tx@STV CP T newpath
+      /a \pst@number\pst@dimg def
+      /w \pst@number{\wd\pst@hbox}a add def
+      /d \pst@number{\dp\pst@hbox}a add neg def
+      /h \pst@number{\ht\pst@hbox}a add def
+      a neg d moveto
+      a neg h L
+      w h L
+      w d L
+      closepath
+      clip
+      newpath
+      0 0 moveto
+      setmatrix}%
+    \unhbox\pst@hbox
+    \end@psclip}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psshadowbox}
+%    \begin{macrocode}
+\def\psshadowbox{%
+  \def\pst@par{}\pst@object{psshadowbox}}
+\def\psshadowbox@i{\pst@makebox\psshadowbox@ii}
+\def\psshadowbox@ii{%
+  \begingroup
+    \pst@useboxpar
+    \psshadowtrue
+    \psboxseptrue
+    \def\psk@shadowangle{-45 }%
+    \setbox\pst@hbox=\hbox{\psframebox@ii}%
+    \pst@dimh=\psk@shadowsize\p@
+    \pst@dimh=.7071\pst@dimh
+    \pst@dimg=\dp\pst@hbox
+    \advance\pst@dimg\pst@dimh
+    \dp\pst@hbox=\pst@dimg
+    \pst@dimg=\wd\pst@hbox
+    \advance\pst@dimg\pst@dimh
+    \wd\pst@hbox=\pst@dimg
+    \leavevmode
+    \box\pst@hbox
+  \endgroup}
+%
+%
+% \begin{macro}{\pscirclebox}
+% "\pscirclebox@ii"'s argument is a hook that is used by node commands.
+%    \begin{macrocode}
+\def\pscirclebox{\def\pst@par{}\pst@object{pscirclebox}}
+\def\pscirclebox@i{\pst@makebox{\pscirclebox@ii{}}}
+\def\pscirclebox@ii#1{%
+  \begingroup
+    \pst@useboxpar
+    \setbox\pst@hbox=\hbox{#1\pscirclebox@iii\box\pst@hbox}%
+    \ifpsboxsep
+      \pst@dima=.5\wd\pst@hbox
+      \pst@pyth\pst@dima\pst@dimb\pst@dimc
+      \advance\pst@dimc\pslinewidth
+      \advance\pst@dimc\psframesep
+      \setbox\pst@hbox=\hbox to2\pst@dimc{%
+        \hss
+        \vbox{\vskip\pst@dimc\vskip-\pst@dimb\box\pst@hbox}%
+        \hss}%
+      \advance\pst@dimc-\pst@dimb
+      \dp\pst@hbox=\pst@dimc
+    \fi
+    \leavevmode\box\pst@hbox
+  \endgroup}
+\def\pscirclebox@iii{%
+  \if@star
+    \pslinewidth\z@
+    \pstverb{\pst@dict \tx@STP \pst@usecolor\psfillcolor
+      newpath \pscirclebox@iv \tx@SD end}%
+  \else
+    \begin@ClosedObj
+    \def\pst@linetype{4}\showpointsfalse
+    \addto@pscode{%
+      \pscirclebox@iv CLW 2 div add 0 360 arc closepath}%
+    \end@ClosedObj
+  \fi}
+\def\pscirclebox@iv{%
+  \pst@number{\wd\pst@hbox}2 div
+  \pst@number{\ht\pst@hbox}\pst@number{\dp\pst@hbox}add 2 div
+  2 copy \pst@number{\dp\pst@hbox}sub 4 2 roll
+  \tx@Pyth \pst@number\psframesep add }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psovalbox}
+% The argument of "\psovalbox@ii" is a hook used by node commands.
+%    \begin{macrocode}
+\def\psovalbox{\def\pst@par{}\pst@object{psovalbox}}
+\def\psovalbox@i{\pst@makebox{\psovalbox@ii{}}}
+\def\psovalbox@ii#1{%
+  \begingroup
+    \pst@useboxpar
+    \pst@dimd=.707\pslinewidth\advance\pst@dimd by 1.414\psframesep
+    \pst@dimg=\ht\pst@hbox\advance\pst@dimg\dp\pst@hbox
+    \pst@dimb=.707\pst@dimg\advance\pst@dimb\pst@dimd
+    \pst@dima=.707\wd\pst@hbox\advance\pst@dima\pst@dimd
+    \setbox\pst@hbox=\hbox{#1\psovalbox@iii\box\pst@hbox}%
+    \ifpsboxsep
+      \setbox\pst@hbox\hbox to 2\pst@dima{\hss\unhbox\pst@hbox\hss}%
+      \advance\pst@dimb-.5\pst@dimg
+      \pst@dimg\ht\pst@hbox
+      \advance\pst@dimg\pst@dimb
+      \ht\pst@hbox=\pst@dimb
+      \pst@dimg=\dp\pst@hbox
+      \advance\pst@dimg\pst@dimb
+      \dp\pst@hbox=\pst@dimb
+    \fi
+    \leavevmode\box\pst@hbox
+  \endgroup}
+\def\psovalbox@iii{%
+  \begin@ClosedObj
+  \addto@pscode{%
+     0 360
+     \pst@number\pst@dima \pst@number\pst@dimb
+     \pst@number{\wd\pst@hbox}2 div
+     \pst@number\pst@dimg 2 div \pst@number{\dp\pst@hbox}sub
+     \tx@Ellipse
+     closepath}%
+  \def\pst@linetype{2}%
+  \end@ClosedObj}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Circles, discs and ellipses\label{Circles}}
+%
+%
+% \begin{macro}{\psset@arcsep,\psk@arcsepA,\psk@arcsepB}
+%    \begin{macrocode}
+\def\psset@arcsepA#1{\pst@getlength{#1}\psk@arcsepA}
+\def\psset@arcsepB#1{\pst@getlength{#1}\psk@arcsepB}
+\def\psset@arcsep#1{%
+  \psset@arcsepA{#1}\let\psk@arcsepB\psk@arcsepA}
+\psset@arcsep{0}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@Arc}
+% Syntax:
+% \begin{LVerbatim}
+%   <angle> {<arrow>} {<add/sub>} ArcArrow <angle>
+% \end{LVerbatim}
+% "r"=radius and "c"=57.2957/"r" should also be defined.
+%    \begin{macrocode}
+\pst@def{ArcArrow}<%
+  /d ED     % add/sub
+  /b ED     % arrow procedure
+  /a ED     % angle
+  gsave
+    newpath
+    0 -1000 moveto
+    clip              % Set clippath far from arrow.
+    newpath
+    0 1 0 0 b         % Draw arrow to determine length.
+  grestore
+  c mul
+  /e ED               % /e equals angle to adjust for arrow length.
+  pop pop pop
+  r a e d \tx@PtoC    % `a e d' is end angle for arrow.
+  y add exch x add exch
+  r a \tx@PtoC        % Now arrow end coor and begin coor are on stack.
+  y add exch x add exch
+  b pop pop pop pop   % Draw arrow, and discard coordinates.
+  a e d                   % End angle of arrow.
+  CLW 8 div c mul neg d>  % Adjust angle to give a little overlap.
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psarc}
+%    \begin{macrocode}
+\def\psarc{\def\pst@par{}\pst@object{psarc}}
+\def\psarc@i{%
+  \@ifnextchar({\psarc@iii}{\psarc@ii}}
+\def\psarc@ii#1{\addto@par{arrows=#1}%
+  \@ifnextchar({\psarc@iii}{\psarc@iii(0,0)}}
+\def\psarc@iii(#1)#2#3#4{%
+  \begin@OpenObj
+    \pst@getangle{#3}\pst@tempa
+    \pst@getangle{#4}\pst@tempb
+    \pst@@getcoor{#1}%
+    \pssetlength\pst@dima{#2}%
+    \addto@pscode{\psarc@iv \psarc@v}%
+    \gdef\psarc@type{0}%
+    \showpointsfalse
+  \end@OpenObj}
+\def\psarc@iv{%
+  \pst@coor /y ED /x ED
+  /r \pst@number\pst@dima def
+  /c 57.2957 r \tx@Div def
+  /angleA
+    \pst@tempa
+    \psk@arcsepA c mul 2 div
+    \ifcase \psarc@type add \or sub \fi
+  def
+  /angleB
+    \pst@tempb
+    \psk@arcsepB c mul 2 div
+    \ifcase \psarc@type sub \or add \fi
+  def
+  \ifshowpoints\psarc@showpoints\fi
+  \ifx\psk@arrowA\@empty
+    \ifnum\psk@liftpen=2
+      r angleA \tx@PtoC
+      y add exch x add exch
+      moveto
+    \fi
+  \fi}
+\def\psarc@v{%
+  x y r
+  angleA
+  \ifx\psk@arrowA\@empty\else
+    { ArrowA CP }
+    { \ifcase\psarc@type add \or sub \fi }
+    \tx@ArcArrow
+  \fi
+  angleB
+  \ifx\psk@arrowB\@empty\else
+    { ArrowB }
+    { \ifcase\psarc@type sub \or add \fi }
+    \tx@ArcArrow
+  \fi
+  \ifcase\psarc@type arc \or arcn \fi}
+\def\psarc@type{0}
+\def\psarc@showpoints{%
+  gsave
+    newpath
+    x y moveto
+    x y r \pst@tempa \pst@tempb
+    \ifcase\psarc@type arc \or arcn \fi
+    closepath
+    CLW 2 div SLW
+    [ \psk@dash\space ] 0 setdash stroke
+  grestore }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psarcn}
+%    \begin{macrocode}
+\def\psarcn{\def\pst@par{}\pst@object{psarcn}}
+\def\psarcn@i{\def\psarc@type{1}\psarc@i}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pscircle}
+%    \begin{macrocode}
+\def\pscircle{\def\pst@par{}\pst@object{pscircle}}
+\def\pscircle@i{\@ifnextchar({\pscircle@do}{\pscircle@do(0,0)}}
+\def\pscircle@do(#1)#2{%
+  \if@star
+    {\use@par\qdisk(#1){#2}}%
+  \else
+    \begin@ClosedObj
+      \pst@@getcoor{#1}%
+      \pssetlength\pst@dimc{#2}%
+      \def\pst@linetype{4}%
+      \addto@pscode{%
+        \pst@coor
+        \pst@number\pst@dimc
+        \psk@dimen CLW mul sub
+        0 360 arc
+        closepath}%
+      \showpointsfalse
+    \end@ClosedObj
+  \fi
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\qdisk}
+%    \begin{macrocode}
+\def\qdisk(#1)#2{%
+  \def\pst@par{}%
+  \begin@SpecialObj
+    \pst@@getcoor{#1}%
+    \pssetlength\pst@dimg{#2}%
+    \addto@pscode{\pst@coor \pst@number\pst@dimg \tx@SD}%
+  \end@SpecialObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pswedge}
+%    \begin{macrocode}
+\def\pswedge{\def\pst@par{}\pst@object{pswedge}}
+\def\pswedge@i{\@ifnextchar({\pswedge@ii}{\pswedge@ii(0,0)}}
+\def\pswedge@ii(#1)#2#3#4{%
+  \begin@ClosedObj
+  \pssetlength\pst@dimc{#2}
+  \pst@getangle{#3}\pst@tempa
+  \pst@getangle{#4}\pst@tempb
+  \pst@@getcoor{#1}%
+  \def\pst@linetype{1}%
+  \addto@pscode{%
+    \pst@coor
+    2 copy
+    moveto
+    \pst@number\pst@dimc \psk@dimen CLW mul sub % Adjusted radius
+    \pst@tempa \pst@tempb
+    arc
+    closepath}%
+    \showpointsfalse
+  \end@ClosedObj}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{Ellipse}
+% Syntax:
+% \begin{Ex}
+%   <angle1 angle2 x-radius y-radius x-origin y-origin> "Ellipse"
+% \end{Ex}
+%    \begin{macrocode}
+\pst@def{Ellipse}<%
+  /mtrx CM def
+  T
+  scale
+  0 0 1 5 3 roll arc
+  mtrx setmatrix>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\psellipse}
+%    \begin{macrocode}
+\def\psellipse{\def\pst@par{}\pst@object{psellipse}}
+\def\psellipse@i(#1){\@ifnextchar(%
+  {\psellipse@ii(#1)}{\psellipse@ii(0,0)(#1)}}
+\def\psellipse@ii(#1)(#2){%
+  \begin@ClosedObj
+    \pst@getcoor{#1}\pst@tempa
+    \pst@@getcoor{#2}%
+    \addto@pscode{%
+      0 360
+      \pst@coor
+      \ifdim\psk@dimen\p@=\z@\else
+        \psk@dimen CLW mul dup 3 1 roll
+        sub 3 1 roll sub exch
+      \fi
+      \pst@tempa
+      \tx@Ellipse
+      closepath}%
+    \def\pst@linetype{2}%
+  \end@ClosedObj}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Repetition}
+%
+% \begin{macro}{\multirput}
+%    \begin{macrocode}
+\def\multirput{%
+  \begingroup\pst@getref{\pst@getrputrot\multirput@i}}
+\def\multirput@i(#1){\@ifnextchar(%
+  {\multirput@ii(#1)}{\multirput@ii(0,0)(#1)}}
+\def\multirput@ii(#1,#2)(#3,#4)#5{%
+  \pst@makebox{\multirput@iii(#1,#2)(#3,#4){#5}}}
+\def\multirput@iii(#1,#2)(#3,#4)#5{%
+  \pst@makesmall\pst@hbox
+  \ifx\pst@rot\@empty\else\pst@rotate\pst@hbox\fi
+  \pssetxlength\pst@dima{#1}\pssetylength\pst@dimb{#2}
+  \pssetxlength\pst@dimc{#3}\pssetylength\pst@dimd{#4}
+  \pst@cntg=#5\relax\pst@cnth=0\relax
+  \leavevmode
+  \loop\ifnum\pst@cntg>\pst@cnth
+    \vbox to \z@{\vss\hbox to \z@{%
+      \kern\pst@dima\copy\pst@hbox\hss}\vskip\pst@dimb}%
+    \advance\pst@dima by\pst@dimc
+    \advance\pst@dimb by\pst@dimd
+    \advance\pst@cnth by 1
+  \repeat
+  \endgroup\ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\multips}
+%    \begin{macrocode}
+\def\multips{\begingroup\pst@getrputrot\multips@i}
+\def\multips@i(#1){\@ifnextchar({\@multips@ii(#1)}{\@multips@ii(0,0)(#1)}}
+\def\@multips@ii(#1)(#2)#3#4{%
+    \pst@getcoor{#1}\pst@tempa
+    \pst@@getcoor{#2}%
+    \pst@cnta=#3\relax
+    \addto@pscode{%
+      \pst@tempa T \the\pst@cnta\space \pslbrace
+      gsave \ifx\pst@rot\@empty\else\pst@rot rotate \fi }%
+    \hbox to\z@{%
+      \def\init@pscode{%
+        \addto@pscode{%
+          gsave
+          \pst@number\pslinewidth SLW
+          \pst@usecolor\pslinecolor}}%
+      \def\use@pscode{\addto@pscode{grestore}}%
+      \def\psclip##1{\pst@misplaced\psclip}%
+      \def\nc@object##1##2##3##4{\pst@misplaced{node connection}}%
+      #4}%
+    \addto@pscode{grestore \pst@coor T \psrbrace repeat}%
+    \leavevmode
+    \use@pscode
+  \endgroup
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Scaling\label{Scaling}}
+%
+% \begin{macro}{\scalebox}
+%    \begin{macrocode}
+\def\scalebox#1{%
+  \begingroup
+    \pst@getscale{#1}\pst@tempa
+    \pst@makebox{\@scalebox}}
+\def\@scalebox{%
+    \leavevmode
+    \ifx\pst@tempa\@empty
+      \box\pst@hbox
+    \else
+      \hbox{%
+        \ht\pst@hbox=\pst@temph\ht\pst@hbox%
+        \dp\pst@hbox=\pst@temph\dp\pst@hbox%
+        \pst@dima=\pst@tempg\wd\pst@hbox%
+        \ifdim\pst@dima<\z@\kern-\pst@dima\fi
+        \pst@Verb{CP CP T \pst@tempa \tx@NET}%
+        \hbox to \z@{\box\pst@hbox\hss}%
+        \pst@Verb{%
+          CP CP T
+          1 \pst@tempg\space div 1 \pst@temph\space div scale
+          \tx@NET}%
+        \ifdim\pst@dima>\z@\kern\pst@dima\fi}%
+    \fi
+  \endgroup}
+\pslongbox{Scalebox}{\scalebox}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\scaleboxto}
+%    \begin{macrocode}
+\def\scaleboxto(#1,#2){%
+  \begingroup
+    \pssetlength\pst@dima{#1}%
+    \pssetlength\pst@dimb{#2}%
+    \pst@makebox{\@scaleboxto\@scalebox}}
+\def\@scaleboxto{%
+    \ifdim\pst@dima=\z@\else
+      \pst@divide{\pst@dima}{\wd\pst@hbox}\pst@tempg
+    \fi
+    \ifdim\pst@dimb=\z@
+      \let\pst@temph\pst@tempg
+    \else
+      \pst@dimc=\ht\pst@hbox\advance\pst@dimc\dp\pst@hbox
+      \pst@divide{\pst@dimb}{\pst@dimc}\pst@temph
+      \ifdim\pst@dima=\z@\let\pst@tempg\pst@temph\fi
+    \fi
+    \edef\pst@tempa{\pst@tempg\space\pst@temph\space scale }%
+    \ifdim\pst@dima=\z@
+      \ifdim\pst@dimb=\z@
+        \@pstrickserr{%
+          \string\scaleboxto\space dimensions cannot both be zero}\@ehpa
+        \def\pst@tempa{}%
+    \fi\fi}
+\pslongbox{Scaleboxto}{\scaleboxto}
+%    \end{macrocode}
+% \end{macro}
+%
+% \section{Rotation: The simple version\label{Rotation:simple}}
+%
+% \begin{macro}{\tx@Rot}
+%    \begin{macrocode}
+\pst@def{Rot}<\pstrotate>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\rotateleft,\rotateright,\rotatedown}
+% These are pretty standard, except that they do not use "gsave" and
+% "grestore".
+%    \begin{macrocode}
+\def\rotateleft{\pst@makebox{\@rotateleft\pst@hbox}}
+\def\@rotateleft#1{%
+  \leavevmode\hbox{\hskip\ht#1\hskip\dp#1\vbox{\vskip\wd#1%
+  \pst@Verb{90 \tx@Rot}
+  \vbox to \z@{\vss\hbox to \z@{\box#1\hss}\vskip\z@}%
+  \pst@Verb{-90 \tx@Rot}}}}
+\def\rotateright{\pst@makebox{\@rotateright\pst@hbox}}
+\def\@rotateright#1{%
+  \hbox{\hskip\ht#1\hskip\dp#1\vbox{\vskip\wd#1%
+  \pst@Verb{-90 \tx@Rot}
+  \vbox to \z@{\hbox to \z@{\hss\box#1}\vss}%
+  \pst@Verb{90 \tx@Rot}}}}
+\def\rotatedown{\pst@makebox{\@rotatedown\pst@hbox}}
+\def\@rotatedown#1{%
+  \hbox{\hskip\wd#1\vbox{\vskip\ht#1\vskip\dp#1%
+  \pst@Verb{180 \tx@Rot}%
+  \vbox to \z@{\hbox to \z@{\box#1\hss}\vss}%
+  \pst@Verb{-180 \tx@Rot}}}}
+\pslongbox{Rotateleft}{\rotateleft}
+\pslongbox{Rotateright}{\rotateright}
+\pslongbox{Rotatedown}{\rotatedown}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{{\tt\Backslash rput} and company}
+%
+% \n\rput\ and similar commands are divided into fours steps:
+% \begin{enumerate}
+%   \item The four arguments are collected:
+%     \begin{enumerate}
+% \item The reference point argument is stored in \n\refpoint@x\ and
+% \n\refpoint@y.
+%       \item The rotation angle is store in \n\pst@rot.
+% \item The translation coordinate is passed to the command that is returned
+% to after the box is made.
+%       \item The RH-box is assigned to the register \n\pst@hbox.
+%     \end{enumerate}
+% \item The box is made zero-dimension and positioned at the reference point
+% by \n\pst@makesmall.
+%   \item The box is rotated by \n\pst@rotate.
+%   \item The box is translated by \n\psput@.
+% \end{enumerate}
+%
+% \subsection{Reference point}
+%
+% \begin{macro}{\pst@getref}
+%    \begin{macrocode}
+\def\pst@getref#1{%
+  \@ifnextchar[%
+    {\def\refpoint@x{.5}\def\refpoint@y{.5}\pst@@getref{#1}}%
+    {\let\refpoint@x\relax#1}}
+\def\pst@@getref#1[#2]{%
+  \pst@expandafter\pst@@@getref{#2}\@empty,,\@nil#1}
+\def\pst@@@getref#1#2,#3,#4\@nil{%
+  \ifx\@empty#3\@empty
+    \@nameuse{getref@#1}\@nameuse{getref@#2}%
+  \else
+    \pst@checknum{#1#2}\refpoint@x
+    \pst@checknum{#3}\refpoint@y
+  \fi}
+\def\getref@t{\def\refpoint@y{1}}
+\def\getref@b{\def\refpoint@y{0}}
+\def\getref@B{\let\refpoint@y\relax}
+\def\getref@l{\def\refpoint@x{0}}
+\def\getref@r{\def\refpoint@x{1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@makesmall}
+%    \begin{macrocode}
+\def\pst@makesmall#1{%
+  \ifx\refpoint@x\relax
+    \setbox#1=\hbox to\z@{\hss\vbox to \z@{\vss\box#1\vss}\hss}%
+  \else
+    \pst@@makesmall{#1}%
+  \fi}
+\def\pst@@makesmall#1{%
+  \pst@dimh=\refpoint@x\wd#1%
+  \ifx\refpoint@y\relax
+    \pst@dimg=\dp#1%
+  \else
+    \pst@dimg=\refpoint@y\ht#1%
+    \advance\pst@dimg\refpoint@y\dp#1%
+  \fi
+  \setbox#1=\hbox to\z@{%
+    \hskip-\pst@dimh\vbox to\z@{\vss\box#1\vskip-\pst@dimg}\hss}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Rotation}
+%
+% \begin{macro}{\pst@getrputrot}
+%    \begin{macrocode}
+\def\pst@getrputrot#1{%
+  \@ifnextchar(%
+    {\def\pst@rot{}#1}%
+    {\pst@getrot{\@ifnextchar({#1}{#1(0,0)}}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getrot}
+%    \begin{macrocode}
+\def\pst@getrot#1#2{%
+  \pst@expandafter{\@ifnextchar*{\pst@@@getrot}{\pst@@getrot}}{#2}\@nil
+  \ifx\pst@rotlist\@empty\else
+    \edef\pst@rotlist{\pst@rotlist \pst@rot add }%
+  \fi
+  #1}
+\def\pst@@getrot#1\@nil{%
+  \def\next##1@#1=##2@##3\@nil{%
+    \ifx\relax##2%
+      \pst@getangle{#1}\pst@rot
+    \else
+      \def\pst@rot{##2}%
+    \fi}%
+  \expandafter\next\pst@rottable @#1=\relax @\@nil}
+\def\pst@@@getrot#1#2\@nil{%
+  \pst@@getrot#2\@nil
+  \edef\pst@rot{\pst@rotlist neg \ifx\pst@rot\@empty\else\pst@rot add \fi}}%
+\def\pst@rotlist{0 }
+\def\pst@rot{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@rottable}
+% The trailing spaces must be included, except when empty.
+%    \begin{macrocode}
+\def\pst@rottable{%
+  @0=%
+  @U=%
+  @L=90 %
+  @D=180 %
+  @R=-90 %
+  @N=\pst@rotlist neg %
+  @W=\pst@rotlist neg 90 add %
+  @S=\pst@rotlist neg 180 add %
+  @E=\pst@rotlist neg 90 sub }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@rotate}
+% The last argument should be the register for a zero-dimensional box that is
+% to be rotated. By first putting the box in a zero-dimension box centered at
+% the reference point of the original box, we do not have to use "gsave" and
+% "grestore".
+%    \begin{macrocode}
+\def\pst@rotate#1{%
+  \setbox#1=\hbox{%
+    \pst@Verb{\pst@rot \tx@Rot}%
+    \box#1%
+    \pst@Verb{\pst@rot neg \tx@Rot}}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \subsection{Translation}
+%
+% \begin{macro}{\psput@cartesian,\psput@special}
+% \n\psput@\ is defined by the \n\NormalCoor\ and \n\SpecialCoor\ commands to
+% invoke either "\psput@cartesian" or "\psput@special".
+%
+% "\psput@cartesian" is for Cartesian coordinates only. \TeX\ does the
+% translation.
+%
+% "\psput@special" works for any coordinates. PostScript does the translation.
+% "/lmtrx" is used to store a stack of transformation for nested translations.
+%    \begin{macrocode}
+\def\psput@cartesian#1{%
+  \hbox to \z@{\kern\pst@dimg{\vbox to \z@{\vss\box#1\vskip\pst@dimh}\hss}}}
+\def\psput@special#1{%
+  \hbox{%
+    \pst@Verb{{ \pst@coor } \tx@PutCoor \tx@PutBegin}%
+    \box#1%
+    \pst@Verb{\tx@PutEnd}}}
+\pst@def{PutCoor}<%
+  gsave
+    CP T
+    CM
+    \tx@STV
+    exch exec
+    moveto
+    setmatrix
+    CP
+  grestore>
+\pst@def{PutBegin}<%
+  /lmtrx [ tx@Dict /lmtrx known { lmtrx aload pop } if CM ] def
+  CP 4 2 roll T moveto>
+\pst@def{PutEnd}<CP /lmtrx [ lmtrx aload pop setmatrix ] def moveto>
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{The real thing}
+%
+% \begin{macro}{\begin@psput,\end@psput}
+%    \begin{macrocode}
+\def\begin@psput#1{\begingroup\pst@killglue\leavevmode\pst@ifstar{#1}}%
+\def\end@psput#1(#2){%
+  \pst@makebox{%
+    \if@star
+      \setbox\pst@hbox\hbox{\psframebox*[boxsep=false]{\unhbox\pst@hbox}}%
+    \fi
+    #1(#2)%
+    \endgroup
+    \ignorespaces}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\rput}
+%    \begin{macrocode}
+\def\rput{\begin@psput{\pst@getref{\pst@getrputrot{\end@psput\rput@i}}}}
+\def\rput@i(#1){%
+    \pst@makesmall\pst@hbox
+    \ifx\pst@rot\@empty\else\pst@rotate\pst@hbox\fi
+    \psput@{#1}\pst@hbox}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\cput}
+% The first argument of "\cput@iii" is a hook used by node commands.
+%    \begin{macrocode}
+\def\cput{\def\pst@par{}\pst@object{cput}}
+\def\cput@i{\begingroup\pst@killglue\leavevmode\pst@getrputrot\cput@ii}
+\def\cput@ii(#1){\pst@makebox{\cput@iii{}(#1)}}
+\def\cput@iii#1(#2){%
+    \setbox\pst@hbox=\hbox{\psboxsepfalse\pscirclebox@ii{#1}}%
+    \let\refpoint@x\relax
+    \rput@i(#2)%
+  \endgroup
+  \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{{\tt\Backslash uput} and company}
+%
+% The difference between "\uput" and \n\rput\ is that "\rput"'s reference
+% point is replaced by labelsep and reference angle arguments.
+%
+% \begin{macro}{\psset@labelsep,\pslabelsep}
+%    \begin{macrocode}
+\newdimen\pslabelsep
+\def\psset@labelsep#1{\pssetlength\pslabelsep{#1}}
+\psset@labelsep{5pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getrefangle}
+%    \begin{macrocode}
+\def\pst@getrefangle#1\@nil{%
+  \def\next##1@#1=##2"##3@##4\@nil{%
+    \ifx\relax##2%
+      \pst@getangle{#1}\pst@refangle
+      \def\pst@uputref{}%
+    \else
+      \edef\pst@refangle{##2}%
+      \edef\pst@uputref{##3}%
+    \fi}%
+  \expandafter\next\pst@refangletable @#1=\relax"@\@nil}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@refangletable}
+%    \begin{macrocode}
+\def\pst@refangletable{%
+  @r=0"20%
+  @u=90"02%
+  @l=180"10%
+  @d=-90"01%
+  @ur=45"22%
+  @ul=135"12%
+  @dr=-135"21%
+  @dl=-45"11}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\uput}
+%    \begin{macrocode}
+\def\uput{\begin@psput{\@ifnextchar[{\uput@ii}{\uput@i}}}
+\def\uput@i#1{\pssetlength\pslabelsep{#1}\uput@ii}
+\def\uput@ii[#1]{%
+  \pst@expandafter\pst@getrefangle{#1}\@nil
+  \pst@getrputrot{\end@psput\uput@iii}}
+\def\uput@iii(#1){%
+    \ifx\pst@uputref\@empty
+      \uput@iv\tx@UUput
+    \else
+      \ifx\pst@rot\@empty
+        \expandafter\uput@v\pst@uputref
+      \else
+        \uput@iv\tx@UUput
+      \fi
+    \fi
+    \psput@{#1}\pst@hbox}
+\def\uput@iv#1{%
+  \edef\pst@coor{%
+    \pst@number\pslabelsep
+    \pst@number{\wd\pst@hbox}%
+    \pst@number{\ht\pst@hbox}%
+    \pst@number{\dp\pst@hbox}%
+    \pst@refangle\space \ifx\pst@rot\@empty\else\pst@rot\space sub \fi
+    \tx@Uput #1}%
+  \setbox\pst@hbox=\hbox to\z@{\hss\vbox to\z@{\vss\box\pst@hbox\vss}\hss}%
+  \setbox\pst@hbox=\psput@special\pst@hbox
+  \ifx\pst@rot\@empty\else\pst@rotate\pst@hbox\fi}
+\def\uput@v#1#2{%
+  \ifnum#1>\z@\ifnum#2>\z@\pslabelsep=.707\pslabelsep\fi\fi
+  \setbox\pst@hbox=\vbox to\z@{%
+    \ifnum#2=1 \vskip\pslabelsep\else\vss\fi
+    \hbox to\z@{%
+      \ifnum#1=2 \hskip\pslabelsep\else\hss\fi
+      \box\pst@hbox
+      \ifnum#1=1 \hskip\pslabelsep\else\hss\fi}%
+    \ifnum#2=2 \vskip\pslabelsep\else\vss\fi}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tx@Uput}
+% I forget how this works, but it does.
+%    \begin{macrocode}
+\pst@def{Uput}<%
+  /a ED
+  add 2 div /h ED
+  2 div /w ED
+  /s a sin def
+  /c a cos def
+  /b
+  s abs c abs 2 copy gt
+  dup /q ED
+  { pop } { exch pop } ifelse
+  def
+  /w1 c b div w mul def
+  /h1 s b div h mul def
+  q
+  { w1 abs w sub dup c mul abs }
+  { h1 abs h sub dup s mul abs }
+  ifelse>
+\pst@def{UUput}<%
+  /z ED
+  abs /y ED
+  /x ED
+  q
+  { x s div c mul abs y gt }
+  { x c div s mul abs y gt }
+  ifelse
+  { x x mul y y mul sub z z mul add sqrt z add }
+  { q { x s div } { x c div } ifelse abs }
+  ifelse
+  a \tx@PtoC h1 add exch w1 add exch>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@getlabelsep,\Rput}
+% "\Rput" is an obsolete version of "\uput".
+%    \begin{macrocode}
+\def\pst@getlabelsep#1{%
+  \@ifnextchar[%
+    {\def\refpoint@x{.5}\def\refpoint@y{.5}\pst@@getref{#1}}%
+    {\pst@@getlabelsep{#1}}}
+\def\pst@@getlabelsep#1#2{\pssetlength\pslabelsep{#2}\pst@getref{#1}}
+\def\Rput{%
+  \begin@psput{\pst@getlabelsep{\pst@getrputrot{\end@psput{\Rput@i\rput@i}}}}}
+\def\Rput@i{%
+  \pst@dimg=\dp\pst@hbox
+  \advance\pst@dimg\pslabelsep
+  \dp\pst@hbox=\pst@dimg
+  \pst@dimg=\ht\pst@hbox
+  \advance\pst@dimg\pslabelsep
+  \ht\pst@hbox=\pst@dimg
+  \setbox\pst@hbox\hbox{\kern\pslabelsep\box\pst@hbox\kern\pslabelsep}}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Pictures\label{Pictures}}
+%
+% \begin{macro}{\pspicture}
+%    \begin{macrocode}
+\def\pspicture{\begingroup\pst@ifstar\pst@picture}
+\def\pst@picture{%
+  \@ifnextchar[{\pst@@picture}{\pst@@picture[0]}}
+\def\pst@@picture[#1]#2(#3,#4){%
+ \@ifnextchar({\pst@@@picture[#1](#3,#4)}%
+   {\pst@@@picture[#1](0,0)(#3,#4)}}
+\def\pst@@@picture[#1](#2,#3)(#4,#5){%
+  \pssetxlength\pst@dima{#2}\pssetylength\pst@dimb{#3}%
+  \pssetxlength\pst@dimc{#4}\pssetylength\pst@dimd{#5}%
+  \def\pst@tempa{#1}%
+  \setbox\pst@hbox=\hbox\bgroup
+  \begingroup\KillGlue
+  \@ifundefined{@latexerr}{}{\let\unitlength\psunit}%
+  \edef\pic@coor{(#2,#3)(#2,#3)(#4,#5)}\ignorespaces}
+\def\pic@coor{(0,0)(0,0)(10,10)}
+\def\endpspicture{%
+    \pst@killglue
+    \endgroup
+    \egroup
+    \ifdim\wd\pst@hbox=\z@\else
+      \@pstrickserr{Extraneous space in the pspicture environment}%
+        {Type \space <return> \space to procede.}%
+    \fi
+    \ht\pst@hbox=\pst@dimd
+    \dp\pst@hbox=-\pst@dimb
+    \setbox\pst@hbox=\hbox{%
+      \kern-\pst@dima
+      \ifx\pst@tempa\@empty\else
+        \advance\pst@dimd-\pst@dimb
+        \pst@dimd=\pst@tempa\pst@dimd
+        \advance\pst@dimd\pst@dimb
+        \lower\pst@dimd
+      \fi
+      \box\pst@hbox
+      \kern\pst@dimc}%
+    \if@star\setbox\pst@hbox=\hbox{\clipbox@@\z@}\fi
+    \leavevmode\box\pst@hbox
+  \endgroup}
+\@namedef{pspicture*}{\pspicture*}
+\@namedef{endpspicture*}{\endpspicture}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Overlays\label{Overlays}}
+%
+% Overlays work by translating invisible material. They take advantage of the
+% fact that PostScript is running parallel to \TeX, and so we can redefine the
+% value of some PostScript variables in order to get a different overlay
+% printed each time we output a box containing overlay commands (even though
+% the box has already been typeset by \TeX).
+%
+% \begin{macro}{BeginOverlay}
+% "BeginOL" is a PostScript procedure, with syntax:
+% \begin{LVerbatim}
+%   (<string>) BeginOL
+% \end{LVerbatim}
+% If the string is not "(all)" and does not match "TheOL", then the output is
+% made invisible by translating it over by the coffee pot (actually, by a
+% distance "OLUnit"). Otherwise, it is made visible by translating it back to
+% the page.
+%
+% Rather than translating the page, we could define a small clipping path off
+% the page, but that would be more likely to be messed up by someone's
+% "initclip" (e.g., by PSTricks' "initclip"!).
+%    \begin{macrocode}
+\pst@def{BeginOL}<%
+  dup (all) eq exch TheOL eq or
+  { IfVisible not
+    { CP OLUnit T moveto
+      /IfVisible true def }
+    if }
+  { IfVisible
+    { CP OLUnit \tx@NET moveto
+      /IfVisible false def }
+    if }
+  ifelse>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{InitOL}
+% This figures out how far in the current units used by the driver is 50
+% inches up and to the right. This works even though drivers use unusual
+% coordinate systems (even "dvips"). This macro also defines "BOL" to be
+% "BeginOL" and sets the default value of "IfVisible".
+%    \begin{macrocode}
+\pst@dimg=40in
+\edef\pst@OLunit{\pst@number\pst@dimg}
+\pst@def{InitOL}<%
+  /OLUnit [ gsave CM \tx@STV \pst@OLunit
+    dup moveto setmatrix CP grestore ] cvx def
+  /BOL { \tx@BeginOL } def /IfVisible true def>
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@initoverlay}
+% This defines "TheOL" to be "#1". It must be inserted just before printing
+% overlay "#1".
+%    \begin{macrocode}
+\def\pst@initoverlay#1{\pst@Verb{\tx@InitOL /TheOL (#1) def}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\pst@overlay,\pst@endoverlay}
+% "\pst@overlay" just calls "BeginOverlay".
+%    \begin{macrocode}
+\def\pst@overlay#1{%
+  \edef\curr@overlay{#1}%
+  \pst@Verb{(#1) BOL}%
+  \aftergroup\pst@endoverlay}
+\def\pst@endoverlay{%
+  \pst@Verb{(\curr@overlay) BOL}}
+\def\curr@overlay{all}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\overlaybox,\endoverlaybox,\putoverlaybox}
+% "\pst@initoverlay", "\pst@overlay", and "\pst@endoverlay" are the overlays
+% primitives. An interface must be set up that guarantees that "\pst@overlay"
+% and "\pst@endoverlay" are only used inside a box, and that
+% "\pst@initoverlay" is inserted each type the box is printed. Here is one
+% such interface (see "seminar.sty" for an interface for slides). The extra
+% "\begingroup" and "\endgroup" assure that each "\pst@endoverlay" is executed
+% within the box.
+%    \begin{macrocode}
+\newbox\theoverlaybox
+\def\overlaybox{%
+  \setbox\theoverlaybox=\hbox\bgroup
+    \begingroup
+    \let\psoverlay\pst@overlay
+    \def\overlaybox{%
+      \@pstrickserr{Overlays cannot be nested}\@eha}%
+    \def\putoverlaybox{%
+      \@pstrickserr{You must end the overlay box
+      before using \string\putoverlaybox}}%
+    \psoverlay{main}}
+\def\endoverlaybox{\endgroup\egroup}
+\def\putoverlaybox#1{%
+  \hbox{\pst@initoverlay{#1}\copy\theoverlaybox}}
+\def\psoverlay{\@pstrickserr{\string\psoverlay\space
+  can only be used after \string\overlaybox}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \section{Configuration file -- revisited\label{Config:revisited}}
+%
+%    \begin{macrocode}
+\ifx\pstcustomize\relax \input pstricks.con \fi
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\pst@ATH<end>
+\catcode`\@=\PstAtCode\relax
+\endinput
+%    \end{macrocode}
+%
+% \endinput
+%
+%% END: pstricks.doc

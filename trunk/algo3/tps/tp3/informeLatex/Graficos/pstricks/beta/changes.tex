@@ -1,0 +1,147 @@
+%% BEGIN changes.tex
+%%
+%% Changes listing for PSTricks.
+%% Run with LaTeX, with or without the NFSS.
+%%
+%% Change these for a4 paper:
+\def\paperwidth{8.5in}
+\def\paperheight{11in}
+
+\def\FileVersion{0.94-Beta}
+\def\FileDate{April 16, 1993}
+
+\documentstyle[12pt,fancybox]{article}
+
+%% PAGE PARAMETERS
+
+% Paragraphs are marked by large space rather than indentation:
+\parindent 0pt
+\parskip 6pt plus 1pt minus 1pt
+
+% No headers, 1in top margin
+\topmargin 0pt
+\headheight 0pt
+\headsep 0pt
+
+% Total bottom margin 1in, text height 9in
+\textheight 9in
+\footskip .625in
+
+% Now adjust for different paper size:
+\newdimen\mydim
+\mydim=\paperwidth
+\advance\mydim-8.5in
+\divide\mydim 2
+\advance\oddsidemargin \mydim
+\advance\evensidemargin \mydim
+\mydim=\paperheight
+\advance\mydim-11in
+\divide\mydim 2
+\advance\topmargin \mydim
+
+%% OTHER
+
+\renewcommand{\EveryVerbatimLine}[2]{}
+
+% Short meta (works in verbatim. Can't use < for other purposes.
+\catcode`\<=13 \def<#1>{{\rm\it #1\/}}    % <meta> (works in verbatim)
+
+% Short verbatim.
+\catcode`\"=13
+\def"{\verb"}
+
+\catcode`\@=12  % In case I'm using AmS-LaTeX
+
+\begin{document}
+
+\begin{center}
+{\large\bf Changes listing for PSTricks}\\[6pt]
+  Version \FileVersion\\
+  \FileDate\\[6pt]
+  Timothy Van Zandt\\
+  tvz@Princeton.EDU
+\end{center}
+
+  The PSTricks package is still preliminary. The features list
+  and user interface are unlikely to change much in the short term, but
+  the internal code is not stable.
+
+\section{VERSION 0.94 (Beta)}
+
+\subsection{Incompatible changes}
+
+  \begin{enumerate}
+
+    \item "\Rnode" uses the graphics parameters "href" and "vref" to set the
+reference point, rather than having a coordinate argument.
+
+  \end{enumerate}
+
+\subsection{New features}
+
+  \begin{enumerate}
+
+  \item New graphics objects: "\pstriangle", "\psdiamond", "\psdot".
+
+  \item New box frames: "\pstribox", "\psdiabox".
+
+  \item New nodes: "\dotnode", "\dianode", "trinode".
+
+  \item Tree macros!
+
+  \item "\psmatrix": Good for math diagrams and graphs.
+
+  \item Negative nodesep and offset measure distance from center of node.
+
+  \item New node connections: "\ncbox", "\ncarcbox".
+
+  \item New node label puts: "\ncput", "\naput", "\nbput". (These replace
+"\lput", "\mput", "\aput", "\Aput", "\bput" and "\Bput", which are still
+supported.)
+
+  \item New node label puts (especially good for trees): "\thput", "\tvput",
+"\tlput", "\trput", "\taput", "\tbput". (Make "\ncline" obsolete, but this is
+still supported.)
+
+  \item "\nput", for attaching labels to nodes.
+
+  \item New arrow styles: {\catcode`\<=12 "|<->|" and "|<*->|*"}.
+
+  \item New dot styles: "diamond", "diamond*", "oplus", "ominus", "x",
+"asterisk".
+
+ \end{enumerate}
+
+\subsection{Obsolete but supported features}
+
+  \begin{enumerate}
+
+  \item "\lput", "\mput", "\aput", "\Aput", "\bput" and "\Bput".
+
+  \item "\ncline".
+
+  \end{enumerate}
+\subsection{Bug fixes}
+
+  \begin{enumerate}
+
+    \item Fixed "\ncangle" so that it would work properly with non-right angle
+values of "angleA" and "angleB".
+
+  \end{enumerate}
+
+
+\subsection{Other changes}
+
+  \begin{enumerate}
+
+     \item "\OldPsput" and "\NewPsput" are back in "pstricks.tex".
+
+     \item The <num> in "arrowsize=<dim num>", "tbarsize=<dim num>", and
+"dotsize=<dim num>" is optional (default=0).
+
+  \end{enumerate}
+
+
+\end{document}
+%% END changes.tex

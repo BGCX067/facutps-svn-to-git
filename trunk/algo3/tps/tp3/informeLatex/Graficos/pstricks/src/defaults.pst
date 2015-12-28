@@ -1,0 +1,103 @@
+%% defaults.pst
+%% Created with unix csh commands:
+%%   grep ^.psset\@ pstricks.doc > defaults.pst
+%%   grep ^.psset\@ pst-node.doc >> defaults.pst
+%%   grep ^.psset\@ gradient.tex >> defaults.pst
+%%   grep ^.psset\@ pst-coil.doc >> defaults.pst
+%%   grep ^.psset\@ pst2eps.tex >> defaults.pst
+%%   grep ^.psset\@ pst-plot.tex >> defaults.pst
+%% Input by pst-user.tex
+\psset@swapaxes{false}
+\psset@showpoints{false}
+\psset@border{0pt}
+\psset@bordercolor{white}
+\psset@doubleline{false}
+\psset@doublesep{1.25\pslinewidth}
+\psset@doublecolor{white}
+\psset@shadow{false}
+\psset@shadowsize{3pt}
+\psset@shadowangle{-45}
+\psset@shadowcolor{darkgray}
+\psset@linewidth{.8pt}
+\psset@linecolor{black}
+\psset@dash{5pt 3pt}
+\psset@dotsep{3pt}
+\psset@linestyle{solid}
+\psset@fillcolor{white}
+\psset@hatchwidth{.8pt}
+\psset@hatchsep{4pt}
+\psset@hatchcolor{black}
+\psset@hatchangle{45}
+\psset@fillstyle{none}
+\psset@arrowscale{1}
+\psset@arrowsize{2pt 3}
+\psset@arrowlength{1.4}
+\psset@arrowinset{.4}
+\psset@tbarsize{2pt 5}
+\psset@bracketlength{.15}
+\psset@rbracketlength{.15}
+\psset@arrows{-}
+\psset@liftpen{0}
+\psset@linetype{0}
+\psset@dotstyle{*}
+\psset@curvature{1 .1 0}
+\psset@dotsize{.5pt 2.5}
+\psset@dotscale{1}
+\psset@dotangle{0}
+\psset@linearc{0pt}
+\psset@framearc{0}
+\psset@cornersize{relative}
+\psset@dimen{outer}
+\psset@gridwidth{.8pt}
+\psset@griddots{0}
+\psset@gridcolor{black}
+\psset@subgridwidth{.4pt}
+\psset@subgridcolor{gray}
+\psset@subgriddots{0}
+\psset@subgriddiv{5}
+\psset@gridlabels{10pt}
+\psset@gridlabelcolor{black}
+\psset@framesep{3pt}
+\psset@boxsep{true}
+\psset@arcsep{0}
+\psset@labelsep{5pt}
+\psset@nodesep{0}
+\psset@offset{0}
+\psset@arm{10pt}
+\psset@angle{0}
+\psset@arcangle{8}
+\psset@ncurv{.67}
+\psset@loopsize{1cm}
+\psset@gradbegin{gradbegin}
+\psset@gradend{gradend}
+\psset@gradlines{500}
+\psset@gradmidpoint{.9}
+\psset@gradangle{0}
+\psset@coilwidth{1cm}
+\psset@coilheight{1}
+\psset@coilarm{.5cm}
+\psset@coilaspect{45}
+\psset@coilinc{10}
+\psset@bbllx{-1pt}
+\psset@bblly{-1pt}
+\psset@bburx{1pt}
+\psset@bbury{1pt}
+\psset@headers{none}
+\psset@checkfile{true}
+\psset@makeeps{new}
+\psset@headerfile{}
+\psset@plotstyle{line}
+\psset@plotpoints{50}
+\psset@ticksize{3pt}
+\psset@tickstyle{full}
+\psset@ticks{all}
+\psset@labels{all}
+\psset@Ox{0}
+\psset@Dx{1}
+\psset@dx{0}
+\psset@Oy{0}
+\psset@Dy{1}
+\psset@dy{0}
+\psset@showorigin{true}
+\psset@axesstyle{axes}
+\endinput

@@ -1,0 +1,135 @@
+%% BEGIN: pst-code.tex
+%%
+%% For printing documented code for PSTricks.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%%
+%% This LaTeX file inputs pstricks.doc and pst-node.doc,
+%% and prints the documented code.
+%%
+%% You must also have Frank Mittelbach's
+%%     doc.sty and gind.ist
+%% (available from rusmv1.rus.uni-stuttgart.de), as well as my
+%%     tvz-hax.sty, tvz-code.sty and fancybox.sty
+%% (distributed with PSTricks).
+%%
+%% gind.ist is for the index. I.e.,
+%%            makeindex -s gind.ist pst-code.idx
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Change these for a4 paper:
+\def\paperwidth{8.5in}
+\def\paperheight{11in}
+
+\documentstyle{tvz-code}
+
+\def\fileversion{0.93a}
+\def\filedate{93/03/12}
+
+% Comment out to suppress generation of .idx file. Speeds things up.
+% \MakeIndex
+
+% Include to suppress checksums for drafts:
+\def\StopEventually#1{\let\Finale\relax}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%% More DoNotIndex for pst-code %%%%%%%%%%%%%%%
+\DoNotIndex{\pst@dima,\pst@dimb,\pst@dimc,\pst@dimd,\pst@dimg,\pst@cnta,%
+\pst@cntb,\pst@cntc,\pst@cntg,\pst@tempa,\pst@tempb,\pst@tempc,\pst@tempd,%
+\pst@tempg,\pst@boxa,\pst@boxg,\if@pst,\@psttrue,\@pstfalse}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatother
+
+\MakeShortVerb\"
+
+\ShortMeta
+
+\def\n#1{{\tt \string#1}}
+
+\newbox\junkbox
+\def\DocInput#1{%
+  \MakePercentIgnore
+  \setbox\junkbox=\hbox\bgroup
+    \input{#1}%
+  \MakePercentComment}
+\let\EndDocPreamble\egroup
+
+\begin{document}
+
+\def\thetitle{PSTricks: Documented Code}
+
+\begin{titlepage}
+
+\let\footnotesize\small
+\let\footnoterule\relax
+\setcounter{page}{0}
+
+\null
+\vfil
+\vskip 25pt
+
+\begin{center}
+
+  {\LARGE\bf PSTricks}:\\[5pt]
+  {\large\bf PostScript macros for Generic TeX}\\[7pt]
+  {\LARGE\bf\em Documented Code}\par
+
+  \vskip 3em
+
+  {\large \lineskip .75em Timothy Van Zandt}%
+    \thanks{%
+      Author's address:
+      Department of Economics, Princeton University,
+      Princeton, NJ 08544-1021, USA. Internet: {\tt tvz@Princeton.EDU}}%
+    \par
+
+  \vskip 1.5em
+
+  {\large \thefiledate\\[2pt] Version \fileversion}\par
+
+\end{center}
+
+\par
+
+\makeatletter\@thanks\makeatother
+
+\vfil
+
+PSTricks is a collection of PostScript macros that is compatible with most
+\TeX\ macro packages, including Plain \TeX\ and \LaTeX. Included are macros
+for color, graphics, rotation and overlays.
+
+This is the documented code. There is also a {\em User's Guide} and a read-me
+file.
+
+\vfil
+\null
+
+\end{titlepage}
+
+\setcounter{footnote}{0}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+\StopEventually{}
+\DocInput{pstricks.doc}
+\Finale
+\clearpage
+
+\StopEventually{}
+\DocInput{pst-node.doc}
+\Finale
+\clearpage
+
+\DeleteShortMeta
+
+\PrintIndex
+
+\end{document}
+
+%% END pst-code.tex

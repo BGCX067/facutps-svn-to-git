@@ -1,0 +1,37 @@
+%% BEGIN pstree.readme
+%% April 14, 1993
+%% tvz@Princeton.EDU
+
+This directory contains some new tree macros for PSTricks, plus a few
+other new features (including a matrix macro for graphs and commutatitve
+diagrams). If you ever make trees, then you really should
+try these out.
+
+These will be incorporated into the next release of PSTricks.
+Any comments and improvements in the meantime would be greatly
+appreciated, including better examples.
+
+These macros are unstable, both in that they probably have bugs and
+also in that the interface could change a little. But they are already
+well documented and are very complete.
+
+These have been tested with PSTricks v0.93a. I think they should also
+work with v0.93, but definitely not earlier versions.
+
+The files are:
+
+  pst-beta.tex   : Use this instead of pst-node.tex. If you are also
+                   using pst-coil.tex or pst-plot.tex, you should
+                   input these BEFORE pst-beta.tex.
+
+  psn-beta.pro   : This is the PostScript header file that is used by
+                   pst-beta.tex (instead of pst-node.pro).
+
+  pst-doc1.ps    : The first part of the documentation. Includes revised
+                   documentation for the node commands.
+
+  pst-doc2.ps    : Second part of the documentation.
+
+  changes.tex    : Changes for this beta release.
+
+%% END pstree.readme

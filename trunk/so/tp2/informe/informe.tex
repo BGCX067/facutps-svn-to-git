@@ -1,0 +1,108 @@
+\documentclass[a4paper, 10pt]{article}
+\usepackage[spanish] {babel}
+\title{Taller 1}
+\usepackage{caratula}
+\usepackage[pdftex]{graphicx}
+\usepackage{amssymb}
+
+\setlength{\leftmargin}{2cm}
+\setlength{\rightmargin}{2cm}
+\setlength{\oddsidemargin}{-1cm}
+\setlength{\evensidemargin}{-1cm}
+\setlength{\topmargin}{-1cm}
+\setlength{\textwidth}{18cm}
+\setlength{\textheight}{25cm}
+
+
+\usepackage{fancyhdr}
+\usepackage{listings}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead [L]{\scriptsize Trabajo Pr\'actico N$^{\circ}$2}
+\fancyhead [R]{\scriptsize Mancuso, Mataloni}%1{20pt}
+\fancyfoot[C]{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\materia{Sistemas Operativos}
+\submateria{Primer Cuatrimestre de 2010}
+\titulo{Trabajo Pr\'actico N$^{\circ}$2}
+\subtitulo{pthreads}
+\grupo{Grupo}
+\integrante{Mataloni Alejandro}{706/07}{amataloni@gmail.com}
+\integrante{Mancuso Emiliano}{597/07}{emiliano.mancuso@gmail.com}
+\maketitle
+
+\newpage
+
+\section{Ejercicio 1}
+
+Para empezar, creamos un archivo nuevo \textbf{servidor\_multi.c} con el fin de desarrollar el servidor multi-thread para realizar el TP, partiendo del c\'odigo original del \textbf{servidor\_mono.c} \\
+
+Primero le\'imos (desde internet) como usar \textit{pthreads} en nuestra applicaci\'on.
+Analizamos el c\'odigo y decidimos que con s\'olo hacer la funci\'on atendedor\_de\_alumno multi-thread, podr\'iamos realizar el procesamiento de varios clientes simultaneamente.\\ 
+
+Como la funci\'on \textbf{atendedor\_de\_alumno} ten\'ia la siguiente aridad: 
+
+\lstset{language=[ANSI]C++}
+\begin{lstlisting}
+ void *atendedor_de_alumno(int socket_fd, t_aula *el_aula)
+\end{lstlisting} 
+\vspace*{2em}
+
+Lo que hicimos fue crear un struct para pasarle los par\'ametros:
+
+\lstset{language=[ANSI]C++}
+\begin{lstlisting}
+ typedef struct {
+ 	int socket_fd;
+ 	t_aula *el_aula;
+ } t_arguments;
+\end{lstlisting}
+\vspace*{2em}
+
+Luego para crear el thread:
+
+\lstset{language=[ANSI]C++}
+\begin{lstlisting}
+ rc = pthread_create(&threadId, NULL, atendedor_de_alumno, (void *) &arguments);
+\end{lstlisting}
+\vspace*{2em}
+
+Una vez resuelto el tema de los threads, pasamos al control de acceso a las variables compartidas.\\ 
+En principio tenemos que controlar aquellas variables que son accedidas desde todos los threads. Si no se hiciera esto podr\'iamos caer en una \textit{race condition}. \\
+\newline
+Para solucionar esto utilizamos \textbf{mutexes}
+
+Estas variables son:
+\begin{enumerate}
+    \item un\_aula
+    \item rescatistas\_disponibles
+\end{enumerate}
+
+Asignamos el \textit{mutexAula} para garantizar el acceso de a un thread a la vez, para cuando se consultan o modifican las posiciones o la cantidad de personas de la misma.
+El \textit{mutexRescatista} se encarga de sincronizar el acceso a la cantidad de rescatistas disponibles.
+Cuando se solicitan m\'as rescatistas que los disponibles, el alumno que lo requiere se queda esperando.\\ 
+Para no hacer \textbf{busy wait} (e irnos al infierno que nos conto Fernando Schapachnic) utilizamos las variables de condici\'on.
+La variable de condici\'on encargada de sincronizar la cantidad de rescatistas disponibles es \textit{rescatista\_cv} y nos permite mandar a esperar a los threads que todav\'ia no dispongan de un rescatista. Cuando la liberaci\'on de un alumno ocurre, se libera un rescatista y al mismo momento se produce una \textbf{signal} que \textit{despierta} alg\'un thread en espera.
+
+\newpage
+
+\section{Pruebas realizadas}
+Para poder probar que los rescatistas liberaban a los alumnos concurrentemente, creamos un script que lanzaba 10 instancias distintas del \textit{server\_tester} que nos facilit\'o la c\'atedra con 20 alumnos cada instancia.
+
+Como configuraci\'on inicial, elegimos tener 2 rescatistas para poder controlar facilmente el comportamiento del servidor multithread. Adem\'as introdujimos una espera en los rescatistas (con la funcion \textbf{usleep} ) para demorarlos y poder simular el comportamiento en paralelo, dado que las operaciones a realizar demoraban muy poco tiempo.\\
+
+Por \'ultimo levantamos el servidor multithread en una pc, y con otras 2 computadoras corrimos el mismo script, insertando alumnos en el servidor, para que la concurrencia no se vea afectada por el \textit{scheduler} del sistema operativo del servidor. De todas formas, no pud\'imos observar diferencias dado que los threads eran de corta duraci\'on por las operaciones a realizar. \\
+
+
+\section{Dificultades encontradas}
+\begin{enumerate}
+\item Cuando empezamos a hacer pruebas, en algunos casos nos fallaba al enviar los primeros datos (nombre, columna y fila). Luego de observar y discutir en el laboratorio con el resto de los alumnos nos dimos cuenta que habia un parametro pasado a la funci\'on \textit{sscanf}, dentro de $biblioteca.c$, el cual hac\'ia que se 'rompa' el programa. El problema era que se limitaba el nombre del pa\'is a 20 caracteres lo cual a veces no se cumpl\'ia. La soluci\'on fue cambiar ese parametro por un n\'umero mayor donde la entrada (dada por el archivo \textbf{paises.py}) coincida.
+
+\item Otra dificultad que tuvimos fue que en un principio en la funci\'on \textbf{main} creabamos un solo struct para pasar los par\'ametros a la funci\'on de thread por lo tanto era una \'unica variable que era utilizada por todos los thread (s\'olo en el principio pero pod\'ia traer complicaciones). La soluci\'on fue que antes de crear un thread hacemos una llamada a \textbf{malloc} para reservar (y no alocar) memoria para una nueva variable de ese tipo y utilizarla para crear el nuevo thread.
+\end{enumerate}
+
+
+\end{document}
+

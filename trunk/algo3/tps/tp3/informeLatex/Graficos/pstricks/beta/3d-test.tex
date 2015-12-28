@@ -1,0 +1,109 @@
+\documentstyle[multido,pstricks,gradient,12pt]{article}
+
+\input pst-beta.tex
+\input pst-3d.tex
+
+\oddsidemargin 0pt
+\evensidemargin 0pt
+\topmargin 0pt
+\headheight 0pt
+\headsep 0pt
+\textheight 8.75in
+\parskip 10pt
+
+\font\bigfont=ptmr at 30pt
+\font\hugefont=ptmr at 50pt
+\font\Hugefont=ptmr at 70pt
+
+\begin{document}
+
+\hugefont
+{\rm\Large Here is a test of \verb+\pstilt+ for each quadrant:}
+
+\def\test#1{#1: \psframebox{\pstilt{#1}{Hello}}\par}
+
+\test{90}
+\test{110}
+%\test{180} Error
+\test{260}
+\test{270}
+\test{300}
+%\test{0} Error
+\test{75}
+\newpage
+
+{\rm\Large Here is a test of \verb+\psTilt+ for each quadrant:}
+
+\def\test#1{#1: \psframebox{\psTilt{#1}{Hello}}\par}
+\test{90}
+\test{110}
+\test{190}
+\test{260}
+\test{270}
+\test{290}
+\test{10}
+\test{75}
+\newpage
+
+\begingroup
+
+{\rm\Large Here is a test of \verb+\psshadow+ for each quadrant:}
+
+\parskip=0pt plus 1fill
+
+\def\test#1{#1: \psframebox{\psshadow[Tshadowangle=#1]{Hello}}\par}
+
+\test{90}
+\test{110}
+% Error: \test{180}
+\test{260}
+\test{270}
+\test{290}
+% Error: \test{0}
+\test{75}
+\newpage
+\endgroup
+
+
+\ThreeDput{\Huge Here is a foo bar}
+
+\vskip 3in
+
+\psset{viewpoint=-1 -1 1}
+\ThreeDput[normal=0 -1 0]{%
+  \psframe[fillstyle=solid,fillcolor=lightgray](4,4)
+  \rput(2,2){\Huge \TeX}}
+\ThreeDput[normal=0 0 1](0,0,4){%
+  \psframe[fillstyle=gradient,gradmidpoint=1](4,4)
+  \rput(2,2){\Huge PS}}
+\ThreeDput[normal=-1 0 0](0,4,0){%
+  \psframe[fillstyle=solid,fillcolor=lightgray](4,4)
+  \rput(2,2){\Huge You}}
+
+\vskip 2in
+
+\psset{viewpoint=.4 -1 .8}
+\ThreeDput[normal=0 0 1]{\psgrid(6,6)}
+
+\newpage
+
+\psset{unit=2}
+\begin{pspicture}(0,-2)(5,5)
+\psset{viewpoint=.75 -1 .6}
+\ThreeDput[normal=0 0 1]{\psgrid(4,0)(0,4)}
+\ThreeDput[normal=1 0 0]{\psgrid(0,3)(4,0)}
+
+\psset{normal=0 0 1, gridlabels=0,subgriddiv=1}
+\multido{\d=0+1}{4}{\ThreeDput(0,0,\d){%
+  \psgrid[gridwidth=8pt,griddots=1](4,4)
+  \psgrid[griddots=30](4,4)}}
+
+\psset{normal=1 0 0, gridlabels=0,subgriddiv=1}
+\multido{\d=0+1}{5}{\ThreeDput(\d,0,0){%
+  \psgrid[gridwidth=8pt,griddots=1](4,3)
+  \psgrid[griddots=30](4,3)}}
+
+\end{pspicture}
+\end{document}
+
+

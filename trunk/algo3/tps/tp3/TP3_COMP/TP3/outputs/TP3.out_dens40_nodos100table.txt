@@ -1,0 +1,5 @@
+\hline
+Nodos & Aristas & compCon & Peso & Comparaciones & Tiempo \\
+\hline
+887 & 548080753\\
+\hline

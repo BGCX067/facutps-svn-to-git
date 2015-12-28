@@ -1,0 +1,398 @@
+%% BEGIN pst-make.tex
+%%
+%% For creating header files and stripped input files for PSTricks.
+%%
+%% Works with PSTricks version 0.93, and maybe later versions.
+%%
+%% COPYRIGHT 1993, by Timothy Van Zandt, tvz@Princeton.EDU
+%%
+%% See end of file for instructions.
+
+\catcode`\@=11
+
+\expandafter\ifx\csname @latexerr\endcsname\relax\else
+   \let\end\@@end
+\fi
+
+\def\TypeOut{\begingroup\obeyspaces\TypeOutI}
+\def\TypeOutI#1{\immediate\write16{#1}\endgroup}
+
+\newlinechar`\^^J
+
+\def\Empty{}
+
+\def\@NNil{\@Nil}
+
+{\catcode`\%=12\gdef\%{%}}
+\edef\PPercent{\%\%}
+
+\newread\InFile
+\newwrite\OutFile
+\newcount\countA
+\newcount\countB
+
+\def\OpenIn{\immediate\openin\InFile\TheInFile\relax}
+\def\OpenOut{\immediate\openout\OutFile\TheOutFile\relax}
+\def\CloseIn{\immediate\closein\InFile}
+\def\CloseOut{\immediate\closeout\OutFile}
+\def\ReadIn{\immediate\read\InFile to}
+\def\WriteOut#1{\immediate\write\OutFile{#1}}
+
+%% \CheckProcede
+
+\newif\ifPMnonstop
+
+\def\CheckProcede{%
+  \read16 to \OK
+  \expandafter\CheckProcedeI\OK\relax\@Nil}
+\long\def\CheckProcedeI#1#2\@Nil{%
+  \ifx#1y
+    \PMnonstopfalse
+  \else
+    \ifx#1Y
+      \PMnonstoptrue
+    \else
+      \ifx#1n
+        \let\Procede\relax
+        \PMnonstopfalse
+      \else
+        \ifx#1N
+          \let\Procede\relax
+          \PMnonstoptrue
+        \else
+          \let\Procede\end
+        \fi
+      \fi
+    \fi
+  \fi}
+
+\def\CheckFile#1{%
+  \ifPMnonstop\else
+    \immediate\openin1=#1
+    \ifeof1\else
+      \TypeOut{^^J%
+        !! File `#1' exists and will be erased if in current directory!^^J%
+        !! Make `#1'? (y=yes; Y-yes,nonstop; n=no; N=no,nonstop; q=quit)}
+      \CheckProcede
+    \fi
+  \fi}
+
+%% \PMstripfile
+
+% \PMStringLength expands "#1" and counts the number of non-space tokens,
+% assigning the result to "#2", which should be a count register.
+% \PMStringLengthI does the same, but without expanding "#1".
+
+\newcount\PMStringcnt
+
+\def\PMStringLength#1#2{%
+  \edef\next{#1}%
+  \expandafter\PMStringLengthI\expandafter{\next}#2}
+\def\PMStringLengthI#1#2{%
+  \PMStringcnt=0
+  \afterassignment\PMStringLengthII\let\next#1\@Nil
+  #2=\PMStringcnt}
+\def\PMStringLengthII{%
+  \ifx\next\@Nil
+    \let\next\relax
+  \else
+    \advance\PMStringcnt by 1
+    \def\next{\afterassignment\PMStringLengthII\let\next}%
+  \fi
+  \next}
+
+\newif\ifflag
+
+\newif\ifpstdef
+
+\newif\ifMakeHeader
+
+\begingroup
+  \catcode`\!=0
+  !catcode`!\=12
+  !gdef!PMpst@def{\pst@def}
+  !gdef!PMendinput{\endinput}
+  !gdef!PMpst@ATH{\pst@ATH}
+  !gdef!PMpst@useheader{\ifx\pst@useheader\iftrue}
+  !gdef!PMelse{\else}
+  !gdef!PMfi{\fi}
+  !catcode`!(=1
+  !catcode`!)=2
+  !catcode`!{=12
+  !catcode`!}=12
+  !gdef!WritePstDef\pst@def{#1}<#2!@Nil(%
+    !pstdeftrue
+    !WriteOut(\def\tx@#1{#1 })%
+    !CheckEndPstDef)
+!endgroup
+
+\def\CheckEndPstDef{\expandafter\CheckEndPstDefI\InLine>\@Nil}
+\def\CheckEndPstDefI#1>#2\@Nil{%
+  \def\temp{#2}%
+  \ifx\temp\Empty\else\pstdeffalse\fi}
+
+\def\ProcessLine{%
+  \ifx\InLine\Empty\else
+    \ifcase\PMuseheaderflag\relax
+      \ifx\InLine\PMpst@useheader
+        \def\PMuseheaderflag{1}
+      \else
+        \ProcessLineI
+      \fi
+    \or
+      \ifx\InLine\PMelse
+        \def\PMuseheaderflag{2}
+      \else
+        \ifMakeHeader
+          \ProcessLineI
+        \fi
+      \fi
+    \or
+      \ifx\InLine\PMfi
+        \def\PMuseheaderflag{0}
+      \else
+        \ifMakeHeader\else
+          \ProcessLineI
+        \fi
+      \fi
+    \fi
+  \fi}
+
+\def\PMuseheaderflag{0}
+
+\def\ProcessLineI{%
+  \expandafter\ProcessLineII\InLine
+  \Empty\Empty\Empty\Empty\Empty\Empty\Empty\Empty\Empty\@Nil}
+
+\def\ProcessLineII#1#2#3#4#5#6#7#8#9\@Nil{%
+  \def\temp{#1#2}%
+  \ifx\temp\PPercent
+    \WriteOut\InLine
+  \else
+    \def\temp{#1}
+    \ifx\temp\%\else
+      \def\temp{#1#2#3#4#5#6#7#8}
+      \ifx\temp\PMpst@ATH\else
+        \ifMakeHeader
+          \def\temp{#1#2#3#4#5#6#7#8}
+          \ifx\temp\PMpst@def
+            \WritePstDef#1#2#3#4#5#6#7#8#9\@Nil
+          \else
+            \WriteOut\InLine
+          \fi
+        \else
+          \WriteOut\InLine
+        \fi
+      \fi
+    \fi
+  \fi}
+
+
+\newif\ifobeyspaces
+
+\def\PMmo#1{\catcode`#1=12\relax}
+\def\PMsanitize{%
+  \ifobeyspaces\PMmo\ \fi
+  \PMmo\\\PMmo\$\PMmo\&\PMmo\#\PMmo\^\PMmo\_%
+  \PMmo\%\PMmo\~\PMmo\}\PMmo\{}
+
+\def\PMstripfile{%
+  \begingroup
+    \PMsanitize
+    \endlinechar-1
+    \flagtrue
+    \loop
+      \ReadIn\InLine
+      \ifx\PMendinput\InLine
+        \flagfalse
+      \else
+        \ifpstdef
+          \CheckEndPstDef
+        \else
+          \ProcessLine
+        \fi
+      \fi
+    \ifflag
+    \repeat
+  \endgroup}
+
+
+%% \MakeHeader
+
+\def\MakeHeader#1#2#3{%
+  \def\TheInFile{#1}%
+  \def\TheOutFile{#2}%
+  \def\ForUseFile{#3}%
+  \TypeOut{^^J%
+  ** Making PostScript header file `\TheOutFile' from `\TheInFile'.^^J%
+  ** For use with `\ForUseFile'.}%
+  \def\Procede{\MakeHeaderI}
+  \CheckFile{\TheOutFile}%
+  \Procede}
+
+\def\MakeHeaderI{%
+  \begingroup
+    \def\pst@ATH<##1>{\WriteOut{##1}}
+    \let\pst@useheader\iftrue
+    \let\pstcustomize\endinput
+    \def\pst@def##1{%
+      \begingroup
+        \catcode`\{=12
+        \catcode`\}=12
+        \newlinechar`\^^J%
+        \PMpst@@def{##1}}
+    \OpenOut
+    \let\pstcustomize\endinput
+    \input pstricks.con
+    \WriteOut{\%!}
+    \WriteOut{\% PostScript prologue for \ForUseFile.}
+    \WriteOut{%
+      \% Created \number\year/\number\month/\number\day.
+      Source file was \TheInFile}
+    \input \TheInFile\relax
+    \CloseOut
+  \endgroup}
+
+\begingroup
+  \catcode`\{=12
+  \catcode`\}=12
+  \catcode`\[=1
+  \catcode`\]=2
+  \gdef\PMpst@@def#1<#2>[%
+    \expandafter\gdef\csname tx@#1\endcsname[#1 ]%
+    \def\ThePstDef[/#1 {]%
+    \PMStringLength[#1]\countB
+    \advance\countB by 2
+    \edef\next[#2 } def \noexpand\@Nil\space]%
+    \expandafter\PMpst@@@def\next
+    \WriteOut[\ThePstDef]%
+    \endgroup]
+\endgroup
+
+
+\def\PMpst@@@def#1 {%
+  \def\next{#1}
+  \ifx\next\@NNil
+    \let\next\relax
+  \else
+    \PMStringLength{#1}\countA
+    \advance\countB by \countA
+    \advance\countB by 1
+    \ifnum\countB>72
+      \edef\ThePstDef{\ThePstDef^^J#1}%
+      \countB=\countA
+    \else
+      \edef\ThePstDef{\ThePstDef\space#1}%
+    \fi
+    \let\next\PMpst@@@def
+  \fi
+  \next}
+
+%% \MakeInput
+
+\def\MakeInput#1#2{
+  \def\TheInFile{#1}
+  \def\TheOutFile{#2}
+  \MakeHeaderfalse
+  \TypeOut{^^J%
+  ** Making stripped macro file `\TheOutFile' from `\TheInFile'.^^J%
+  ** For use without a PostScript header.}
+  \def\Procede{\MakeInputI}
+  \CheckFile\TheOutFile
+  \Procede}
+
+\def\MakeInputH#1#2#3{
+  \def\TheInFile{#1}
+  \def\TheOutFile{#2}
+  \def\ForUseFile{#3}%
+  \MakeHeadertrue
+  \TypeOut{^^J%
+  ** Making stripped macro file `\TheOutFile' from `\TheInFile'.^^J%
+  ** For use with PostScript header `\ForUseFile'.}
+  \def\Procede{\MakeInputI}
+  \CheckFile\TheOutFile
+  \Procede}
+
+\def\MakeInputI{%
+  \OpenIn
+  \OpenOut
+  \WriteOut{\%\% BEGIN: \TheOutFile}
+  \WriteOut{%
+    \%\% Generated on <\the\year/\the\month/\the\day> from `\TheInFile'.}
+  \ifMakeHeader
+    \WriteOut{\%\% For use with the PostScript header file `\ForUseFile'.}
+  \else
+    \WriteOut{\%\% For use without a PostScript header file.}
+  \fi
+  \WriteOut{\%\%}
+  \ReadIn\junk
+  \PMstripfile
+  \CloseIn
+  \WriteOut{\string\endinput}%
+  \WriteOut{\%\%}%
+  \WriteOut{\%\% END: \TheOutFile}%
+  \CloseOut}
+
+%% Action
+
+\TypeOut{^^J
+ ************************************************************^^J
+ *                                                          *^^J
+ * This is pst-make.tex.                                    *^^J
+ *                                                          *^^J
+ * This utility makes stripped input files                  *^^J
+ * and/or PostScript header files for PSTricks.             *^^J
+ *                                                          *^^J
+ * A .dvi file may also be produced. Just ignore it.        *^^J
+ *                                                          *^^J
+ * The configuration file `pstricks.con' must be correct    *^^J
+ * before running this.                                     *^^J
+ *                                                          *^^J
+ * See the end of pst-make.tex for further information.     *^^J
+ *                                                          *^^J
+ ************************************************************^^J
+ ^^J%
+Do you wish to procede?^^J%
+(y=yes;  Y=yes,nonstop;  n=no(quit)}
+
+\def\Procede#1{}
+\CheckProcede
+\Procede\end
+
+%%%%%%%%%%%%%%%%% INSTRUCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Run with Plain TeX or LaTeX.
+%%
+%% Configuration file must be correct before running this!!
+%%
+%% Commands:
+%%
+%%  \MakeInput{infile}{outfile}              Create input file, use w/o header.
+%%  \MakeInputH{infile}{outfile}{header}     Create input file, use w/ header.
+%%  \MakeHeader{infile}{outfile}{inputfile}  Create header file
+%%
+%% The following controls whether spaces at beginning of line are included:
+%%  \obeyspacestrue
+%%  \obeyspacesfalse
+%% E.g., pstricks.tex is about 10% smaller when spaces are omitted, but
+%% the file is much harder to read. On the other hand, you should
+%% be reading pstricks.doc. Spaces are omitted by default.
+%%
+%% See read-me.pst for addition installation instructions.
+
+%% This creates standard files with PostScript header files:
+
+\MakeInputH{pstricks.doc}{pstricks.tex}{pstricks.pro}
+\MakeHeader{pstricks.doc}{pstricks.pro}{pstricks.tex}
+\MakeInputH{pst-node.doc}{pst-node.tex}{pst-node.pro}
+\MakeHeader{pst-node.doc}{pst-node.pro}{pst-node.tex}
+\MakeInputH{pst-coil.doc}{pst-coil.tex}{pst-coil.pro}
+\MakeHeader{pst-coil.doc}{pst-coil.pro}{pst-coil.tex}
+
+%% This creates standard files without PostScript header files:
+%\MakeInput{pstricks.doc}{pstricks.tex}
+%\MakeInput{pst-node.doc}{pst-node.tex}
+%\MakeInputHpst-coil.doc}{pst-coil.tex}
+
+%% Don't delete the following:
+\end
+%% END pst-make.tex

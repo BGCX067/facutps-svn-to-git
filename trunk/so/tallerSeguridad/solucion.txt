@@ -1,0 +1,7 @@
+Con el siguiente nombre obtenemos el hash
+Grupo 1 - Emiliano Mancuso - Alejandro Mataloni                 => 07d72ee25c764bd53f1240779af5aca8
+
+Ingresar el siguiente string para aprobar.
+Grupo 1 - Emiliano Mancuso - Alejandro Mataloni                 07d72ee25c764bd53f1240779af5aca807d72ee25c764bd53f1240779af5aca8
+
+La solucion consiste en saber el hash que genera, y asi ingresar el nombre del grupo en 64 caracteres, y los proximos 32 puedens ser basura, pero los 32 siguientes pisan el hash del admin.

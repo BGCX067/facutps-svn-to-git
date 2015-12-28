@@ -1,0 +1,522 @@
+\begin{theindex}
+
+  \item \verb*+\AltClipMode+, \usage{55}, \usage{78}
+  \item \verb*+\altcolormode+, \main{88}, \usage{89}
+  \item {\ptt angle} (parameter), \main{61}, \usage{62, 63}, \usage{72}
+  \item {\ptt angleA} (parameter), \usage{63--65}
+  \item {\ptt angleB} (parameter), \usage{63, 64}
+  \item \verb*+\Aput+, \main{68}
+  \item \verb*+\aput+, \usage{67}, \main{68}, \usage{68}
+  \item {\ptt arcangle} (parameter), \main{61}
+  \item {\ptt arcangleA} (parameter), \usage{63}
+  \item {\ptt arcangleB} (parameter), \usage{63}
+  \item {\ptt arcsep} (parameter), \main{13}
+  \item {\ptt arcsepA} (parameter), \main{12}, \usage{12, 13}
+  \item {\ptt arcsepB} (parameter), \main{12}, \usage{13}
+  \item {\ptt arm} (parameter), \main{61}, \usage{63}
+  \item {\ptt armA} (parameter), \usage{63--65}
+  \item {\ptt armB} (parameter), \usage{63--65}
+  \item {\ptt arrowinset} (parameter), \main{30}, \usage{30}
+  \item {\ptt arrowlength} (parameter), \main{30}, \usage{30}
+  \item \verb*+\arrows+, \main{40}
+  \item {\ptt arrows} (parameter), \usage{9}, \usage{11},
+		\usage{19, 20}, \main{28}, \usage{29}, \usage{48}
+  \item {\ptt arrowscale} (parameter), \main{30}, \usage{30}
+  \item {\ptt arrowsize} (parameter), \main{30}
+  \item {\ptt axesstyle} (parameter), \main{51}
+
+  \indexspace
+
+  \item {\ptt bbllx} (parameter), \main{80}
+  \item {\ptt bblly} (parameter), \main{80}
+  \item {\ptt bburx} (parameter), \main{80}
+  \item {\ptt bbury} (parameter), \main{80}
+  \item \verb*+\black+, \usage{89}
+  \item \verb*+\blue+, \usage{89}
+  \item {\ptt border} (parameter), \main{25}, \usage{25}, \usage{33},
+		\usage{62}
+  \item {\ptt bordercolor} (parameter), \main{25}, \usage{25}
+  \item {\ptt boxsep} (parameter), \main{52}, \usage{53, 54}
+  \item \verb*+\Bput+, \main{68}
+  \item \verb*+\bput+, \usage{67}, \main{68}, \usage{68}
+  \item {\ptt bracketlength} (parameter), \main{30}
+
+  \indexspace
+
+  \item \verb*+\Cartesian+, \main{72}, \usage{72}
+  \item \verb*+\circlenode+, \main{60}
+  \item \verb*+\clipbox+, \main{54}
+  \item \verb*+\closedshadow+, \main{38}
+  \item \verb*+\closepath+, \usage{34}, \main{36}, \usage{36}
+  \item \verb*+\cnode+, \main{60}
+  \item \verb*+\cnodeput+, \main{60}
+  \item \verb*+\code+, \main{39}, \usage{40}
+  \item {\ptt coilarm} (parameter), \main{70}, \usage{70, 71}
+  \item {\ptt coilarmA} (parameter), \usage{70}
+  \item {\ptt coilarmB} (parameter), \usage{70}
+  \item {\ptt coilaspect} (parameter), \main{70}, \usage{70, 71}
+  \item {\ptt coilheight} (parameter), \main{70}, \usage{70}
+  \item {\ptt coilinc} (parameter), \main{70}, \usage{70}
+  \item {\ptt coilwidth} (parameter), \main{70}, \usage{70}
+  \item \verb*+\coor+, \main{39}, \usage{40}
+  \item {\ptt cornersize} (parameter), \main{10}, \usage{10},
+		\usage{54}
+  \item \verb*+\cput+, \main{53}, \usage{60}
+  \item {\ptt curvature} (parameter), \main{14}
+  \item \verb*+\curveto+, \main{39}, \usage{39}
+
+  \indexspace
+
+  \item {\ptt dash} (parameter), \main{25}
+  \item {\ptt dashed} (parameter), \usage{33}
+  \item \verb*+\dataplot+, \main{20}, \usage{20, 21}
+  \item \verb*+\degrees+, \main{8}, \usage{8}, \usage{72}
+  \item \verb*+\dim+, \main{39}
+  \item {\ptt dimen} (parameter), \main{26}
+  \item \verb*+\DontKillGlue+, \main{42}
+  \item {\ptt dotangle} (parameter), \main{16}, \usage{16}
+  \item {\ptt dotscale} (parameter), \main{16}
+  \item {\ptt dotsep} (parameter), \main{25}
+  \item {\ptt dotsize} (parameter), \usage{16}, \main{30}
+  \item {\ptt dotstyle} (parameter), \main{16}, \usage{16}
+  \item {\ptt dotted} (parameter), \usage{33}
+  \item {\ptt doublecolor} (parameter), \usage{25}, \main{26}
+  \item {\ptt doubleline} (parameter), \main{25}, \usage{25, 26},
+		\usage{33}
+  \item {\ptt doublesep} (parameter), \main{25}, \usage{25}
+  \item {\ptt Dx} (parameter), \main{49}, \usage{49}
+  \item {\ptt dx} (parameter), \main{49}, \usage{49}
+  \item {\ptt Dy} (parameter), \main{49}, \usage{49}
+  \item {\ptt dy} (parameter), \usage{49}
+
+  \indexspace
+
+  \item \verb*+\endoverlaybox+, \main{73}
+  \item \verb*+\endpscharclip+, \main{78}, \usage{78}
+  \item \verb*+\endpsclip+, \main{54}, \usage{54, 55}, \usage{78}
+  \item \verb*+\endpspicture+, \main{41}
+  \item \verb*+\endTeXtoEPS+, \main{79}
+  \item \verb*+\everypsbox+, \main{83}
+
+  \indexspace
+
+  \item \verb*+\file+, \main{40}
+  \item \verb*+\fileplot+, \main{20}, \usage{20}
+  \item \verb*+\fill+, \usage{33}, \main{37}
+  \item {\ptt fillcolor} (parameter), \usage{9}, \main{27}, \usage{28},
+		\usage{52}
+  \item {\ptt fillstyle} (parameter), \usage{9}, \main{27}, \usage{28},
+		\usage{32, 33}, \usage{51}, \usage{74}, \usage{77}
+  \item {\ptt framearc} (parameter), \main{10}, \usage{10}
+  \item \verb*+\framenode+, \usage{60}
+  \item {\ptt framesep} (parameter), \main{52}
+
+  \indexspace
+
+  \item {\ptt gradangle} (parameter), \main{75}
+  \item {\ptt gradbegin} (parameter), \main{74}, \usage{75}
+  \item {\ptt gradend} (parameter), \main{74}, \usage{75}
+  \item {\ptt gradlines} (parameter), \main{75}
+  \item {\ptt gradmidpoint} (parameter), \main{75}
+  \item \verb*+\gray+, \usage{4}
+  \item \verb*+\grestore+, \main{37}, \usage{37, 38}
+  \item {\ptt gridcolor} (parameter), \main{18}
+  \item {\ptt griddots} (parameter), \main{18}, \usage{18}
+  \item {\ptt gridlabelcolor} (parameter), \main{18}
+  \item {\ptt gridlabels} (parameter), \main{18}
+  \item {\ptt gridwidth} (parameter), \main{18}
+  \item \verb*+\gsave+, \main{37}, \usage{37, 38}
+
+  \indexspace
+
+  \item {\ptt hatchangle} (parameter), \main{27}, \usage{27}
+  \item {\ptt hatchcolor} (parameter), \main{27}
+  \item {\ptt hatchsep} (parameter), \main{27}
+  \item {\ptt hatchwidth} (parameter), \main{27}
+  \item {\ptt headerfile} (parameter), \main{81}, \usage{81}
+  \item {\ptt headers} (parameter), \main{81}, \usage{81}
+
+  \indexspace
+
+  \item \verb*+\KillGlue+, \main{42}
+
+  \indexspace
+
+  \item {\ptt labels} (parameter), \main{50}
+  \item {\ptt labelsep} (parameter), \main{44}, \usage{50}
+  \item {\ptt liftpen} (parameter), \main{35}, \usage{35}, \usage{37}
+  \item {\ptt linearc} (parameter), \main{10}, \usage{10},
+		\usage{19--21}, \usage{54}, \usage{63, 64}, \usage{71}
+  \item {\ptt linecolor} (parameter), \main{8}, \usage{8, 9},
+		\usage{24}, \usage{28}, \usage{32, 33}, \usage{52}
+  \item {\ptt linestyle} (parameter), \main{24}, \usage{25}, \usage{28},
+		\usage{32, 33}, \usage{51}, \usage{55}, \usage{76, 77}
+  \item \verb*+\lineto+, \main{39}, \usage{39}
+  \item {\ptt linetype} (parameter), \main{33}, \usage{33}
+  \item {\ptt linewidth} (parameter), \main{8}, \usage{8}, \usage{11},
+		\usage{16}, \usage{24}, \usage{28--30}, \usage{32, 33}
+  \item \verb*+\listplot+, \usage{20}, \main{21}, \usage{21}
+  \item {\ptt loopsize} (parameter), \main{62}, \usage{65}
+  \item \verb*+\Lput+, \main{67}, \usage{67}
+  \item \verb*+\lput+, \usage{62}, \main{67}, \usage{67, 68}
+
+  \indexspace
+
+  \item \verb*+\movepath+, \main{38}
+  \item \verb*+\moveto+, \main{36}, \usage{36}
+  \item \verb*+\Mput+, \main{67}, \usage{67}
+  \item \verb*+\mput+, \main{68}
+  \item \verb*+\mrestore+, \main{38}, \usage{38}
+  \item \verb*+\msave+, \main{38}, \usage{38}
+  \item \verb*+\multido+, \usage{47}, \usage{51}
+  \item \verb*+\multips+, \main{46}, \usage{46}, \usage{51}
+  \item \verb*+\multirput+, \main{46}, \usage{46}
+
+  \indexspace
+
+  \item \verb*+\ncangle+, \main{64}, \usage{64}, \usage{66}
+  \item \verb*+\ncangles+, \main{64}, \usage{64}
+  \item \verb*+\ncarc+, \usage{61}, \main{63}, \usage{63},
+		\usage{65, 66}
+  \item \verb*+\ncbar+, \main{63}, \usage{65, 66}
+  \item \verb*+\nccircle+, \main{65}, \usage{65, 66}
+  \item \verb*+\nccoil+, \main{71}
+  \item \verb*+\nccurve+, \usage{61}, \main{62}, \usage{63},
+		\usage{65, 66}
+  \item \verb*+\ncdiag+, \main{63}, \usage{64--66}
+  \item \verb*+\ncdiagg+, \main{64}, \usage{66}
+  \item \verb*+\ncLine+, \main{62}, \usage{65}, \usage{68}
+  \item \verb*+\ncline+, \main{62}, \usage{62}, \usage{65, 66},
+		\usage{68, 69}, \usage{71}
+  \item \verb*+\ncloop+, \usage{62}, \main{65}, \usage{66}
+  \item {\ptt ncurv} (parameter), \main{61}, \usage{62, 63}
+  \item \verb*+\nczigzag+, \main{71}
+  \item \verb*+\newcmykcolor+, \main{5}
+  \item \verb*+\newgray+, \main{5}
+  \item \verb*+\newhsbcolor+, \main{5}
+  \item \verb*+\newpath+, \main{36}
+  \item \verb*+\newpsobject+, \main{31}, \usage{31}, \usage{54}
+  \item \verb*+\newpsstyle+, \main{31}, \usage{31}
+  \item \verb*+\newrgbcolor+, \main{5}
+  \item {\ptt nodesep} (parameter), \main{61}, \usage{62--64},
+		\usage{72}
+  \item {\ptt nodesepA} (parameter), \usage{65}
+  \item \verb*+\NormalCoor+, \main{73}
+
+  \indexspace
+
+  \item {\ptt offset} (parameter), \main{61}, \usage{62--64},
+		\usage{67}, \usage{72}
+  \item \verb*+\openshadow+, \main{38}
+  \item {\ptt origin} (parameter), \main{24}, \usage{33}
+  \item \verb*+\ovalnode+, \main{60}
+  \item \verb*+\overlaybox+, \main{73}
+  \item {\ptt Ox} (parameter), \main{49}, \usage{49, 50}
+  \item {\ptt Oy} (parameter), \main{49}, \usage{49, 50}
+  \item {\ptt oy} (parameter), \main{49}, \usage{49}
+
+  \indexspace
+
+  \item \verb*+\parabola+, \main{14}, \usage{14}
+  \item parameters:
+    \subitem {\ptt Dx}, \main{49}, \usage{49}
+    \subitem {\ptt Dy}, \main{49}, \usage{49}
+    \subitem {\ptt Ox}, \main{49}, \usage{49, 50}
+    \subitem {\ptt Oy}, \main{49}, \usage{49, 50}
+    \subitem {\ptt angleA}, \usage{63--65}
+    \subitem {\ptt angleB}, \usage{63, 64}
+    \subitem {\ptt angle}, \main{61}, \usage{62, 63}, \usage{72}
+    \subitem {\ptt arcangleA}, \usage{63}
+    \subitem {\ptt arcangleB}, \usage{63}
+    \subitem {\ptt arcangle}, \main{61}
+    \subitem {\ptt arcsepA}, \main{12}, \usage{12, 13}
+    \subitem {\ptt arcsepB}, \main{12}, \usage{13}
+    \subitem {\ptt arcsep}, \main{13}
+    \subitem {\ptt armA}, \usage{63--65}
+    \subitem {\ptt armB}, \usage{63--65}
+    \subitem {\ptt arm}, \main{61}, \usage{63}
+    \subitem {\ptt arrowinset}, \main{30}, \usage{30}
+    \subitem {\ptt arrowlength}, \main{30}, \usage{30}
+    \subitem {\ptt arrowscale}, \main{30}, \usage{30}
+    \subitem {\ptt arrowsize}, \main{30}
+    \subitem {\ptt arrows}, \usage{9}, \usage{11}, \usage{19, 20},
+		\main{28}, \usage{29}, \usage{48}
+    \subitem {\ptt axesstyle}, \main{51}
+    \subitem {\ptt bbllx}, \main{80}
+    \subitem {\ptt bblly}, \main{80}
+    \subitem {\ptt bburx}, \main{80}
+    \subitem {\ptt bbury}, \main{80}
+    \subitem {\ptt bordercolor}, \main{25}, \usage{25}
+    \subitem {\ptt border}, \main{25}, \usage{25}, \usage{33},
+		\usage{62}
+    \subitem {\ptt boxsep}, \main{52}, \usage{53, 54}
+    \subitem {\ptt bracketlength}, \main{30}
+    \subitem {\ptt coilarmA}, \usage{70}
+    \subitem {\ptt coilarmB}, \usage{70}
+    \subitem {\ptt coilarm}, \main{70}, \usage{70, 71}
+    \subitem {\ptt coilaspect}, \main{70}, \usage{70, 71}
+    \subitem {\ptt coilheight}, \main{70}, \usage{70}
+    \subitem {\ptt coilinc}, \main{70}, \usage{70}
+    \subitem {\ptt coilwidth}, \main{70}, \usage{70}
+    \subitem {\ptt cornersize}, \main{10}, \usage{10}, \usage{54}
+    \subitem {\ptt curvature}, \main{14}
+    \subitem {\ptt dashed}, \usage{33}
+    \subitem {\ptt dash}, \main{25}
+    \subitem {\ptt dimen}, \main{26}
+    \subitem {\ptt dotangle}, \main{16}, \usage{16}
+    \subitem {\ptt dotscale}, \main{16}
+    \subitem {\ptt dotsep}, \main{25}
+    \subitem {\ptt dotsize}, \usage{16}, \main{30}
+    \subitem {\ptt dotstyle}, \main{16}, \usage{16}
+    \subitem {\ptt dotted}, \usage{33}
+    \subitem {\ptt doublecolor}, \usage{25}, \main{26}
+    \subitem {\ptt doubleline}, \main{25}, \usage{25, 26}, \usage{33}
+    \subitem {\ptt doublesep}, \main{25}, \usage{25}
+    \subitem {\ptt dx}, \main{49}, \usage{49}
+    \subitem {\ptt dy}, \usage{49}
+    \subitem {\ptt fillcolor}, \usage{9}, \main{27}, \usage{28},
+		\usage{52}
+    \subitem {\ptt fillstyle}, \usage{9}, \main{27}, \usage{28},
+		\usage{32, 33}, \usage{51}, \usage{74}, \usage{77}
+    \subitem {\ptt framearc}, \main{10}, \usage{10}
+    \subitem {\ptt framesep}, \main{52}
+    \subitem {\ptt gradangle}, \main{75}
+    \subitem {\ptt gradbegin}, \main{74}, \usage{75}
+    \subitem {\ptt gradend}, \main{74}, \usage{75}
+    \subitem {\ptt gradlines}, \main{75}
+    \subitem {\ptt gradmidpoint}, \main{75}
+    \subitem {\ptt gridcolor}, \main{18}
+    \subitem {\ptt griddots}, \main{18}, \usage{18}
+    \subitem {\ptt gridlabelcolor}, \main{18}
+    \subitem {\ptt gridlabels}, \main{18}
+    \subitem {\ptt gridwidth}, \main{18}
+    \subitem {\ptt hatchangle}, \main{27}, \usage{27}
+    \subitem {\ptt hatchcolor}, \main{27}
+    \subitem {\ptt hatchsep}, \main{27}
+    \subitem {\ptt hatchwidth}, \main{27}
+    \subitem {\ptt headerfile}, \main{81}, \usage{81}
+    \subitem {\ptt headers}, \main{81}, \usage{81}
+    \subitem {\ptt labelsep}, \main{44}, \usage{50}
+    \subitem {\ptt labels}, \main{50}
+    \subitem {\ptt liftpen}, \main{35}, \usage{35}, \usage{37}
+    \subitem {\ptt linearc}, \main{10}, \usage{10}, \usage{19--21},
+		\usage{54}, \usage{63, 64}, \usage{71}
+    \subitem {\ptt linecolor}, \main{8}, \usage{8, 9}, \usage{24},
+		\usage{28}, \usage{32, 33}, \usage{52}
+    \subitem {\ptt linestyle}, \main{24}, \usage{25}, \usage{28},
+		\usage{32, 33}, \usage{51}, \usage{55}, \usage{76, 77}
+    \subitem {\ptt linetype}, \main{33}, \usage{33}
+    \subitem {\ptt linewidth}, \main{8}, \usage{8}, \usage{11},
+		\usage{16}, \usage{24}, \usage{28--30}, \usage{32, 33}
+    \subitem {\ptt loopsize}, \main{62}, \usage{65}
+    \subitem {\ptt ncurv}, \main{61}, \usage{62, 63}
+    \subitem {\ptt nodesepA}, \usage{65}
+    \subitem {\ptt nodesep}, \main{61}, \usage{62--64}, \usage{72}
+    \subitem {\ptt offset}, \main{61}, \usage{62--64}, \usage{67},
+		\usage{72}
+    \subitem {\ptt origin}, \main{24}, \usage{33}
+    \subitem {\ptt oy}, \main{49}, \usage{49}
+    \subitem {\ptt plotpoints}, \main{22}, \usage{22}
+    \subitem {\ptt plotstyle}, \main{19}, \usage{19}, \usage{34}
+    \subitem {\ptt pspicture}, \usage{41}
+    \subitem {\ptt rbracketlength}, \main{30}
+    \subitem {\ptt rectarc}, \usage{54}
+    \subitem {\ptt runit}, \main{7}, \usage{8}
+    \subitem {\ptt shadowangle}, \main{26}, \usage{26}
+    \subitem {\ptt shadowcolor}, \main{26}, \usage{26}
+    \subitem {\ptt shadowsize}, \main{26}, \usage{26}, \usage{53}
+    \subitem {\ptt shadow}, \main{26}, \usage{26}, \usage{33}
+    \subitem {\ptt showorigin}, \main{50}
+    \subitem {\ptt showpoints}, \main{9}, \usage{12}, \usage{14--16},
+		\usage{19--21}, \usage{33}
+    \subitem {\ptt style}, \usage{31}
+    \subitem {\ptt subgridcolor}, \main{18}
+    \subitem {\ptt subgriddiv}, \main{18}
+    \subitem {\ptt subgriddots}, \main{18}
+    \subitem {\ptt subgridwidth}, \main{18}
+    \subitem {\ptt swapaxes}, \main{24}, \usage{33}
+    \subitem {\ptt tbarsize}, \usage{16}, \main{30}
+    \subitem {\ptt ticksize}, \main{50}
+    \subitem {\ptt tickstyle}, \main{50}, \usage{50}
+    \subitem {\ptt ticks}, \main{50}
+    \subitem {\ptt unit}, \main{7}, \usage{7}, \usage{19}, \usage{72}
+    \subitem {\ptt xunit}, \main{7}, \usage{8}, \usage{17, 18},
+		\usage{72}
+    \subitem {\ptt yunit}, \main{7}, \usage{7, 8}, \usage{17, 18},
+		\usage{72}
+  \item \verb*+\parametricplot+, \main{22}, \usage{22, 23}
+  \item \verb*+\pcangle+, \main{66}
+  \item \verb*+\pcarc+, \main{65}
+  \item \verb*+\pcbar+, \main{65}
+  \item \verb*+\pccoil+, \main{71}
+  \item \verb*+\pccurve+, \usage{61}, \main{65}
+  \item \verb*+\pcdiag+, \main{65}
+  \item \verb*+\pcline+, \main{65}, \usage{67}, \usage{71}
+  \item \verb*+\pcloop+, \usage{62}, \main{66}
+  \item \verb*+\pczigzag+, \main{71}
+  \item \verb*+\plotfile+, \usage{20}
+  \item {\ptt plotpoints} (parameter), \main{22}, \usage{22}
+  \item {\ptt plotstyle} (parameter), \main{19}, \usage{19}, \usage{34}
+  \item \verb*+\pnode+, \main{60}
+  \item \verb*+\Polar+, \main{72}, \usage{72}
+  \item \verb*+\psaddtolength+, \main{7}
+  \item \verb*+\psarc+, \main{12}, \usage{12, 13}, \usage{61}
+  \item \verb*+\psarcn+, \main{13}, \usage{13}
+  \item \verb*+\psaxes+, \usage{17}, \main{48}, \usage{49--51}
+  \item \verb*+\psbezier+, \main{13}, \usage{13}, \usage{34, 35}
+  \item \verb*+\psborder+, \usage{25}
+  \item \verb*+\psccurve+, \main{15}, \usage{19}
+  \item \verb*+\pscharclip+, \main{78}, \usage{78}
+  \item \verb*+\pscharpath+, \main{77}, \usage{78}
+  \item \verb*+\pscircle+, \main{11}, \usage{26}
+  \item \verb*+\pscircle*+, \usage{11}
+  \item \verb*+\pscirclebox+, \usage{52}, \main{53}, \usage{53},
+		\usage{60}
+  \item \verb*+\psclip+, \main{54}, \usage{54, 55}, \usage{78}
+  \item \verb*+\psCoil+, \main{70}, \usage{70, 71}
+  \item \verb*+\pscoil+, \main{70}, \usage{70, 71}
+  \item \verb*+\pscurve+, \main{15}, \usage{15}, \usage{19}, \usage{34},
+		\usage{37}
+  \item \verb*+\pscustom+, \usage{13}, \main{32}, \usage{32--34},
+		\usage{36, 37}, \usage{39}, \usage{46}, \usage{54},
+		\usage{61}
+  \item \verb*+\psdblframebox+, \main{53}, \usage{60}
+  \item \verb*+\psdots+, \main{15}, \usage{19}, \usage{34}
+  \item \verb*+\psecurve+, \main{15}, \usage{19}
+  \item \verb*+\psellipse+, \main{12}, \usage{26}
+  \item \verb*+\psfill+, \usage{32}
+  \item \verb*+\psframe+, \usage{9, 10}, \main{11}, \usage{11},
+		\usage{26}, \usage{51, 52}
+  \item \verb*+\psframebox+, \main{52}, \usage{52--54}, \usage{60}
+  \item \verb*+\psgrid+, \main{17}, \usage{17--19}, \usage{34},
+		\usage{48}, \usage{78, 79}
+  \item \verb*+\pshatchcolor+, \usage{27}
+  \item \verb*+\pslabelsep+, \main{44}, \usage{50}, \usage{68}
+  \item \verb*+\pslbrace+, \main{87}
+  \item \verb*+\psline+, \usage{7}, \main{10}, \usage{10, 11},
+		\usage{19}, \usage{22}, \usage{31}, \usage{34},
+		\usage{51}, \usage{65}, \usage{86}
+  \item \verb*+\pslinecolor+, \usage{8}
+  \item \verb*+\pslinewidth+, \usage{8}
+  \item \verb*+\pslongbox+, \main{83}, \usage{84}
+  \item \verb*+\psmathboxfalse+, \main{83}
+  \item \verb*+\psmathboxtrue+, \main{83}
+  \item \verb*+\psovalbox+, \usage{52}, \main{54}, \usage{60}
+  \item \verb*+\psoverlay+, \main{73}, \usage{74}
+  \item \verb*+\pspicture+, \usage{17}, \main{41}, \usage{41, 42},
+		\usage{54}, \usage{78}
+  \item {\ptt pspicture} (parameter), \usage{41}
+  \item \verb*+\psplot+, \main{21}, \usage{21--23}
+  \item \verb*+\pspolygon+, \usage{10}, \main{11}, \usage{19},
+		\usage{28}
+  \item \verb*+\psrbrace+, \main{87}
+  \item \verb*+\psrunit+, \usage{8}
+  \item \verb*+\psset+, \usage{5}, \main{6}, \usage{6}, \usage{11},
+		\usage{41}
+  \item \verb*+\pssetlength+, \main{7}
+  \item \verb*+\psshadowbox+, \main{53}, \usage{60}
+  \item \verb*+\pstextpath+, \main{76}, \usage{76, 77}
+  \item \verb*+\pstheader+, \usage{76}
+  \item \verb*+\PSTricksEPS+, \usage{79, 80}
+  \item \verb*+\PSTricksOff+, \main{85}
+  \item \verb*+\pstroke+, \usage{32}
+  \item \verb*+\pstrotate+, \usage{46}
+  \item \verb*+\PSTtoEPS+, \usage{20}, \main{80}, \usage{80}
+  \item \verb*+\pstunit+, \usage{32}
+  \item \verb*+\pstVerb+, \usage{5}, \usage{42}, \usage{46}, \usage{55},
+		\usage{69}, \usage{74}
+  \item \verb*+\pstverb+, \usage{32}
+  \item \verb*+\pstverbscale+, \usage{42}, \usage{55}, \usage{69},
+		\usage{74}
+  \item \verb*+\psunit+, \usage{8}, \usage{77}
+  \item \verb*+\psverbboxfalse+, \main{84}
+  \item \verb*+\psverbboxtrue+, \usage{4}, \main{84}, \usage{85}
+  \item \verb*+\pswedge+, \main{12}, \usage{26}
+  \item \verb*+\psxlabel+, \main{51}
+  \item \verb*+\psxunit+, \usage{8}, \usage{19}
+  \item \verb*+\psylabel+, \main{51}
+  \item \verb*+\psyunit+, \usage{8}, \usage{19}
+  \item \verb*+\pszigzag+, \main{70}, \usage{70, 71}
+  \item \verb*+\putoverlaybox+, \main{74}
+
+  \indexspace
+
+  \item \verb*+\qdisk+, \main{11}, \usage{34}
+  \item \verb*+\qline+, \main{10}, \usage{34}
+
+  \indexspace
+
+  \item \verb*+\radians+, \main{8}
+  \item {\ptt rbracketlength} (parameter), \main{30}
+  \item \verb*+\rcoor+, \main{40}
+  \item \verb*+\rcurveto+, \main{39}
+  \item \verb*+\readdata+, \main{20}, \usage{20, 21}
+  \item {\ptt rectarc} (parameter), \usage{54}
+  \item \verb*+\red+, \usage{4}
+  \item \verb*+\rlineto+, \main{39}
+  \item \verb*+\Rnode+, \main{59}, \usage{60}, \usage{68}
+  \item \verb*+\rnode+, \main{59}, \usage{59, 60}, \usage{68, 69}
+  \item \verb*+\RnodeRef+, \main{59}, \usage{60}
+  \item \verb*+\rotate+, \main{38}
+  \item \verb*+\Rotatedown+, \usage{56}
+  \item \verb*+\rotatedown+, \main{56}
+  \item \verb*+\rotateleft+, \main{55}
+  \item \verb*+\rotateright+, \main{55}
+  \item \verb*+\Rput+, \main{45}, \usage{45}, \usage{67}
+  \item \verb*+\rput+, \usage{41}, \main{43}, \usage{43--46},
+		\usage{53}, \usage{58}, \usage{67}, \usage{71},
+		\usage{78}, \usage{80}
+  \item {\ptt runit} (parameter), \main{7}, \usage{8}
+
+  \indexspace
+
+  \item \verb*+\savedata+, \main{20}, \usage{20}
+  \item \verb*+\scale+, \main{38}
+  \item \verb*+\scalebox+, \main{56}
+  \item \verb*+\scaleboxto+, \main{56}
+  \item \verb*+\setcolor+, \main{40}
+  \item {\ptt shadow} (parameter), \main{26}, \usage{26}, \usage{33}
+  \item {\ptt shadowangle} (parameter), \main{26}, \usage{26}
+  \item {\ptt shadowcolor} (parameter), \main{26}, \usage{26}
+  \item {\ptt shadowsize} (parameter), \main{26}, \usage{26},
+		\usage{53}
+  \item {\ptt showorigin} (parameter), \main{50}
+  \item {\ptt showpoints} (parameter), \main{9}, \usage{12},
+		\usage{14--16}, \usage{19--21}, \usage{33}
+  \item \verb*+\SpecialCoor+, \usage{7, 8}, \main{72}, \usage{72, 73}
+  \item \verb*+\stroke+, \usage{33}, \main{36}
+  \item {\ptt style} (parameter), \usage{31}
+  \item {\ptt subgridcolor} (parameter), \main{18}
+  \item {\ptt subgriddiv} (parameter), \main{18}
+  \item {\ptt subgriddots} (parameter), \main{18}
+  \item {\ptt subgridwidth} (parameter), \main{18}
+  \item \verb*+\swapaxes+, \main{38}
+  \item {\ptt swapaxes} (parameter), \main{24}, \usage{33}
+
+  \indexspace
+
+  \item {\ptt tbarsize} (parameter), \usage{16}, \main{30}
+  \item \verb*+\TeXtoEPS+, \main{79}
+  \item {\ptt ticks} (parameter), \main{50}
+  \item {\ptt ticksize} (parameter), \main{50}
+  \item {\ptt tickstyle} (parameter), \main{50}, \usage{50}
+  \item \verb*+\TPoffset+, \usage{77}
+  \item \verb*+\translate+, \main{38}
+
+  \indexspace
+
+  \item {\ptt unit} (parameter), \main{7}, \usage{7}, \usage{19},
+		\usage{72}
+  \item \verb*+\uput+, \main{44}, \usage{44, 45}, \usage{68}
+
+  \indexspace
+
+  \item {\ptt xunit} (parameter), \main{7}, \usage{8}, \usage{17, 18},
+		\usage{72}
+
+  \indexspace
+
+  \item {\ptt yunit} (parameter), \main{7}, \usage{7, 8},
+		\usage{17, 18}, \usage{72}
+
+\end{theindex}

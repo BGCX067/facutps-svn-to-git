@@ -1,0 +1,61 @@
+%% BEGIN pst-beta.bug
+% LAST MODIFIED: December 15, 1993
+% The latest version of this file can be obtained from Princeton.EDU.
+
+% This file list some bugs and latebreaking news for the beta-release
+% features in the file pst-beta.tex, for use with PSTricks v0.93a.
+% pst-beta.tex has many bugs, and the following list is not meant to
+% be exhaustive.
+%
+% The order in which you input files is important with pst-beta tex:
+%
+% \input pstricks
+% \input pst-plot % Or any other extensions to pstricks
+% \input pstricks.bug
+% \input pst-beta
+% \input pst-beta.bug
+
+% PROBLEMS:
+
+% 1. Labels don't work right with \nccircle.
+%    PATCH: Input this file.
+%
+% 2. nrot=:<angle> does not work when : is active.
+%    PATCH: Input this file.
+
+% PATCHES:  (Input this file, in the order given at top, to get these patches)
+
+\edef\TheAtCode{\the\catcode`\@}
+\catcode`\@=11
+
+% 1.
+\pst@def{NCCircle}<%
+  0 0 NodesepA nodeA \tx@GetEdge pop
+  xA sub 2 div dup 2 exp r r mul
+  sub abs sqrt atan 2 mul /a ED
+  r AngleA 90 add PtoC
+  yA add exch xA add
+  exch 2 copy /LPutVar [ 4 2 roll r AngleA ] cvx def
+  /LPutPos { LPutVar t 360 mul add dup 5 1 roll 90 sub
+    \tx@PtoC 3 -1 roll add /Y ED add /X ED /NAngle ED } def
+  /HPutPos { LPutPos } def
+  /VPutPos { LPutPos } def
+  r AngleA 90 sub a add AngleA 270 add a sub
+  tx@Dict begin /angleB ED /angleA ED /r ED /c 57.2957 r Div def /y ED /x ED>
+
+% 2.
+\begingroup
+  \catcode`\:=13
+  \gdef\pst@activerot{\def:{\string:}}
+\endgroup
+\def\psset@nrot#1{%
+  \begingroup
+    \pst@activerot
+    \pst@expandafter{\@ifnextchar:{\psset@@nrot}{\psset@@rot}}{#1}\@nil
+    \global\let\pst@tempg\psk@rot
+  \endgroup
+  \let\psk@nrot\pst@tempg}
+
+\catcode`\@=\TheAtCode\relax
+\endinput
+%% END pst-beta.bug

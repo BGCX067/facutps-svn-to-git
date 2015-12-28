@@ -1,0 +1,68 @@
+% Informacion sobre el package para el sistema
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tpalgo3}[2004/04/06 v0.1 Para componer simbolitos frecuentemente usados en AED3]
+
+% Imprimir un mensajito al procesar un .tex que use este package
+\typeout{Cargando package 'tpalgo3' v0.1 (07/04/2004)}
+
+% Aseguremonos de cargar los packages de la AMS
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+
+\newcommand{\flechita}{\:\leftarrow\:}
+\newcommand{\yLogico}{\; \wedge \;}
+
+\newcommand{\subindice}[2]{$#1_{#2}$}
+
+\newcommand{\superindice}[2]{$#1^{#2}$}
+
+\newcommand{\asignar}[2]{$#1 \flechita #2$}
+
+\newcommand{\mientras}{\textbf{mientras}\:}
+
+\newcommand{\paratodo}{\textbf{paraTodo}\:}
+
+\newcommand{\paracada}{\textbf{paraCada}\:}
+
+\newcommand{\hacer}{\textbf{hacer}\:}
+
+\newcommand{\repetir}{\textbf{repetir}\:}
+
+\newcommand{\fin}{\textbf{fin}\:}
+
+\newcommand{\iif}{\textbf{if}\:}
+
+\newcommand{\desde}{\textbf{desde}\:}
+
+\newcommand{\hasta}{\textbf{hasta}\:}
+
+\newcommand{\sino}{\textbf{sino}\:}
+
+\newcommand{\finif}{\textbf{end if}\:}
+
+\newcommand{\para}{\textbf{para}\:}
+
+\newcommand{\devolver}{\textbf{devolver}\:}
+
+\newcommand{\nuevoAlgo}[2]{\textbf{#1:\:}#2}
+
+\newcommand{\sii}[2]{$#1 \: \Leftrightarrow \: #2$}
+
+\newcommand{\entonces}{\ensuremath{\hspace{0,25cm} \Rightarrow \hspace{0,25cm}}}
+
+\newcommand{\pertenece}{\ensuremath{\hspace{0,25cm} \in\hspace{0,25cm} }}
+
+
+% Complejidad
+\newcommand{\ode}[1]{\ensuremath{O(#1)}}
+\newcommand{\omegade}[1]{\ensuremath{\Omega(#1)}}
+\newcommand{\thetade}[1]{\ensuremath{\Theta(#1)}}
+
+% Formulas
+\newcommand{\zum}[3]{\ensuremath{\displaystyle\sum_{#1}^{#2} #3}}
+\newcommand{\mai}{\ensuremath{\hspace{0,15cm} \geq \hspace{0,15cm}}}
+\newcommand{\mei}{\ensuremath{\hspace{0,15cm} \leq \hspace{0,15cm}}}
+
+% define un enviroment
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist 
